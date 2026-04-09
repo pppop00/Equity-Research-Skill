@@ -1,0 +1,8 @@
+.DS_Store
+.claude/
+
+# 本地运行产物（可选：若希望把 archive 一并提交备份，可删除下行）
+archive/
+
+# 若本地重新打包 skill，不想提交二进制
+*.skill
