@@ -59,7 +59,7 @@ After the user answers, map **English** → `en`, **Chinese** / **中文** → `
 workspace/{Company}_{Date}/
 ```
 
-All intermediate JSON files and the final HTML go here.
+All intermediate JSON files and the final HTML go here. Treat this path as **relative to the root of this skill pack** (the directory that contains `SKILL.md` and the `workspace/` folder). **Do not** create the workspace inside `~/.claude/` or other unrelated trees.
 
 **Detect environment:**
 
@@ -147,6 +147,7 @@ Follow agents/news_researcher.md
 Read `financial_data.json`; compute metrics per `references/financial_metrics.md`.  
 **Fiscal year labels (“当年 / 上年”, KPI 财年, `METRICS_YEAR_CUR` / `METRICS_YEAR_PREV`):** Must match **`income_statement.current_year`** and **`prior_year`** as fixed by **Step 0C** (latest **published** full-year pair; default target **`FY(Y_cal − 1)`** vs **`FY(Y_cal − 2)`** when that annual exists). **YoY / 同比** is always those two **consecutive** full fiscal years in the JSON. If only interim (e.g. 9M) exists for the newest year, either keep the table on the last two **full** fiscal years with a **`notes[]`** lag explanation per Step 0C, or add a clearly labeled “最近中期 vs 上年同期” block — do not mix without stating it.
 **Geographic revenue (Section II, fourth trend-card):** Write **`geographic_revenue.analysis`** for **`{{GEO_REVENUE_TEXT}}`** only — regional net revenue amounts, share of total, and growth/concentration **from filings / `financial_data.json`**. **Do not** discuss FX, currency translation, hedging, or DXY in this block (those belong in Section III / macro narrative). See `references/financial_metrics.md`.  
+**Evidence gate for narrative claims:** Any valuation statement in summary / thesis / appendix (e.g. “估值处于历史低位”, target price, upside/downside, cheap/expensive vs history/peers) must be backed by non-null fields in `financial_analysis.json` → `valuation` or by explicitly cited market-data sources in the appendix. If valuation fields are unavailable, remove the valuation claim instead of hand-waving it. Likewise, do not present a live-market conclusion as fact when the underlying market-data fields are `null`.
 **HTML narrative (no Markdown):** All strings that fill `{{SUMMARY_PARA_*}}`, `{{TREND*_TEXT}}`, `{{GEO_REVENUE_TEXT}}`, thesis, Sankey note, etc. must be **plain text** — do **not** use `**` / `*` / backticks; the template does not run a Markdown processor. See `references/report_style_guide_cn.md` or `report_style_guide_en.md` and `agents/report_writer_*.md`.  
 **If `report_language=en`:** all free-text fields in `financial_analysis.json` must be **English**.  
 **If `zh`:** Chinese prose as before.
@@ -197,6 +198,7 @@ python3 scripts/extract_report_template.py --lang cn --sha256 \
 ```
 
 Then fill **only** `{{PLACEHOLDER}}` markers in the extracted file (or paste into your editor from the same extract) and save as `{Company}_Research_CN.html`. Do not alter the locked HTML/CSS/JS skeleton. **Post-processing caution:** Do **not** delete HTML comment lines that contain `-->` solely because they include illustrative `{{…}}` text — removing the only closing `-->` for a multi-line `<!--` will comment out the Porter/Appendix DOM (see `agents/report_writer_cn.md` 写作规范、`agents/report_validator.md` §5).
+After placeholders are filled, you **may** remove **only** single-line, self-contained instructional comments that still contain sample `{{...}}` text **if** you have **positively verified** that the line is not the closing leg of a multi-line `<!-- ... -->` block (e.g. a standalone `<!-- … {{…}} … -->`). **If there is any doubt, do not delete the comment line** — leave it, or rewrite the comment so it no longer contains `{{` / `}}`, instead of removing a line that might be the only `-->` closing an earlier `<!--`. Deliverables must not contain unreplaced real placeholders; optional comment cleanup must never risk breaking the DOM.
 
 ### If `report_language = en`
 
@@ -213,7 +215,7 @@ python3 scripts/extract_report_template.py --lang en --sha256 \
 
 Then fill **only** placeholders and save as `{Company}_Research_EN.html`.
 
-**Post-processing:** Same HTML comment rule as Chinese — do **not** strip lines that close a `<!--` block inside the Porter company panel (see `report_writer_en.md`).
+**Post-processing:** Same HTML comment rule as Chinese — do **not** strip lines that close a `<!--` block inside the Porter company panel (see `report_writer_en.md`). If you might remove a single-line comment that contains sample `{{...}}` text, apply the same **“only when sure / otherwise leave or reword”** rule as in the Chinese branch above.
 
 - Header: **English legal name** in the first name line; **ticker only** on the second line (see `report_writer_en.md` rules).  
 - Use `{{RATING_EN}}`, `{{CONFIDENCE_EN}}` per the English template.  
@@ -231,10 +233,16 @@ Then fill **only** placeholders and save as `{Company}_Research_EN.html`.
 
 - HTML: `*_Research_CN.html` **or** `*_Research_EN.html` (whichever Phase 5 produced)  
 - `financial_data.json`  
+- `financial_analysis.json`
+- `macro_factors.json`
+- `news_intel.json`
 - `prediction_waterfall.json`  
 
 Run all checks; fix CRITICAL issues until zero remain.  
 Treat **checklist item 9** in `agents/report_validator.md` (segment/region list must use percentages consistently with `segment_data`, or use amounts only for all items) as a **pre-delivery** fix: do not ship HTML with mixed formats.
+Treat the following as **pre-delivery blockers** as well, even if they are classified as WARNING in the validator output: narrative claims unsupported by JSON fields, appendix/source dates later than the report date, “real-time/current/latest” wording when the underlying data is knowledge-cutoff or estimated, and geographic mix text that mixes regions with product/brand labels.
+
+**Why some blockers are WARNING, not CRITICAL:** Items 10–13 (and similar content checks) are labeled **WARNING** because a short validator checklist cannot mechanically prove narrative wrongdoing the way it can detect missing sections or stray `{{…}}`. That lower label does **not** mean they may ship as-is — fix them before delivery like item 9, per `agents/report_validator.md`.
 
 ---
 
@@ -253,6 +261,7 @@ Summarize: data mode, predicted revenue growth and drivers, data confidence cave
 
 - `"data_source": "10-K upload"` → high confidence  
 - `"data_source": "web search"` → medium; mark estimates with `~`  
+- `"data_source": "primary filing (web fetched)"` → high confidence when line items were pulled from EDGAR / company IR / exchange filing site during web mode and cross-checked to the filing itself  
 - Missing numbers → `null`, note "Data unavailable" **in the report language**
 
 ---

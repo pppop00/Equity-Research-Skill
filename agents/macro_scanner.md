@@ -30,6 +30,13 @@ For each factor, extract:
 - **Forecast value** (analyst/Fed consensus for year-end 2026 or next 12 months)
 - **Factor_Change%** = (Forecast - Current) / Current × 100, or use the absolute change for rates (e.g., rate goes from 4.25% to 3.50% = -75bps = -7.1% change on the level)
 
+### Source-date discipline (mandatory)
+
+- Every macro source you cite must be dated on or before the orchestrator `report_date` when one is provided.
+- Do **not** cite a publication month that is later than `report_date` as if it were already available.
+- If you only have model-memory / knowledge-cutoff estimates rather than verified web results, set `data_source` to an estimate-oriented label, keep `data_confidence` at `"medium"` or lower, and explicitly state in `notes` that the figures were **not** verified with live web search on the report date.
+- In that fallback case, avoid wording like “最新已发布数据表明”; use “估算 / likely / indicative / knowledge-cutoff estimate”.
+
 ## Step 3: Check for Sector-Specific Factors
 
 For certain sectors, add additional factors:

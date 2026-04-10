@@ -173,3 +173,11 @@ Use `null` for any field that could not be found, and add a note to the `notes` 
 - `"high"` — from verified 10-K/10-Q filing
 - `"medium"` — from reliable financial data sites (Macrotrends, Yahoo Finance, etc.)
 - `"low"` — estimates assembled from incomplete sources
+
+## Source labeling discipline
+
+- Keep `data_source` and `data_confidence` logically consistent.
+- Use `data_source: "10-K upload"` when the user supplied the filing directly.
+- Use `data_source: "primary filing (web fetched)"` when you pulled the official filing / company IR release online and validated line items against that primary source; this may still carry `data_confidence: "high"`.
+- Use `data_source: "web search"` only when the numbers come mainly from secondary aggregators / search snippets / non-filing summaries; in that case `data_confidence` should normally be `"medium"`, not `"high"`.
+- If some fields are primary-source verified and others are estimated, explain the split in `notes[]` instead of overstating overall confidence.

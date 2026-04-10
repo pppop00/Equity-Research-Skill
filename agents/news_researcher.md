@@ -32,6 +32,15 @@ For each material event found, estimate its revenue impact:
 - Acquisition → positive for revenue (add target's revenue), but note integration risk
 - Guidance cut / raise → use management's own numbers if available
 
+### Real-time fallback rule (mandatory)
+
+- If live web search / fetch is unavailable, do **not** fabricate “current” or “latest” news. Write the file as a knowledge-cutoff synthesis instead.
+- In that case:
+  - `data_source_note` must explicitly say live web verification was unavailable.
+  - Any 2026-specific event, tariff, analyst target, or policy statement must be labeled as estimate / prior-public-info synthesis unless you actually verified it.
+  - Keep `confidence` at `"medium"` or `"low"` for such items unless they come from a company filing or official announcement you directly verified.
+- Do not let downstream HTML describe these items as already verified real-time facts.
+
 ## Step 2: Industry Dynamics for Porter Five Forces
 
 Run these searches:

@@ -21,6 +21,8 @@
 2. 在抽取出的文件（或等价地在本文件模板视图中）**仅**替换 `{{PLACEHOLDER}}`，保存为 `{Company}_Research_CN.html`。
 3. 可选：将 `--sha256` 输出记入运行日志，便于复现与同版本比对；`_locked_cn_skeleton.html` 可在交付前删除或随 run 归档以供审计。
 
+补充说明：生成完成后，**仅在已确认**某条注释是**独立单行**、**不承担**多行 `<!-- …` 的 `-->` 闭合时，才可删除其中带 `{{...}}` 的示例性注释，以免校验器报占位符残留。**若无法百分百确认，则不要删该行**——保留注释，或把注释改成不含 `{{`/`}}` 的说明文字；误删唯一闭合 `-->` 会导致第五节及附录 DOM 被整段注释吞掉。
+
 ## 输入文件（从 workspace 目录读取）
 
 - `financial_data.json`
@@ -1091,7 +1093,7 @@ window.addEventListener('resize', () => {
 | `{{SANKEY_ACTUAL_JS_DATA}}` | JS Object | `{nodes:[...],links:[...]}` |
 | `{{SANKEY_FORECAST_JS_DATA}}` | JS Object | 同上；由「当年」P&L 按预测营收增速缩放 |
 | `{{PORTER_COMPANY_SCORES_ARRAY}}` | JS Array | `[3,2,4,3,4]` 对应5力 |
-| `{{PORTER_COMPANY_SCORES}}` | HTML | 5个 `<li>` 含 score-dot |
+| `{{PORTER_COMPANY_SCORES}}` | HTML | 5个 `<li>`，**必须使用 `score-dot s{N}` class**（N=分数四舍五入至整数1-5），示例：`<li><span class="score-dot s2">2</span><span class="score-label">供应商议价能力</span> 2/5 低</li>`。CSS 只定义了 `.score-dot`，不存在 `score-badge`，不得使用其他 class。5力顺序固定：供应商议价能力、买方议价能力、新进入者威胁、替代品威胁、行业竞争强度。 |
 | `{{PORTER_COMPANY_TEXT}}` | HTML | 约300字波特五力分析正文 |
 | `{{FACTOR_ROWS}}` | HTML | 预测因子明细表行 |
 | `{{APPENDIX_SOURCE_ROWS}}` | HTML | 数据来源表行 |
@@ -1107,4 +1109,5 @@ window.addEventListener('resize', () => {
 - 美股金额以"亿美元"为单位（大于100亿用"X,XXX亿美元"或"X.X万亿美元"）
 - 禁止口语化和感叹号
 - **HTML 正文占位符不得使用 Markdown**：勿在 `{{SUMMARY_PARA_*}}`、`{{TREND*_TEXT}}`、`{{GEO_REVENUE_TEXT}}`、`{{INVESTMENT_THESIS}}`、`{{SANKEY_ANALYSIS_TEXT}}` 等字段中写入 `**加粗**`、`*斜体*`、反引号代码等；最终页面不会渲染 Markdown，会出现裸露星号。需强调处用中文「」或必要时少量 `<strong>…</strong>`（慎用以免破坏版式）。
-- **禁止破坏锁定 HTML 中的注释闭合**：第四节、第五节company 面板等处曾用多行 `<!-- …` 且下一行含示例 `{{…}}` 再用 `-->` 闭合；若生成脚本按字串删除「含 `{{分数}}` 的行」，会删掉唯一的 `-->`，导致**整段后续 DOM 被浏览器当作注释吞掉**（第五、六节版式全崩）。生成 HTML 时**不得**删除带 `-->` 的注释行；第五节「公司层面」已改为**单行自闭合注释**。
+- **禁止破坏锁定 HTML 中的注释闭合**：第四节、第五节 company 面板等处曾用多行 `<!-- …` 且下一行含示例 `{{…}}` 再用 `-->` 闭合；若生成脚本按字串删除「含 `{{分数}}` 的行」，会删掉唯一的 `-->`，导致**整段后续 DOM 被浏览器当作注释吞掉**（第五、六节版式全崩）。生成 HTML 时**不得**删除任何可能是**多行注释唯一闭合**的 `-->` 行。
+- **可选：清理单行样例注释**：仅当确认某条注释是独立单行提示、与多行注释闭合无关时，才可删除以免残留 `{{...}}` 触发校验；**不确定则保留**，或改写注释文字而不删行。
