@@ -1,0 +1,37 @@
+{
+  "company": "PDD Holdings Inc.",
+  "baseline_growth_pct": 12.0,
+  "baseline_note": "基准增速采用 FY2025 第四季度收入同比增速约 +12.0% 作为保守代理，反映公司在增长放缓环境下的最新经营斜率。",
+  "macro_adjustments": [
+    {
+      "factor": "Fed Funds Rate",
+      "adjustment_pct": 0.52
+    },
+    {
+      "factor": "GDP Growth",
+      "adjustment_pct": 1.59
+    },
+    {
+      "factor": "PCE Inflation",
+      "adjustment_pct": 0.18
+    },
+    {
+      "factor": "USD Index (DXY)",
+      "adjustment_pct": 0.07
+    },
+    {
+      "factor": "WTI Crude Oil",
+      "adjustment_pct": 0.3
+    },
+    {
+      "factor": "Consumer Confidence",
+      "adjustment_pct": 0.16
+    }
+  ],
+  "total_macro_adjustment_pct": 2.82,
+  "company_specific_adjustment_pct": -1.8,
+  "predicted_revenue_growth_pct": 13.02,
+  "phi": 0.5,
+  "confidence": "medium",
+  "formula_note": "12.00 + 2.82 - 1.80 = 13.02；考虑 Temu 政策扰动和国内竞争，预测更适合作为 FY2026 中性偏谨慎情景。"
+}

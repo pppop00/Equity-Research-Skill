@@ -1,0 +1,10 @@
+Eli Lilly and Company — HTML Validation (2026-04-08)
+
+1. Section IDs: 6/6 present — PASS
+2. KPI vs financial_data.json revenue: ~450 亿美元 vs 45042.7M USD — PASS (within ±5%)
+3. Waterfall: baseline → +macro +company → result; last type=result — PASS
+4. Sankey: all link sums reconcile — PASS
+5. porterScores: 5 ints 1–5 each — PASS
+6. rating-badge contains overweight — PASS
+
+CRITICAL: 0 | WARNING: 0

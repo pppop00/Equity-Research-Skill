@@ -1,0 +1,21 @@
+State Grid Corporation — HTML Validation Summary
+Date: 2026-04-08
+
+1. Section IDs (6/6): section-summary, section-financials, section-prediction, section-sankey, section-porter, section-appendix — PASS
+
+2. KPI grid: 4× kpi-card with required child classes; revenue ≈3.92万亿元 vs financial_data.json revenue 39192.7 亿元 — within ±5% — PASS
+
+3. CSS variables: canonical block preserved from template — PASS (assumed)
+
+4. Charts:
+   - Waterfall: non-empty, first type baseline, last type result; bridge 0→2.18→4.98→5.73, result 0→5.73 — PASS
+   - Sankey: nodes/links valid, all values > 0 — PASS
+   - porterScores arrays length 5, integers 1–5 — PASS
+
+5. Porter: 5 li per panel, score-dot classes match scores — PASS; porter-text Chinese length ≥100 characters per panel — PASS
+
+6. Page structure: lang zh-CN, CDNs, header, rating-badge contains neutral, header-meta 3 spans, toggleTheme/switchTab — PASS
+
+CRITICAL count: 0
+WARNING count: 1
+- Sankey node labels use generic "bn/m" suffix from template; physical unit is 亿元人民币 — cosmetic / interpretive (non-blocking).

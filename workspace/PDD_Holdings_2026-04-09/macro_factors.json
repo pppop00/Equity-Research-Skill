@@ -1,0 +1,82 @@
+{
+  "company": "PDD Holdings Inc.",
+  "sector": "Consumer Discretionary",
+  "sector_note": "PDD 虽归类于 Consumer Discretionary，但核心收入仍主要来自中国平台经济与跨境电商，因此对美国宏观因子的传导弱于典型美国可选消费公司。",
+  "phi": 0.5,
+  "beta_source": "adjusted",
+  "data_freshness": "2026-04-09",
+  "factors": [
+    {
+      "name": "Fed Funds Rate",
+      "current_value": 3.625,
+      "forecast_value": 3.375,
+      "factor_change_pct": 6.9,
+      "factor_change_note": "按利率下行对可选消费估值与需求形成正向支持处理。",
+      "beta": 0.15,
+      "phi": 0.5,
+      "adjustment_pct": 0.52,
+      "unit": "percent level",
+      "source": "Federal Reserve 2026-03-18 SEP。"
+    },
+    {
+      "name": "GDP Growth",
+      "current_value": 2.2,
+      "forecast_value": 2.4,
+      "factor_change_pct": 9.09,
+      "beta": 0.35,
+      "phi": 0.5,
+      "adjustment_pct": 1.59,
+      "unit": "percent YoY",
+      "source": "Federal Reserve 2026-03-18 SEP。"
+    },
+    {
+      "name": "PCE Inflation",
+      "current_value": 2.8,
+      "forecast_value": 2.7,
+      "factor_change_pct": -3.57,
+      "beta": -0.1,
+      "phi": 0.5,
+      "adjustment_pct": 0.18,
+      "unit": "percent YoY",
+      "source": "BEA / Federal Reserve 2026-03 数据与预测。"
+    },
+    {
+      "name": "USD Index (DXY)",
+      "current_value": 100.48,
+      "forecast_value": 99.0,
+      "factor_change_pct": -1.47,
+      "beta": -0.1,
+      "phi": 0.5,
+      "adjustment_pct": 0.07,
+      "unit": "index level",
+      "source": "第三方美元指数快照（2026-03-31）与 Morgan Stanley 2026 展望。"
+    },
+    {
+      "name": "WTI Crude Oil",
+      "current_value": 91.0,
+      "forecast_value": 80.0,
+      "factor_change_pct": -12.09,
+      "beta": -0.05,
+      "phi": 0.5,
+      "adjustment_pct": 0.3,
+      "unit": "USD/bbl",
+      "source": "EIA Short-Term Energy Outlook，2026-04。"
+    },
+    {
+      "name": "Consumer Confidence",
+      "current_value": 91.8,
+      "forecast_value": 93.0,
+      "factor_change_pct": 1.31,
+      "beta": 0.25,
+      "phi": 0.5,
+      "adjustment_pct": 0.16,
+      "unit": "index level",
+      "source": "The Conference Board 2026-03-31。"
+    }
+  ],
+  "total_macro_adjustment_pct": 2.82,
+  "notes": [
+    "该宏观模型主要使用美国变量，而 PDD 的主站业务主要暴露于中国内需，因此我们显著下调了默认 β。",
+    "宏观项更适合作为方向性情景输入，不宜机械视为精确增量。"
+  ]
+}

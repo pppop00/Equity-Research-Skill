@@ -1,0 +1,81 @@
+{
+  "company": "国家电网有限公司",
+  "sector": "Utilities",
+  "phi": 0.35,
+  "beta_source": "default",
+  "data_freshness": "2026-04-08",
+  "factors": [
+    {
+      "name": "Fed Funds Rate",
+      "current_value": 3.625,
+      "forecast_value": 3.4,
+      "factor_change_pct": -6.21,
+      "beta": 1.2,
+      "phi": 0.35,
+      "adjustment_pct": 2.61,
+      "unit": "percent level",
+      "source": "FOMC SEP March 2026 midpoint 3.4% year-end vs current ~3.5–3.75% range；利率下行按「−Factor_Change%×β×φ」计入营收弹性（与 prediction_factors 示例一致）。"
+    },
+    {
+      "name": "US Real GDP Growth",
+      "current_value": 2.4,
+      "forecast_value": 2.4,
+      "factor_change_pct": 0,
+      "beta": 0.3,
+      "phi": 0.35,
+      "adjustment_pct": 0,
+      "unit": "percent YoY",
+      "source": "FOMC/市场共识区间：2026 年实际 GDP 增速预测持稳；公司业务主体在中国，美国 GDP 因子仅作跨市场参照。"
+   
+    },
+    {
+      "name": "PCE Inflation",
+      "current_value": 2.5,
+      "forecast_value": 2.7,
+      "factor_change_pct": 8.0,
+      "beta": -0.1,
+      "phi": 0.35,
+      "adjustment_pct": -0.28,
+      "unit": "percent YoY",
+      "source": "March 2026 SEP 核心 PCE 预测上修至约 2.7%（相对 2.5% 近似起点）。"
+    },
+    {
+      "name": "USD Index (DXY)",
+      "current_value": 100,
+      "forecast_value": 98,
+      "factor_change_pct": -2.0,
+      "beta": 0,
+      "phi": 0.35,
+      "adjustment_pct": 0,
+      "unit": "index level",
+      "source": "情景假设：美元温和走弱；Utilities 行默认 USD β=0。"
+    },
+    {
+      "name": "WTI Crude Oil",
+      "current_value": 75,
+      "forecast_value": 70,
+      "factor_change_pct": -6.67,
+      "beta": -0.2,
+      "phi": 0.35,
+      "adjustment_pct": 0.47,
+      "unit": "USD/barrel",
+      "source": "年内油价同比温和回落情景；油价下跌经负 β 转为正向营收调整（燃料及产业链成本通道）。"
+    },
+    {
+      "name": "US Consumer Confidence",
+      "current_value": 98,
+      "forecast_value": 100,
+      "factor_change_pct": 2.04,
+      "beta": 0,
+      "phi": 0.35,
+      "adjustment_pct": 0,
+      "unit": "Conference Board index (illustrative)",
+      "source": "Utilities 行默认消费者信心 β=0；列出备查。"
+    }
+  ],
+  "total_macro_adjustment_pct": 2.8,
+  "notes": [
+    "主体收入与监管在中国，美国宏观因子与默认 Utilities β 存在国别错配；已将 φ 从 0.5 下调至 0.35 以反映管制电价、长周期合同与跨境传导摩擦。",
+    "若需中国专项模型，建议增加全社会用电量增速、煤电基准价、LPR 等本地因子并单独标定 β。"
+  ]
+}

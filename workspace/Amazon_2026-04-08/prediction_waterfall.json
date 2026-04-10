@@ -1,0 +1,21 @@
+{
+  "company": "Amazon.com, Inc.",
+  "sector_beta_row": "Consumer Discretionary",
+  "phi": 0.5,
+  "baseline_revenue_growth_pct": 11.0,
+  "baseline_note": "以 FY2024 相对 FY2023 的实际营收增速（约 11%）为基准情景锚点，代表在宏观温和、云与广告韧性延续下的趋势延续假设。",
+  "macro_adjustments": [
+    { "factor": "联邦基金利率", "macro_change_pct": 6.21, "beta": 0.5, "phi": 0.5, "adjustment_pct": 1.553 },
+    { "factor": "美国实际 GDP 增速", "macro_change_pct": 4.348, "beta": 1.5, "phi": 0.5, "adjustment_pct": 3.261 },
+    { "factor": "核心 PCE 通胀", "macro_change_pct": 8.0, "beta": -0.5, "phi": 0.5, "adjustment_pct": -2.0 },
+    { "factor": "美元指数 DXY", "macro_change_pct": -1.923, "beta": -0.3, "phi": 0.5, "adjustment_pct": 0.288 },
+    { "factor": "WTI 原油价格", "macro_change_pct": -10.87, "beta": -0.2, "phi": 0.5, "adjustment_pct": 1.087 },
+    { "factor": "消费者信心指数", "macro_change_pct": 3.093, "beta": 1.2, "phi": 0.5, "adjustment_pct": 1.856 }
+  ],
+  "macro_subtotal_pct": 6.045,
+  "company_specific_adjustment_pct": 0.2,
+  "company_specific_note": "新闻情报四项事件净影响约 +0.20pct（四舍五入）。",
+  "predicted_revenue_growth_pct": 17.245,
+  "confidence": "medium",
+  "predicted_fiscal_year_label": "FY2025E"
+}

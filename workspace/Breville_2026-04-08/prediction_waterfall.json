@@ -1,0 +1,22 @@
+{
+  "company": "Breville Group Limited",
+  "sector_beta_row": "Consumer Discretionary",
+  "phi": 0.5,
+  "baseline_revenue_growth_pct": 6.5,
+  "baseline_note": "以双位数销量历史为锚，结合管理层对关税与成本的审慎措辞，FY2026营收同比增速基准取中高单位数（相对FY2025的10.9%有所放缓）。",
+  "macro_adjustments": [
+    { "factor": "Fed Funds Rate", "macro_change_pct": 6.0, "beta": 0.5, "phi": 0.5, "adjustment_pct": 1.5 },
+    { "factor": "GDP Growth", "macro_change_pct": 3.2, "beta": 1.5, "phi": 0.5, "adjustment_pct": 2.4 },
+    { "factor": "PCE Inflation", "macro_change_pct": 5.5, "beta": -0.5, "phi": 0.5, "adjustment_pct": -1.375 },
+    { "factor": "USD Index (DXY)", "macro_change_pct": -2.5, "beta": -0.3, "phi": 0.5, "adjustment_pct": 0.375 },
+    { "factor": "WTI Crude Oil", "macro_change_pct": -8.0, "beta": -0.2, "phi": 0.5, "adjustment_pct": 0.8 },
+    { "factor": "Consumer Confidence", "macro_change_pct": 2.8, "beta": 1.2, "phi": 0.5, "adjustment_pct": 1.68 }
+  ],
+  "macro_subtotal_pct": 5.38,
+  "company_specific_adjustment_pct": -0.4,
+  "company_specific_note": "新闻情报中公司事件对收入影响合计约-0.4个百分点（扩张红利与关税/成本预警大致相抵后的净值）。",
+  "predicted_revenue_growth_pct": 11.48,
+  "confidence": "medium",
+  "predicted_fiscal_year_label": "FY2026E",
+  "waterfall_formula_check": "6.5 + 5.38 - 0.4 = 11.48"
+}

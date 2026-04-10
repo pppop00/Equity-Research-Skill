@@ -1,0 +1,80 @@
+{
+  "company": "PDD Holdings Inc.",
+  "ticker": "PDD",
+  "sector": "Consumer Discretionary",
+  "sub_industry": "Internet Retail / E-commerce Platforms",
+  "fiscal_year": "FY2025",
+  "fiscal_year_end": "2025-12-31",
+  "prior_fiscal_year": "FY2024",
+  "currency": "RMB",
+  "data_source": "FY2025 业绩公告 + FY2024 20-F + web search",
+  "data_confidence": "high",
+  "income_statement": {
+    "current_year": {
+      "revenue": 431845.713,
+      "cogs": 188801.753,
+      "gross_profit": 243043.96,
+      "rd_expense": 16496.164,
+      "sm_expense": 125287.932,
+      "ga_expense": 6635.803,
+      "total_opex": 148419.899,
+      "operating_income": 94624.061,
+      "interest_expense": null,
+      "pretax_income": 120968.22,
+      "income_tax": 21732.756,
+      "net_income": 99364.469,
+      "diluted_eps": 67.03,
+      "diluted_shares": 1482.394
+    },
+    "prior_year": {
+      "revenue": 393836.097,
+      "cogs": 153900.374,
+      "gross_profit": 239935.723,
+      "rd_expense": 12659.361,
+      "sm_expense": 111300.533,
+      "ga_expense": 7552.967,
+      "total_opex": 131512.861,
+      "operating_income": 108422.862,
+      "interest_expense": null,
+      "pretax_income": 132684.068,
+      "income_tax": 20266.781,
+      "net_income": 112434.512,
+      "diluted_eps": 76.01,
+      "diluted_shares": 1479.148
+    },
+    "unit": "millions RMB"
+  },
+  "balance_sheet": {
+    "cash_and_equivalents": 108900.587,
+    "short_term_investments": 313407.682,
+    "total_assets": 630044.327,
+    "total_debt": 0.0,
+    "total_equity": 414907.086,
+    "shares_outstanding": 1482.394,
+    "unit": "millions RMB"
+  },
+  "cash_flow": {
+    "operating_cash_flow": 106938.69,
+    "capex": -700.0,
+    "free_cash_flow": 106238.69,
+    "unit": "millions RMB"
+  },
+  "segment_data": [
+    {
+      "name": "在线营销服务及其他",
+      "revenue": 217783.028,
+      "pct_of_total": 50.43
+    },
+    {
+      "name": "交易服务",
+      "revenue": 214062.685,
+      "pct_of_total": 49.57
+    }
+  ],
+  "notes": [
+    "FY2025 财务口径来自 PDD Holdings 2026-03-25 发布的第四季度及全年未经审计业绩公告。",
+    "截至 2026-04-09，最新已披露的审计年报仍为 FY2024 20-F（2025-04-29 挂网）。",
+    "公司在 FY2025 业绩公告中未单列利息费用，而是披露“利息及投资收益净额”，因此利息保障倍数不宜机械计算。",
+    "资本开支未在本次业绩公告中单列，本报告按平台轻资产特征与 PP&E 变动对 capex 做近似估算。"
+  ]
+}

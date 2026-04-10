@@ -1,0 +1,60 @@
+{
+  "company": "Eli Lilly and Company",
+  "sector": "Healthcare",
+  "data_freshness": "2026-04-08",
+  "company_events": [
+    {
+      "type": "regulatory_access",
+      "description": "CMS 更新 Medicare CMMI BALANCE 与 GLP-1 Bridge 实施细节：2026 年 7 月起部分 Part D 参保人自付封顶等安排，2027 年起 tirzepatide 类产品进一步纳入参与计划，利于美国高龄与肥胖相关用药渗透。",
+      "revenue_impact_pct": 2.0,
+      "impact_direction": "positive",
+      "confidence": "medium",
+      "source": "Lilly 新闻稿 2026-03-09；Yahoo Finance 等摘要"
+    },
+    {
+      "type": "product_launch",
+      "description": "Zepbound 多剂量 KwikPen 获 FDA 批准并扩大自费/LillyDirect 渠道可及性（约 299 美元/月起等公开标价信息），有望提升处方便利性与依从性。",
+      "revenue_impact_pct": 1.0,
+      "impact_direction": "positive",
+      "confidence": "medium",
+      "source": "Lilly / PRNewswire 2026-02-23；Reuters"
+    },
+    {
+      "type": "competition",
+      "description": "诺和诺德 Wegovy 等竞品持续迭代与降价压力；全球 GLP-1 产能扩张后价格与市场份额博弈可能加剧。",
+      "revenue_impact_pct": -0.6,
+      "impact_direction": "negative",
+      "confidence": "medium",
+      "source": "路透、行业媒体报道"
+    },
+    {
+      "type": "market_sentiment",
+      "description": "公司在 GLP-1 需求推动下于 2025 年前后市值突破约 1 万亿美元关口（里程碑事件，反映预期已高、波动率或上升）。",
+      "revenue_impact_pct": 0.0,
+      "impact_direction": "neutral",
+      "confidence": "low",
+      "source": "CNBC 等 2025-11 报道"
+    }
+  ],
+  "company_specific_adjustment_pct": 2.4,
+  "industry_dynamics": {
+    "supplier_power": "中到高。关键原料药、生物药产能与灌装产线存在瓶颈，公司在扩产与多元化供应上持续资本开支，但在极度紧俏期供应商仍具议价。",
+    "buyer_power": "高。美国与欧盟的 PBM、政府项目、国际性比价与返利机制使净价与可及性高度依赖结构化谈判。",
+    "new_entrants": "中。小分子与大分子重磅药需巨额临床研发与注册壁垒，但 me-too、生物类似药与下一代口服/联合疗法仍不断涌入代谢领域。",
+    "substitutes": "中到高。手术、数字疗法、生活方式干预与其余机制减重/降糖药构成长期替代与联合用药分流。",
+    "rivalry": "极高。代谢（GLP-1/GIP）、肿瘤与自免领域由跨国药企与生物科技激烈竞争，临床数据与商业化执行决定短期份额。"
+  },
+  "forward_looking": {
+    "supplier_power": "随着自有产能释放，供应约束有望缓解，但地缘政治与质量问题仍可能阶段性扰动。",
+    "buyer_power": "美国医保改革路径与海外药价参照立法若推进，净价压力或呈结构性上升。",
+    "new_entrants": "口服小分子 GLP-1 与新双靶点分子若获批，将快速改写竞争格局与公司护城河评估。",
+    "substitutes": "肥胖慢病管理从「打针」向「口服 + 组合疗法 + 数字随访」迁移，商业化策略需同步升级。",
+    "rivalry": "研发管线与 BD（并购、授权）节奏决定 3–5 年是否仍能维持超高速增长叙事。"
+  },
+  "key_analyst_views": [
+    "管理层 2026 营收指引区间约 800–830 亿美元（新闻稿摘录，非本报告观点）。"
+  ],
+  "notes": [
+    "部分新闻事件发生在 2025–2026 年，用于情景调整；具体影响为模型化估计。"
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "company": "Eli Lilly and Company",
+  "ticker": "LLY",
+  "sector": "Healthcare",
+  "sub_industry": "Pharmaceuticals — Large Cap / Metabolic & Oncology",
+  "fiscal_year": "FY2024",
+  "fiscal_year_end": "2024-12-31",
+  "prior_fiscal_year": "FY2023",
+  "currency": "USD",
+  "data_source": "SEC Form 10-K（2024/2023）、Q4×2024 earnings materials（investor.lilly.com）、公司官网投资者数据表",
+  "data_confidence": "high",
+  "income_statement": {
+    "current_year": {
+      "label": "FY2024",
+      "revenue": 45042.7,
+      "cogs": 8418.0,
+      "gross_profit": 36624.7,
+      "rd_expense": 10991.0,
+      "sm_expense": 2090.0,
+      "ga_expense": 10644.0,
+      "total_opex": 23725.0,
+      "operating_income": 12899.0,
+      "interest_expense": 605.0,
+      "pretax_income": 12680.4,
+      "income_tax": 2090.4,
+      "net_income": 10590.0,
+      "diluted_eps": 11.71,
+      "diluted_shares_outstanding_millions": 904.0
+    },
+    "prior_year": {
+      "label": "FY2023",
+      "revenue": 34124.1,
+      "cogs": 7056.0,
+      "gross_profit": 27068.1,
+      "rd_expense": 9534.0,
+      "sm_expense": 5480.0,
+      "ga_expense": 5578.0,
+      "total_opex": 20592.0,
+      "operating_income": 6476.1,
+      "interest_expense": 312.0,
+      "pretax_income": 6554.6,
+      "income_tax": 1314.2,
+      "net_income": 5240.4,
+      "diluted_eps": 5.80,
+      "diluted_shares_outstanding_millions": 904.0
+    },
+    "unit": "millions USD",
+    "notes": [
+      "2024 年报收入 450.43 亿美元、净利润 105.9 亿美元与每股收益 11.71 美元来自公司四季报新闻稿披露。",
+      "「管理费用」行汇总 acquired IPR&D、减值与其他特殊营业费用及与研发/销售与管理不直接对应的其他营业支出，使 RD+SM+GA 合计等于毛利减营业利润，便于桑基图勾稽。",
+      "2023 年若干费用行在行业数据库与 10-K 附注间存在四舍五入；已按与 2024 披露一致的逻辑重分类。"
+    ]
+  },
+  "balance_sheet": {
+    "label": "2024-12-31",
+    "cash_and_equivalents": 3268.0,
+    "short_term_investments": 111.0,
+    "total_assets": 78714.9,
+    "total_debt": 31120.0,
+    "total_equity": 14192.1,
+    "shares_outstanding_millions": 948.0,
+    "unit": "millions USD",
+    "notes": "总资产、总负债与股东权益来自 Lilly 投资者网站 Fundamental 表（12/2024）；有息债务为长短期借款近似加总。"
+  },
+  "cash_flow": {
+    "label": "FY2024",
+    "operating_cash_flow": 8820.0,
+    "capex": -5058.0,
+    "free_cash_flow": 3762.0,
+    "unit": "millions USD",
+    "prior_year": { "operating_cash_flow": 4240.0, "capex": -3448.0, "free_cash_flow": 792.0 },
+    "notes": "经营现金流与 PPE 资本支出来自 Lilly Cash Flow 公开表；自由现金流 = 经营现金流 − |CapEx|。"
+  },
+  "segment_data": [
+    { "name": "Mounjaro（tirzepatide，2 型糖尿病等）", "revenue": 11540.1, "pct_of_total": 25.6 },
+    { "name": "Verzenio", "revenue": 5306.6, "pct_of_total": 11.8 },
+    { "name": "Trulicity", "revenue": 5253.5, "pct_of_total": 11.7 },
+    { "name": "Zepbound（肥胖等）", "revenue": 4925.7, "pct_of_total": 10.9 },
+    { "name": "Jardiance 家族", "revenue": 3340.9, "pct_of_total": 7.4 },
+    { "name": "其他产品与合作", "revenue": 14675.9, "pct_of_total": 32.6 }
+  ],
+  "notes": [
+    "用户输入「李来医药」本报告按常见笔误处理为礼来（Eli Lilly）；若为其他主体请更正公司名称。",
+    "GLP-1/GIP 类药物（Mounjaro/Zepbound）为当前最核心的销量与盈利引擎。"
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "company": "Breville Group Limited",
+  "ticker": "BRG",
+  "sector": "Consumer Discretionary",
+  "sub_industry": "Small Kitchen Appliances",
+  "fiscal_year": "FY2025",
+  "fiscal_year_end": "2025-06-30",
+  "prior_fiscal_year": "FY2024",
+  "currency": "AUD",
+  "data_source": "web search (Appendix 4E / FY2025 Annual Report / ASX announcements)",
+  "data_confidence": "medium",
+  "income_statement": {
+    "current_year": {
+      "label": "FY2025",
+      "revenue": 1696.6,
+      "cogs": 1076.1,
+      "gross_profit": 620.5,
+      "rd_expense": 108.0,
+      "sm_expense": 133.0,
+      "ga_expense": 175.0,
+      "total_opex": 416.0,
+      "operating_income": 204.6,
+      "ebitda": 271.9,
+      "pretax_income": 191.0,
+      "income_tax": 55.1,
+      "net_income": 135.9,
+      "diluted_eps": 0.944,
+      "diluted_shares_outstanding_millions": 143.8
+    },
+    "prior_year": {
+      "label": "FY2024",
+      "revenue": 1530.0,
+      "cogs": 973.1,
+      "gross_profit": 556.9,
+      "rd_expense": 96.0,
+      "sm_expense": 118.0,
+      "ga_expense": 157.0,
+      "total_opex": 371.0,
+      "operating_income": 185.7,
+      "ebitda": 245.5,
+      "pretax_income": 171.0,
+      "income_tax": 52.5,
+      "net_income": 118.5,
+      "diluted_eps": 0.827,
+      "diluted_shares_outstanding_millions": 143.3
+    },
+    "unit": "millions AUD",
+    "opex_allocation_note": "集团法定报表未单列「销售/管理/研发」；销售与市场、研发及数字化相关支出在披露中约为营收的14.2%（FY2025）/14.0%（FY2024）。桑基图中将上述组合按比例拆分至销售费用与研发费用，其余计入管理费用，总额与毛利减营业利润一致。"
+  },
+  "balance_sheet": {
+    "label": "2025-06-30",
+    "cash_and_equivalents": 105.7,
+    "total_assets": 1100.0,
+    "total_debt": 57.2,
+    "total_equity": 973.7,
+    "net_cash": 48.5,
+    "inventory": 426.3,
+    "trade_receivables": 302.3,
+    "unit": "millions AUD",
+    "notes": "股东权益及净现金取自公司FY2025业绩材料；总资产为基于营运资本、无形资产和现金的近似值，用于ROA示意。"
+  },
+  "cash_flow": {
+    "label": "FY2025",
+    "operating_cash_flow": 126.8,
+    "capex": -68.6,
+    "free_cash_flow": 58.2,
+    "unit": "millions AUD",
+    "source_note": "经营现金流与资本开支来自第三方财务数据库汇总口径（与法定现金流量表可能存在四舍五入差异）；自由现金流为两者之差。"
+  },
+  "segment_data": [
+    {
+      "name": "Global Product",
+      "revenue": 1500.6,
+      "revenue_prior": 1336.0,
+      "gross_profit": 558.9,
+      "gross_margin_pct": 37.2
+    },
+    {
+      "name": "Distribution",
+      "revenue": 196.0,
+      "revenue_prior": 194.0,
+      "gross_profit": 61.6,
+      "gross_margin_pct": 31.4
+    }
+  ],
+  "geographic_theatre": [
+    { "name": "Americas", "revenue": 822.2, "revenue_prior": 735.5 },
+    { "name": "EMEA", "revenue": 374.4, "revenue_prior": 325.2 },
+    { "name": "APAC", "revenue": 304.0, "revenue_prior": 275.4 }
+  ],
+  "stock_data": {
+    "price_ref_aud": 30.73,
+    "ref_note": "2026年初附近多来源现价区间约30–31澳元，用于市盈率示例",
+    "forward_pe_consensus_approx": 33
+  },
+  "notes": [
+    "FY2025为截至2025年6月30日止年度；核心损益与分部数据来自公司Appendix 4E及年报摘要披露。",
+    "Barista Express等产品线包含在Global Product品牌组合内；公司不单独披露单品收入。",
+    "美国对等关税与制造多元化相关费用在管理层讨论中被多次提及，并推动库存与资本开支阶段性上升。"
+  ]
+}

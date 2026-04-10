@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>State Grid Corporation（未上市）— 权益研究报告 | 2026年4月8日</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+/* ============================================================
+   CANONICAL CSS — DO NOT MODIFY ANY RULE IN THIS BLOCK
+   ============================================================ */
+:root {
+  --primary:        #0a2140;
+  --primary-light:  #1a3a6e;
+  --accent-green:   #1a8f5a;
+  --accent-red:     #c0392b;
+  --accent-amber:   #d68910;
+  --accent-blue:    #2980b9;
+  --bg:             #f4f6f9;
+  --bg-card:        #ffffff;
+  --bg-header:      #0a2140;
+  --text-primary:   #1a1a2e;
+  --text-secondary: #4a5568;
+  --text-muted:     #6b7a8d;
+  --border:         #dde3ea;
+  --shadow:         0 2px 12px rgba(10,33,64,0.10);
+  --shadow-hover:   0 6px 24px rgba(10,33,64,0.15);
+  --tab-active:     #0a2140;
+  --kpi-up-bg:      #edf7f2;
+  --kpi-down-bg:    #fdf3f2;
+}
+[data-theme="dark"] {
+  --bg:             #0d1b2e;
+  --bg-card:        #1a2a3e;
+  --bg-header:      #071020;
+  --text-primary:   #e8edf5;
+  --text-secondary: #b0bec5;
+  --text-muted:     #78909c;
+  --border:         #2c3e50;
+  --shadow:         0 2px 12px rgba(0,0,0,0.40);
+  --shadow-hover:   0 6px 24px rgba(0,0,0,0.60);
+  --tab-active:     #1e90ff;
+  --kpi-up-bg:      #0d2e1e;
+  --kpi-down-bg:    #2e0d0d;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.75;
+  transition: background 0.3s, color 0.3s;
+}
+/* --- Header --- */
+.report-header {
+  background: linear-gradient(135deg, #0a2140 0%, #1a3a6e 55%, #0d4f8a 100%);
+  color: #fff;
+  padding: 28px 48px 0;
+}
+.header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  padding-bottom: 20px;
+}
+.header-left { flex: 1; }
+.company-exchange-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 4px;
+  padding: 3px 10px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: #a8c8f0;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.company-name-cn {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-bottom: 3px;
+}
+.company-name-en {
+  font-size: 13px;
+  color: #a8c8f0;
+  margin-bottom: 14px;
+}
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.theme-toggle {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  padding: 5px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+}
+.rating-badge {
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+}
+.rating-badge.overweight  { background: var(--accent-green); }
+.rating-badge.neutral     { background: var(--accent-amber); }
+.rating-badge.underweight { background: var(--accent-red);   }
+.header-meta {
+  background: rgba(0,0,0,0.18);
+  padding: 8px 48px;
+  display: flex;
+  gap: 24px;
+  font-size: 12px;
+  color: #a8c8f0;
+}
+.header-meta span::before { content: "• "; }
+/* --- Layout --- */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.section {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 28px 32px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  letter-spacing: 0.02em;
+}
+[data-theme="dark"] .section-title { color: var(--tab-active); border-bottom-color: var(--tab-active); }
+/* --- Summary section --- */
+.summary-para { font-size: 13.5px; line-height: 1.85; margin-bottom: 14px; color: var(--text-secondary); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 16px; }
+.highlights-box h4, .risks-box h4 {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+.highlights-box h4 { color: var(--accent-green); background: #edf7f2; }
+.risks-box h4      { color: var(--accent-red);   background: #fdf3f2; }
+[data-theme="dark"] .highlights-box h4 { background: #0d2e1e; }
+[data-theme="dark"] .risks-box h4      { background: #2e0d0d; }
+.bullet-list { list-style: none; }
+.bullet-list li {
+  font-size: 13px;
+  line-height: 1.75;
+  padding: 5px 0 5px 18px;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+.bullet-list li:last-child { border-bottom: none; }
+.bullet-list li::before {
+  position: absolute;
+  left: 0;
+  top: 8px;
+  font-size: 9px;
+}
+.highlights-box .bullet-list li::before { content: "●"; color: var(--accent-green); }
+.risks-box      .bullet-list li::before { content: "●"; color: var(--accent-red);   }
+.thesis-box {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #fff;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.8;
+  margin-top: 20px;
+}
+.thesis-box strong { color: #a8d8ff; }
+/* --- KPI Cards --- */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  border-radius: 10px;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  background: var(--bg-card);
+  border-left: 4px solid var(--border);
+  transition: box-shadow 0.2s;
+}
+.kpi-card:hover { box-shadow: var(--shadow-hover); }
+.kpi-card.up   { border-left-color: var(--accent-green); background: var(--kpi-up-bg); }
+.kpi-card.down { border-left-color: var(--accent-red);   background: var(--kpi-down-bg); }
+.kpi-card.neutral-kpi { border-left-color: var(--accent-amber); }
+.kpi-label  { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.04em; margin-bottom: 6px; }
+.kpi-value  { font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+.kpi-change { font-size: 12px; font-weight: 600; }
+.kpi-change.up   { color: var(--accent-green); }
+.kpi-change.down { color: var(--accent-red);   }
+.kpi-sub    { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+/* --- Metrics Table --- */
+.metrics-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; }
+.metrics-table th {
+  background: var(--primary);
+  color: #fff;
+  padding: 9px 14px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+}
+[data-theme="dark"] .metrics-table th { background: var(--primary-light, #1a3a6e); }
+.metrics-table td { padding: 8px 14px; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+.metrics-table tr:last-child td { border-bottom: none; }
+.metrics-table tr:hover td { background: rgba(10,33,64,0.03); }
+[data-theme="dark"] .metrics-table tr:hover td { background: rgba(255,255,255,0.04); }
+.metric-up   { color: var(--accent-green) !important; font-weight: 600; }
+.metric-down { color: var(--accent-red)   !important; font-weight: 600; }
+/* --- Trend Cards --- */
+.trend-cards { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.trend-card {
+  border-left: 4px solid var(--border);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  background: var(--bg);
+}
+.trend-card.up   { border-left-color: var(--accent-green); }
+.trend-card.down { border-left-color: var(--accent-red);   }
+.trend-card-label { font-weight: 700; font-size: 13px; margin-bottom: 5px; color: var(--text-primary); }
+.trend-card-text  { font-size: 13px; color: var(--text-secondary); line-height: 1.75; }
+/* --- Tabs --- */
+.tab-bar {
+  display: flex;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 20px;
+  gap: 0;
+}
+.tab {
+  padding: 9px 18px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.tab.active { color: var(--tab-active); border-bottom-color: var(--tab-active); font-weight: 700; }
+.tab-panel  { display: none; }
+.tab-panel.active { display: block; }
+/* --- Waterfall Chart Container --- */
+.waterfall-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+#chart-waterfall {
+  width: 100%;
+  height: 320px;
+  min-width: 600px;
+  display: block;
+}
+.waterfall-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+/* --- Waterfall Factor Table --- */
+.factor-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 16px; }
+.factor-table th {
+  background: var(--primary);
+  color: #fff;
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+}
+[data-theme="dark"] .factor-table th { background: var(--primary-light, #1a3a6e); }
+.factor-table td { padding: 7px 12px; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+.factor-table tr:last-child td { border-bottom: none; }
+/* --- Sankey Container --- */
+.sankey-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+#chart-sankey-actual, #chart-sankey-forecast {
+  width: 100%;
+  height: 380px;
+  min-width: 600px;
+  display: block;
+}
+.sankey-note { font-size: 12.5px; color: var(--text-secondary); line-height: 1.75; margin-top: 12px; }
+/* --- Porter Radar Container --- */
+.porter-wrap {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+#chart-radar-company,
+#chart-radar-industry,
+#chart-radar-forward {
+  width: 300px !important;
+  height: 300px !important;
+  display: block;
+}
+.porter-scores { list-style: none; margin-bottom: 16px; }
+.porter-scores li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.porter-scores li:last-child { border-bottom: none; }
+.score-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  line-height: 28px;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.score-dot.s1, .score-dot.s2 { background: var(--accent-green); }
+.score-dot.s3               { background: var(--accent-amber); }
+.score-dot.s4, .score-dot.s5 { background: var(--accent-red); }
+.porter-text { font-size: 13px; line-height: 1.85; color: var(--text-secondary); }
+/* --- Appendix --- */
+.appendix-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 16px; }
+.appendix-table th {
+  background: var(--primary);
+  color: #fff;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+}
+[data-theme="dark"] .appendix-table th { background: var(--primary-light, #1a3a6e); }
+.appendix-table td { padding: 7px 12px; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text-secondary); }
+.appendix-table tr:last-child td { border-bottom: none; }
+.disclaimer-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.85;
+  margin-top: 16px;
+}
+.methodology-box {
+  background: var(--bg);
+  border-left: 4px solid var(--accent-blue);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .two-col  { grid-template-columns: 1fr; }
+  .porter-wrap { grid-template-columns: 1fr; }
+  #chart-radar-company,
+  #chart-radar-industry,
+  #chart-radar-forward { width: 100% !important; height: 260px !important; }
+}
+@media (max-width: 600px) {
+  .report-header { padding: 20px 20px 0; }
+  .header-meta   { padding: 8px 20px; flex-wrap: wrap; gap: 10px; }
+  .container     { padding: 16px 12px; }
+  .section       { padding: 20px 16px; }
+  .kpi-grid      { grid-template-columns: 1fr 1fr; }
+  .header-main   { flex-direction: column; }
+}
+/* ============================================================ END CANONICAL CSS ============================================================ */
+</style>
+</head>
+<body>
+
+<div class="report-header">
+  <div class="header-main">
+    <div class="header-left">
+      <div class="company-exchange-badge">非上市央企 · 公用事业 / 电网</div>
+      <div class="company-name-cn">State Grid Corporation</div>
+      <div class="company-name-en">国家电网有限公司 · 未上市</div>
+    </div>
+    <div class="header-right">
+      <button class="theme-toggle" onclick="toggleTheme()">☀ / ☾ 切换主题</button>
+      <div class="rating-badge neutral">中性</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <span>2026年4月8日</span>
+    <span>数据来源：中国货币网年报摘要、公司债券年度报告、评级报告与公开新闻整理（中等置信度）</span>
+    <span>由 Equity Research Skill 生成</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section" id="section-summary">
+    <div class="section-title">一、投资摘要</div>
+
+    <p class="summary-para">国家电网有限公司是全球最大的公用事业企业之一，负责中国大部分地区的输电、配电与售电网络运营，并布局产业金融、电工装备、国际业务等。公司为国务院国资委控股的非上市央企，本报告不构成任何股票买卖建议，仅作信用与行业研究式的财务与情景量化。</p>
+    <p class="summary-para">2024 年合并口径营业收入约 3.92 万亿元人民币，同比约 +2.2%；营业成本约 3.67 万亿元；净利润约 773 亿元、同比约 +9.7%。输配电价受准许成本监审框架约束，毛利率长期处于低个位数属行业常态。资产规模超过 5.8 万亿元，有息债务规模大，投资性现金流出连续高于经营现金流净流入，依赖稳定的外部融资环境。</p>
+    <p class="summary-para">政策与投资层面，多家媒体与卖方援引公司「十五五」约 4 万亿元固定资产投资规划、特高压与配网智能化为重点；宏观模型采用 Utilities 行业默认 β，并将传导摩擦因子 φ 下调至 0.35 以反映中国监管电价主体特征。基准增速锚定 2024 年实际营收同比，叠加宏观调整与公司事件，情境预测未来一年合并营收同比增速约<strong>+5.7%</strong>（置信度中等，国别 β 错配需谨慎解读）。</p>
+
+    <div class="two-col">
+      <div class="highlights-box">
+        <h4>核心亮点</h4>
+        <ul class="bullet-list">
+          <li>自然垄断网络 + 政策使命双支撑：电网是能源安全与新型电力系统建设的核心基础设施，资本开支具备战略刚性。</li>
+          <li>「十五五」投资强度抬升：公开报道指向约 4 万亿元量级固定资产投资，利好可折旧资产与监管准许收入长期曲线。</li>
+          <li>2024 年净利润增速显著高于营收，反映成本传导与费用/非经常性因素的综合结果，利润率仍处监管框架下的低水平。</li>
+          <li>经营性现金流体量巨大，利息保障倍数在杠杆偏高的前提下仍处可接受区间（取决于 EBITDA 口径）。</li>
+        </ul>
+      </div>
+      <div class="risks-box">
+        <h4>主要风险</h4>
+        <ul class="bullet-list">
+          <li>监管与电价风险：准许成本、交叉补贴与市场化改革节奏扰动盈利可预测性。</li>
+          <li>资本开支爬坡带来持续自由现金流为负与债务滚动压力，利率与债市环境敏感。</li>
+          <li>新能源渗透率抬升与分布式发展或压低传统输配电量增长中枢。</li>
+          <li>非上市主体下股权结构复杂，信息披露频率与颗粒度低于上市公司，模型存在估计误差。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="thesis-box">
+      <strong>投资逻辑：</strong>国家电网的研究价值更多体现在<strong>信用、产业链与政策β</strong>而非流通股权估值。长期看，特高压外送、配网承载力与数字化调度决定资产强度；短中期看，监管规则与投资节奏决定利润与现金流的可实现性。本报告评级<strong>中性</strong>，强调情景分析而非目标价。
+    </div>
+  </div>
+
+  <div class="section" id="section-financials">
+    <div class="section-title">二、财务概览</div>
+
+    <div class="kpi-grid">
+
+      <div class="kpi-card up">
+        <div class="kpi-label">营业收入</div>
+        <div class="kpi-value">约 3.92 万亿元</div>
+        <div class="kpi-change up">同比约 +2.2%</div>
+        <div class="kpi-sub">2024 合并报表</div>
+      </div>
+
+      <div class="kpi-card up">
+        <div class="kpi-label">净利润</div>
+        <div class="kpi-value">约 773 亿元</div>
+        <div class="kpi-change up">同比约 +9.7%</div>
+        <div class="kpi-sub">2024 合并报表</div>
+      </div>
+
+      <div class="kpi-card down">
+        <div class="kpi-label">自由现金流（FCF）</div>
+        <div class="kpi-value">约 −1800 亿元</div>
+        <div class="kpi-change down">估计缺口较 2023 年扩大</div>
+        <div class="kpi-sub">经营现金流 − 资本开支（估计）</div>
+      </div>
+
+      <div class="kpi-card up">
+        <div class="kpi-label">净利率</div>
+        <div class="kpi-value">约 2.0%</div>
+        <div class="kpi-change up">同比约 +13 bps</div>
+        <div class="kpi-sub">vs 上年约 1.8%</div>
+      </div>
+
+    </div>
+
+    <table class="metrics-table">
+      <thead>
+        <tr>
+          <th>指标</th>
+          <th>2024（当年）</th>
+          <th>2023（上年）</th>
+          <th>同比变动</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>毛利率</td>
+          <td>6.4%</td>
+          <td>6.4%</td>
+          <td class="metric-up">基本持平</td>
+        </tr>
+        <tr>
+          <td>营业利润率</td>
+          <td>2.5%</td>
+          <td>2.3%</td>
+          <td class="metric-up">+0.2 ppt</td>
+        </tr>
+        <tr>
+          <td>净利率</td>
+          <td>2.0%</td>
+          <td>1.8%</td>
+          <td class="metric-up">+0.2 ppt</td>
+        </tr>
+        <tr>
+          <td>ROE</td>
+          <td>2.9%</td>
+          <td>2.6%</td>
+          <td class="metric-up">略有改善</td>
+        </tr>
+        <tr>
+          <td>ROA</td>
+          <td>1.3%</td>
+          <td>1.2%</td>
+          <td class="metric-up">略有改善</td>
+        </tr>
+        <tr>
+          <td>有息债务/权益（近似）</td>
+          <td>0.51x</td>
+          <td>0.53x</td>
+          <td class="metric-up">略降</td>
+        </tr>
+        <tr>
+          <td>利息保障倍数（营业利润/利息）</td>
+          <td>2.7x</td>
+          <td>2.6x</td>
+          <td class="metric-up">略升</td>
+        </tr>
+        <tr>
+          <td>每股收益（EPS）</td>
+          <td>不适用</td>
+          <td>不适用</td>
+          <td class="metric-up">非上市</td>
+        </tr>
+        <tr>
+          <td>自由现金流利润率</td>
+          <td>−0.5%</td>
+          <td>−0.4%</td>
+          <td class="metric-down">仍为负</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="trend-cards">
+      <div class="trend-card up">
+        <div class="trend-card-label">净利润趋势</div>
+        <div class="trend-card-text">2024 年净利润增速快于营收，反映监管传导、成本与费用节奏及非经常性项目的综合影响；后续若加大电网投资与利率环境变化，利润斜率未必维持。</div>
+      </div>
+      <div class="trend-card up">
+        <div class="trend-card-label">净利率趋势</div>
+        <div class="trend-card-text">净利率仍处低位但同比略升，符合公用事业管制行业特征；边际变化更多取决于电价规则、燃料及设备采购价格而非竞争溢价。</div>
+      </div>
+      <div class="trend-card down">
+        <div class="trend-card-label">自由现金流趋势</div>
+        <div class="trend-card-text">大额资本开支使自由现金流持续为负；模型估计 2024 年缺口较 2023 年略有扩大。需持续关注债务期限结构、滚动融资与投资节奏匹配度。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="section-prediction">
+    <div class="section-title">三、收入预测（宏观因子模型）</div>
+
+    <div class="waterfall-meta">
+      φ（市场磨损因子）= 0.35 &nbsp;|&nbsp; 置信度：中等 &nbsp;|&nbsp; 模型：宏观因子模型 v1.0 &nbsp;|&nbsp; 预测：相对 2024 年实际的合并营收情景（2025E–2026E）
+    </div>
+
+    <div class="waterfall-wrap">
+      <svg id="chart-waterfall"></svg>
+    </div>
+
+    <table class="factor-table">
+      <thead>
+        <tr>
+          <th>因子</th>
+          <th>宏观变化（%）</th>
+          <th>β系数</th>
+          <th>φ值</th>
+          <th>调整幅度（pct）</th>
+          <th>方向</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Fed Funds Rate（降息幅度）</td><td>+6.21</td><td>1.20</td><td>0.35</td><td>+2.61</td><td class="metric-up">正向</td></tr>
+        <tr><td>US Real GDP Growth</td><td>0.00</td><td>0.30</td><td>0.35</td><td>0.00</td><td class="metric-up">中性</td></tr>
+        <tr><td>PCE Inflation</td><td>+8.00</td><td>-0.10</td><td>0.35</td><td>-0.28</td><td class="metric-down">负向</td></tr>
+        <tr><td>USD Index (DXY)</td><td>-2.00</td><td>0.00</td><td>0.35</td><td>0.00</td><td class="metric-up">中性</td></tr>
+        <tr><td>WTI Crude Oil</td><td>-6.67</td><td>-0.20</td><td>0.35</td><td>+0.47</td><td class="metric-up">正向</td></tr>
+        <tr><td>US Consumer Confidence</td><td>+2.04</td><td>0.00</td><td>0.35</td><td>0.00</td><td class="metric-up">中性</td></tr>
+      </tbody>
+    </table>
+
+    <div class="disclaimer-box" style="margin-top:16px;">
+      预测数据为概率性估计，仅供参考，不构成投资建议。本报告中的收入预测基于宏观因子量化模型，使用 Utilities 行业敏感度系数（β）及市场磨损因子（φ = 0.35），结合公开宏观经济预测数据及公司特定情报生成。主体业务在中国，美国宏观变量存在国别错配。实际结果可能与预测存在重大差异。
+    </div>
+  </div>
+
+  <div class="section" id="section-sankey">
+    <div class="section-title">四、收入流向分析（Sankey 桑基图）</div>
+
+    <div class="tab-bar" id="sankey-tabs">
+      <div class="tab active" onclick="switchTab('sankey','actual',this)">2024 实际</div>
+      <div class="tab"        onclick="switchTab('sankey','forecast',this)">2025E 预测（+5.7%）</div>
+    </div>
+
+    <div class="tab-panel active" id="sankey-panel-actual">
+      <div class="sankey-wrap">
+        <svg id="chart-sankey-actual"></svg>
+      </div>
+    </div>
+    <div class="tab-panel" id="sankey-panel-forecast">
+      <div class="sankey-wrap">
+        <svg id="chart-sankey-forecast"></svg>
+      </div>
+    </div>
+
+    <p class="sankey-note">桑基图基于 2024 年合并损益展示逻辑：营业收入减营业成本得毛利润；销售、管理与研发相关费用在法定报表中高度合并，此处按行业惯例拆分以便可视化，并使三项费用合计等于毛利润减营业利润。连接「营业利润」至「税及其他」与「净利润」汇总所得税、利息与其他 below-the-line 差异，为示意性勾稽非精密法定还原。2025E 预测页在约 +5.7% 情境营收增速下对各科目标量同比放大；若监管准许收入、电价或大宗商品大幅偏离假设，需重算。</p>
+  </div>
+
+  <div class="section" id="section-porter">
+    <div class="section-title">五、波特五力分析</div>
+
+    <div class="tab-bar" id="porter-tabs">
+      <div class="tab active" onclick="switchTab('porter','company',this)">公司层面</div>
+      <div class="tab"        onclick="switchTab('porter','industry',this)">行业层面</div>
+      <div class="tab"        onclick="switchTab('porter','forward',this)">前景展望</div>
+    </div>
+
+    <div class="tab-panel active" id="porter-panel-company">
+      <div class="porter-wrap">
+        <div>
+          <canvas id="chart-radar-company"></canvas>
+        </div>
+        <div>
+          <ul class="porter-scores" id="scores-company">
+            <li><span class="score-dot s3">3</span>供应商议价能力</li>
+            <li><span class="score-dot s3">3</span>买方议价能力</li>
+            <li><span class="score-dot s1">1</span>新进入者威胁</li>
+            <li><span class="score-dot s3">3</span>替代品威胁</li>
+            <li><span class="score-dot s2">2</span>行业竞争强度</li>
+          </ul>
+          <div class="porter-text">公司在特高压设备与技术服务采购体量上具备强大议价，但在全球交货紧张阶段仍面对关键主设备供货周期与价格刚性。买方维度上，终端用户分散而弱，国家发改委、能源局及价格主管部门对输配电价与交叉补贴的规则制定构成强谈判方。新进入者难以在国家主干输电网络复制同等资产与特许业态。替代品威胁主要来自分布式与就地消纳技术对经济输电量增长的稀释。行业内横向争夺市场份额色彩弱，更多体现为保供、安全与投资考核下的高效执行竞赛。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="porter-panel-industry">
+      <div class="porter-wrap">
+        <div>
+          <canvas id="chart-radar-industry"></canvas>
+        </div>
+        <div>
+          <ul class="porter-scores" id="scores-industry">
+            <li><span class="score-dot s3">3</span>供应商议价能力</li>
+            <li><span class="score-dot s4">4</span>买方议价能力</li>
+            <li><span class="score-dot s2">2</span>新进入者威胁</li>
+            <li><span class="score-dot s3">3</span>替代品威胁</li>
+            <li><span class="score-dot s3">3</span>行业竞争强度</li>
+          </ul>
+          <div class="porter-text">中国电网行业在自然垄断环节呈现高度集中，输配电价按准许成本监审框架运行，盈利弹性低于竞争性制造业。上游电工装备受大宗商品、芯片与产能周期影响，中游电网企业资本开支周期长、负债规模大。下游对电价与可靠性敏感，改革深化后市场电量占比上升提升规则复杂度。潜在新主体更多出现于配网运营与综合能源服务等边缘业态。替代威胁随新能源渗透率抬升而缓慢累积。竞争焦点在投资合规、工程交付与技术标准主导权。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="porter-panel-forward">
+      <div class="porter-wrap">
+        <div>
+          <canvas id="chart-radar-forward"></canvas>
+        </div>
+        <div>
+          <ul class="porter-scores" id="scores-forward">
+            <li><span class="score-dot s4">4</span>供应商议价能力</li>
+            <li><span class="score-dot s4">4</span>买方议价能力</li>
+            <li><span class="score-dot s2">2</span>新进入者威胁</li>
+            <li><span class="score-dot s4">4</span>替代品威胁</li>
+            <li><span class="score-dot s3">3</span>行业竞争强度</li>
+          </ul>
+          <div class="porter-text">未来两到三年，「十五五」大投资与新型电力系统建设将强化设备与技术供应商在高峰期的议价；监管侧对投资有效性、电价约束与新能源消纳责任的平衡更趋精细。分布式、储能与电力市场化或抬高局部替代与分流效应。主干网环节进入壁垒仍高，但数字化调度、现货与辅助服务市场扩大了对人才与系统能力的软竞争。国际项目与标准输出亦带来与国内规则不同的竞争维度。</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section" id="section-appendix">
+    <div class="section-title">附录</div>
+
+    <p style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">数据来源</p>
+    <table class="appendix-table">
+      <thead><tr><th>来源类型</th><th>具体来源</th><th>数据日期</th><th>置信度</th></tr></thead>
+      <tbody>
+        <tr><td>监管披露</td><td>中国货币网：国家电网 2024 年度报告及审计报告摘要；上交所债券发行人公司债券年度报告（表格口径）</td><td>2025-04</td><td>中高</td></tr>
+        <tr><td>评级机构</td><td>联合资信等跟踪评级报告（有息债务、现金流、投资支出）</td><td>2024</td><td>中</td></tr>
+        <tr><td>媒体与卖方</td><td>电力网、新浪财经、观研报告网等对年报要点与「十五五」投资规划的汇编</td><td>2025-05至2026-03</td><td>中</td></tr>
+        <tr><td>宏观情景</td><td>FOMC 2026 年 3 月 SEP、TradingEconomics 等对联邦基金利率的公开整理；内部 Utilities β 与 φ=0.35</td><td>2026-04</td><td>中</td></tr>
+      </tbody>
+    </table>
+
+    <p style="font-size:13px;font-weight:700;color:var(--text-primary);margin:16px 0 10px;">预测模型方法论</p>
+    <div class="methodology-box">
+      <strong>预测公式：</strong><br>
+      预测营收增长率 = 基准增长率 + Σ（宏观因子变化% × β<sub>sector</sub> × φ）+ 公司特定调整项<br><br>
+      <strong>参数：</strong>φ由默认 0.5 下调至 <strong>0.35</strong>（市场磨损因子，反映受管制电价与跨境传导摩擦）| 置信度：中等<br><br>
+      本报告对国家电网采用 <strong>Utilities</strong> 行业默认 β 向量（见 <code>references/prediction_factors.md</code>）。基准增长率取 <strong>2024 年相对 2023 年实际合并营收同比 +2.18%</strong>；宏观因子调整合计约 <strong>+2.8pct</strong>（美联储利率路径、PCE、油价等，经 φ 缩放）；公司特定事件（「十五五」投资表述、重点特高压工程、电网高质量发展政策等）合计约 <strong>+0.75pct</strong>，得到情境营收增速约 <strong>+5.7%</strong>。主体在中国、宏观因子以美国变量为主，国别错配显著，宜仅作跨市场情景压力测试而非精确预测。
+    </div>
+
+    <div class="disclaimer-box">
+      <strong>免责声明：</strong>本报告由 Equity Research Skill 自动生成，仅供参考，不构成任何投资建议或要约。报告中的预测数据基于量化模型及公开信息，存在重大不确定性，实际结果可能与预测存在重大差异。投资者在做出任何投资决策前应自行进行独立研究，并充分了解相关风险。本报告的作者及生成工具不对任何基于本报告的投资损失承担责任。
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+  redrawAllCharts();
+}
+
+function switchTab(group, panelId, clickedTab) {
+  document.querySelectorAll('#' + group + '-tabs .tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('[id^="' + group + '-panel-"]').forEach(p => p.classList.remove('active'));
+  clickedTab.classList.add('active');
+  document.getElementById(group + '-panel-' + panelId).classList.add('active');
+}
+
+function themeColor(lightVal, darkVal) {
+  return document.documentElement.dataset.theme === 'dark' ? darkVal : lightVal;
+}
+
+const waterfallData = [
+  { label: "基准增长", start: 0, end: 2.18, value: 2.18, type: "baseline" },
+  { label: "宏观调整", start: 2.18, end: 4.98, value: 2.8, type: "positive" },
+  { label: "公司特定", start: 4.98, end: 5.73, value: 0.75, type: "positive" },
+  { label: "预测结果", start: 0, end: 5.73, value: 5.73, type: "result" }
+];
+
+const sankeyActualData = {
+  nodes: [
+    {name:"营业收入"},{name:"营业成本"},{name:"毛利润"},
+    {name:"销售费用"},{name:"管理费用"},{name:"研发费用"},
+    {name:"营业利润"},{name:"税及其他"},{name:"净利润"}
+  ],
+  links: [
+    {source:0,target:1,value:36674},{source:0,target:2,value:2519},
+    {source:2,target:3,value:105},{source:2,target:4,value:1347},{source:2,target:5,value:85},{source:2,target:6,value:982},
+    {source:6,target:7,value:209},{source:6,target:8,value:773}
+  ]
+};
+
+const sankeyForecastData = {
+  nodes: [
+    {name:"营业收入"},{name:"营业成本"},{name:"毛利润"},
+    {name:"销售费用"},{name:"管理费用"},{name:"研发费用"},
+    {name:"营业利润"},{name:"税及其他"},{name:"净利润"}
+  ],
+  links: [
+    {source:0,target:1,value:38776},{source:0,target:2,value:2662},
+    {source:2,target:3,value:111},{source:2,target:4,value:1427},{source:2,target:5,value:90},{source:2,target:6,value:1034},
+    {source:6,target:7,value:219},{source:6,target:8,value:815}
+  ]
+};
+
+const porterScores = {
+  company:  [3, 3, 1, 3, 2],
+  industry: [3, 4, 2, 3, 3],
+  forward:  [4, 4, 2, 4, 3]
+};
+
+function drawWaterfall() {
+  const el = document.getElementById('chart-waterfall');
+  if (!el || !waterfallData.length) return;
+  d3.select(el).selectAll('*').remove();
+
+  const isDark = document.documentElement.dataset.theme === 'dark';
+  const textColor  = isDark ? '#b0bec5' : '#4a5568';
+  const gridColor  = isDark ? '#2c3e50' : '#dde3ea';
+  const colorPos   = '#1a8f5a';
+  const colorNeg   = '#c0392b';
+  const colorBase  = '#2980b9';
+  const colorRes   = '#0a2140';
+
+  const rect    = el.parentElement.getBoundingClientRect();
+  const W       = Math.max(rect.width || 600, 600);
+  const H       = 320;
+  const margin  = { top: 30, right: 30, bottom: 60, left: 60 };
+  const innerW  = W - margin.left - margin.right;
+  const innerH  = H - margin.top  - margin.bottom;
+
+  const svg = d3.select(el)
+    .attr('width',  W)
+    .attr('height', H);
+
+  const g = svg.append('g')
+    .attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const allVals  = waterfallData.flatMap(d => [d.start, d.end]);
+  const [minV, maxV] = [Math.min(...allVals), Math.max(...allVals)];
+  const pad    = (maxV - minV) * 0.15 || 1;
+  const yDomain = [minV - pad, maxV + pad];
+
+  const x = d3.scaleBand().domain(waterfallData.map(d => d.label)).range([0, innerW]).padding(0.35);
+  const y = d3.scaleLinear().domain(yDomain).range([innerH, 0]);
+
+  g.append('g').attr('class', 'grid')
+    .call(d3.axisLeft(y).tickSize(-innerW).tickFormat(''))
+    .selectAll('line').attr('stroke', gridColor).attr('stroke-dasharray', '3,3');
+  g.select('.grid .domain').remove();
+
+  g.append('line')
+    .attr('x1', 0).attr('x2', innerW)
+    .attr('y1', y(0)).attr('y2', y(0))
+    .attr('stroke', gridColor).attr('stroke-width', 1.5);
+
+  g.append('g').attr('transform', `translate(0,${innerH})`).call(d3.axisBottom(x))
+    .selectAll('text').attr('fill', textColor).attr('font-size', 11)
+    .attr('transform', 'rotate(-25)').attr('text-anchor', 'end');
+  g.append('g').call(d3.axisLeft(y).ticks(6).tickFormat(d => d + '%'))
+    .selectAll('text').attr('fill', textColor).attr('font-size', 11);
+  g.selectAll('.domain').attr('stroke', gridColor);
+  g.selectAll('.tick line').attr('stroke', gridColor);
+
+  svg.append('text')
+    .attr('transform', `rotate(-90)`)
+    .attr('x', -(H / 2)).attr('y', 16)
+    .attr('text-anchor', 'middle')
+    .attr('fill', textColor).attr('font-size', 11)
+    .text('增长率 (%)');
+
+  const tooltip = d3.select('body').select('#wf-tooltip').empty()
+    ? d3.select('body').append('div').attr('id','wf-tooltip')
+        .style('position','fixed').style('background','rgba(10,33,64,0.9)')
+        .style('color','#fff').style('padding','8px 12px').style('border-radius','6px')
+        .style('font-size','12px').style('pointer-events','none').style('opacity',0)
+    : d3.select('#wf-tooltip');
+
+  waterfallData.forEach(d => {
+    const barColor = d.type === 'baseline' ? colorBase
+                   : d.type === 'result'   ? colorRes
+                   : d.value >= 0          ? colorPos : colorNeg;
+    const barY = y(Math.max(d.start, d.end));
+    const barH = Math.abs(y(d.start) - y(d.end));
+
+    g.append('rect')
+      .attr('x', x(d.label)).attr('y', barY)
+      .attr('width', x.bandwidth()).attr('height', Math.max(barH, 1))
+      .attr('fill', barColor).attr('rx', 3)
+      .on('mouseover', (event) => {
+        tooltip.style('opacity', 1)
+          .html(`<strong>${d.label}</strong><br>调整：${d.value > 0 ? '+' : ''}${d.value.toFixed(2)}%<br>结果：${d.end.toFixed(2)}%`);
+      })
+      .on('mousemove', (event) => {
+        tooltip.style('left', (event.clientX + 12) + 'px').style('top', (event.clientY - 28) + 'px');
+      })
+      .on('mouseout', () => tooltip.style('opacity', 0));
+
+    g.append('text')
+      .attr('x', x(d.label) + x.bandwidth() / 2)
+      .attr('y', barY - 4)
+      .attr('text-anchor', 'middle')
+      .attr('fill', barColor)
+      .attr('font-size', 10).attr('font-weight', 600)
+      .text((d.value > 0 ? '+' : '') + d.value.toFixed(1) + '%');
+  });
+}
+
+function drawSankey(containerId, data, colorScheme) {
+  const el = document.getElementById(containerId);
+  if (!el || !data || !data.nodes || !data.links) return;
+  d3.select(el).selectAll('*').remove();
+
+  const isDark  = document.documentElement.dataset.theme === 'dark';
+  const textColor = isDark ? '#b0bec5' : '#4a5568';
+
+  const rect   = el.parentElement.getBoundingClientRect();
+  const W      = Math.max(rect.width || 700, 600);
+  const H      = 380;
+  const margin = { top: 10, right: 120, bottom: 10, left: 10 };
+
+  const svg = d3.select(el).attr('width', W).attr('height', H);
+
+  const sankey = d3.sankey()
+    .nodeWidth(18)
+    .nodePadding(14)
+    .extent([[margin.left, margin.top], [W - margin.right, H - margin.bottom]]);
+
+  const graph = sankey({
+    nodes: data.nodes.map(d => Object.assign({}, d)),
+    links: data.links.map(d => Object.assign({}, d))
+  });
+
+  const color = d3.scaleOrdinal()
+    .domain(graph.nodes.map(d => d.name))
+    .range(colorScheme);
+
+  svg.append('g').attr('fill', 'none')
+    .selectAll('path')
+    .data(graph.links).join('path')
+    .attr('d', d3.sankeyLinkHorizontal())
+    .attr('stroke', d => color(d.source.name))
+    .attr('stroke-width', d => Math.max(1, d.width))
+    .attr('opacity', 0.45)
+    .on('mouseover', function() { d3.select(this).attr('opacity', 0.75); })
+    .on('mouseout',  function() { d3.select(this).attr('opacity', 0.45); });
+
+  svg.append('g')
+    .selectAll('rect')
+    .data(graph.nodes).join('rect')
+    .attr('x', d => d.x0).attr('y', d => d.y0)
+    .attr('height', d => Math.max(1, d.y1 - d.y0))
+    .attr('width', d => d.x1 - d.x0)
+    .attr('fill', d => color(d.name))
+    .attr('rx', 2);
+
+  svg.append('g').style('font-size', '12px')
+    .selectAll('text')
+    .data(graph.nodes).join('text')
+    .attr('x', d => d.x0 < W / 2 ? d.x1 + 6 : d.x0 - 6)
+    .attr('y', d => (d.y1 + d.y0) / 2)
+    .attr('dy', '0.35em')
+    .attr('text-anchor', d => d.x0 < W / 2 ? 'start' : 'end')
+    .attr('fill', textColor)
+    .text(d => {
+      const val = d.value >= 1000 ? (d.value / 1000).toFixed(1) + 'bn' : d.value.toFixed(2) + 'm';
+      return d.name + ' ' + val;
+    });
+}
+
+const SANKEY_COLORS_ACTUAL   = ['#2980b9','#c0392b','#1a8f5a','#d68910','#8e44ad','#16a085','#2c3e50','#e74c3c','#27ae60'];
+const SANKEY_COLORS_FORECAST = ['#3498db','#e74c3c','#2ecc71','#f39c12','#9b59b6','#1abc9c','#34495e','#c0392b','#27ae60'];
+
+let radarCharts = {};
+function drawRadar(canvasId, scores, label) {
+  if (radarCharts[canvasId]) { radarCharts[canvasId].destroy(); }
+  const isDark = document.documentElement.dataset.theme === 'dark';
+  const gridColor = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(10,33,64,0.10)';
+  const textColor = isDark ? '#b0bec5' : '#4a5568';
+  const pointColor = isDark ? '#1e90ff' : '#0a2140';
+
+  radarCharts[canvasId] = new Chart(document.getElementById(canvasId), {
+    type: 'radar',
+    data: {
+      labels: ['供应商议价能力', '买方议价能力', '新进入者威胁', '替代品威胁', '行业竞争强度'],
+      datasets: [{
+        label: label,
+        data: scores,
+        backgroundColor: 'rgba(10,33,64,0.12)',
+        borderColor: pointColor,
+        borderWidth: 2,
+        pointBackgroundColor: pointColor,
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }]
+    },
+    options: {
+      responsive: false,
+      scales: {
+        r: {
+          min: 0, max: 5,
+          ticks: { stepSize: 1, display: false },
+          grid:  { color: gridColor },
+          angleLines: { color: gridColor },
+          pointLabels: { color: textColor, font: { size: 11 } }
+        }
+      },
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+}
+
+function redrawAllCharts() {
+  drawWaterfall();
+  drawSankey('chart-sankey-actual',   sankeyActualData,   SANKEY_COLORS_ACTUAL);
+  drawSankey('chart-sankey-forecast', sankeyForecastData, SANKEY_COLORS_FORECAST);
+  drawRadar('chart-radar-company',  porterScores.company,  '公司层面');
+  drawRadar('chart-radar-industry', porterScores.industry, '行业层面');
+  drawRadar('chart-radar-forward',  porterScores.forward,  '前景展望');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  redrawAllCharts();
+});
+window.addEventListener('resize', () => {
+  drawWaterfall();
+  drawSankey('chart-sankey-actual',   sankeyActualData,   SANKEY_COLORS_ACTUAL);
+  drawSankey('chart-sankey-forecast', sankeyForecastData, SANKEY_COLORS_FORECAST);
+});
+</script>
+
+</body>
+</html>

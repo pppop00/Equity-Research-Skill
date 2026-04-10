@@ -1,0 +1,36 @@
+{
+  "company": "Breville Group Limited",
+  "executive_summary": "集团FY2025录得营收约16.97亿澳元（同比+10.9%），毛利约6.21亿澳元，毛利率36.6%，营业利润约2.05亿澳元（同比+10.2%），归母净利润约1.36亿澳元（同比+14.6%）。全球产品业务在美洲、EMEA与亚太均实现双位数增长；分销业务增速温和。净现金约4,850万澳元，但关税应对与备货使库存明显上升。",
+  "profitability": {
+    "gross_margin_pct": 36.6,
+    "gross_margin_prior_pct": 36.4,
+    "operating_margin_pct": 12.1,
+    "operating_margin_prior_pct": 12.1,
+    "net_margin_pct": 8.01,
+    "net_margin_prior_pct": 7.75,
+    "roe_pct": 14.9,
+    "roa_pct": 12.4
+  },
+  "growth": {
+    "revenue_yoy_pct": 10.9,
+    "net_income_yoy_pct": 14.6,
+    "eps_yoy_pct": 14.1,
+    "operating_income_yoy_pct": 10.2
+  },
+  "cash_flow": {
+    "ocf_millions": 126.8,
+    "fcf_millions": 58.2,
+    "fcf_margin_pct": 3.43,
+    "fcf_yoy_pct": 7.8
+  },
+  "leverage": {
+    "debt_to_equity": 0.059,
+    "interest_coverage": 12.8
+  },
+  "trend_narratives": {
+    "net_income": "净利润增速高于营收，财务费用下降与税率/营运杠杆的边际改善提供了部分支撑；需关注FY2026起投入品成本与关税环境对毛利率的再平衡。",
+    "net_margin": "净利率同比小幅扩张约0.26个百分点；若美国市场关税与混配成本持续，利润率可能回吐部分升幅。",
+    "fcf": "在库存与模具/产能多元化资本开支上升的背景下，自由现金流仍录得同比增长，但利润转现金的质量需持续观察营运资本变动。"
+  },
+  "investment_thesis_short": "全球高端小家电与咖啡品类的结构性需求叠加多区域直营扩张支撑收入增长；关键矛盾集中在对美关税、投入品价格与中国等新市场的爬坡效率。"
+}

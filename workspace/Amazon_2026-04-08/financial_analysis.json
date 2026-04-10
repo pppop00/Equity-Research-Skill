@@ -1,0 +1,35 @@
+{
+  "company": "Amazon.com, Inc.",
+  "executive_summary": "2024 财年亚马逊实现净销售额约 6,380 亿美元（同比约 +11%），净利润约 592 亿美元，接近翻倍增长；营业利润约 686 亿美元，营业利润率升至约 10.8%。增长由 AWS（净销售额约 +19%、分部营业利润显著扩张）与零售履约效率改善共同推动，国际分部亦由亏转盈。规模体量大、资本开支与租赁刚性高，自由现金流对 capex 与物流技术节奏仍较敏感。",
+  "profitability": {
+    "gross_margin_pct": 48.9,
+    "gross_margin_prior_pct": 47.0,
+    "operating_margin_pct": 10.8,
+    "operating_margin_prior_pct": 6.4,
+    "net_margin_pct": 9.3,
+    "net_margin_prior_pct": 5.3,
+    "roe_pct": 20.7,
+    "roa_pct": 9.5
+  },
+  "growth": {
+    "revenue_yoy_pct": 11.0,
+    "net_income_yoy_pct": 94.7,
+    "eps_yoy_pct": 90.7
+  },
+  "cash_flow": {
+    "ocf_bn": 1158.8,
+    "fcf_bn": 382.2,
+    "fcf_margin_pct": 6.0,
+    "fcf_yoy_pct": 3.8
+  },
+  "leverage": {
+    "liabilities_to_assets_pct": 54.2,
+    "interest_coverage_x": 28.1
+  },
+  "trend_narratives": {
+    "net_income": "↑ 净利润大幅提升反映 AWS 盈利能力增强、零售端成本效率改善及国际分部的经营拐点，但季度间仍受一次性项目与有效税率影响。",
+    "net_margin": "↑ 净利率显著走扩，主因营业利润率由成本优化与更高毛利业务占比驱动；后续需关注 AI 基础设施投入节奏与价格竞争。",
+    "fcf": "↑ 自由现金流同比略增，但显著低于经营现金流的体量，体现物流、数据中心等资本开支强度；中长期取决于收入增速与资本回报的再平衡。"
+  },
+  "investment_thesis_short": "核心在于 AWS 云与生成式 AI 产品栈能否维持高于集团均值的增速与利润率，同时零售网络区域化与广告、第三方卖家服务能否继续摊薄履约刚性；监管与劳资成本是主要摩擦项。"
+}

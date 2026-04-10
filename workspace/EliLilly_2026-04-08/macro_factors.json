@@ -1,0 +1,79 @@
+{
+  "company": "Eli Lilly and Company",
+  "sector": "Healthcare",
+  "phi": 0.5,
+  "beta_source": "default",
+  "data_freshness": "2026-04-08",
+  "factors": [
+    {
+      "name": "Fed Funds Rate",
+      "current_value": 3.625,
+      "forecast_value": 3.4,
+      "factor_change_pct": -6.21,
+      "beta": 0.1,
+      "phi": 0.5,
+      "adjustment_pct": 0.31,
+      "unit": "percent level",
+      "source": "FOMC SEP March 2026：年末政策利率预测中位约 3.4%；降息幅度按 −Factor_Change%×β×φ 计入正面营收弹性。"
+    },
+    {
+      "name": "US Real GDP Growth",
+      "current_value": 2.4,
+      "forecast_value": 2.4,
+      "factor_change_pct": 0.0,
+      "beta": 0.5,
+      "phi": 0.5,
+      "adjustment_pct": 0.0,
+      "unit": "percent YoY",
+      "source": "2026 年增长预测相对平稳的情景。"
+    },
+    {
+      "name": "PCE Inflation",
+      "current_value": 2.5,
+      "forecast_value": 2.7,
+      "factor_change_pct": 8.0,
+      "beta": -0.1,
+      "phi": 0.5,
+      "adjustment_pct": -0.4,
+      "unit": "percent YoY",
+      "source": "核心 PCE 预测温和上修情境。"
+    },
+    {
+      "name": "USD Index (DXY)",
+      "current_value": 100,
+      "forecast_value": 98,
+      "factor_change_pct": -2.0,
+      "beta": -0.2,
+      "phi": 0.5,
+      "adjustment_pct": 0.2,
+      "unit": "index level",
+      "source": "美元略弱有利于海外标价折算。"
+    },
+    {
+      "name": "WTI Crude Oil",
+      "current_value": 75,
+      "forecast_value": 70,
+      "factor_change_pct": -6.67,
+      "beta": -0.1,
+      "phi": 0.5,
+      "adjustment_pct": 0.33,
+      "unit": "USD/barrel",
+      "source": "油价同比温和回落对成本端的边际利好。"
+    },
+    {
+      "name": "Consumer Confidence",
+      "current_value": 98,
+      "forecast_value": 101,
+      "factor_change_pct": 3.06,
+      "beta": 0.1,
+      "phi": 0.5,
+      "adjustment_pct": 0.15,
+      "unit": "index (illustrative)",
+      "source": "可选消费与处方支付能力相关的简化代理变量。"
+    }
+  ],
+  "total_macro_adjustment_pct": 0.59,
+  "notes": [
+    "Healthcare 行采用 references/prediction_factors.md 默认 β；创新药龙头对宏观因子的弹性总体低于可选消费。"
+  ]
+}

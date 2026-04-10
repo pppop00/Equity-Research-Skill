@@ -1,0 +1,33 @@
+=== HTML 报告验证报告 ===
+文件：PDD_Holdings_Research_CN.html
+验证时间：2026-04-09
+
+--- 1. Section 完整性 ---
+[PASS] 6个section均存在 ✓
+
+--- 2. KPI 卡片 ---
+[PASS] 4张卡片，方向class正确 ✓
+[WARNING] 自由现金流采用近似 capex 估算，建议人工复核。
+
+--- 3. CSS 变量 ---
+[PASS] 所有必须变量存在 ✓
+
+--- 4. 图表容器与数据 ---
+[PASS] Waterfall / Sankey / Radar 容器与数据变量均存在 ✓
+
+--- 5. 波特五力 ---
+[PASS] 3个panel，各5个li，score-dot与数组吻合 ✓
+
+--- 6. 页面结构 ---
+[PASS] 所有必须元素和函数存在 ✓
+
+--- 7. 占位符残留 ---
+[PASS] 无残留占位符 ✓
+
+--- 8. 数字格式 ---
+[PASS] 抽查数字与格式，无 NaN/undefined/null/Infinity ✓
+
+=== 总结 ===
+CRITICAL 错误：0
+WARNING  警告：1
+状态：✅ 通过（含警告）

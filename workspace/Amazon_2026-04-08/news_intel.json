@@ -1,0 +1,29 @@
+{
+  "company": "Amazon.com, Inc.",
+  "sector": "电商 / 云服务",
+  "data_freshness": "2026-04-08",
+  "company_events": [
+    {
+      "type": "product_ai",
+      "description": "AWS 持续扩展生成式 AI 工具链（Bedrock、自研芯片 Trainium、企业应用 Amazon Q 等），有望撬动企业工作负载与推理需求，抬升云业务增速与价格加成空间。",
+      "revenue_impact_pct": 0.35
+    },
+    {
+      "type": "efficiency",
+      "description": "区域化履约网络与成本效率优化改善零售利润率，支撑营业利润连续两年显著修复。",
+      "revenue_impact_pct": 0.25
+    },
+    {
+      "type": "regulatory",
+      "description": "欧美反垄断、平台责任与劳工监管可能增加合规成本或限制部分业务扩展节奏。",
+      "revenue_impact_pct": -0.22
+    },
+    {
+      "type": "competition",
+      "description": "云市场面临微软 Azure、谷歌云及价格竞争；零售端面临低价电商与全渠道竞争，对广告与第三方卖家抽佣形成压力测试。",
+      "revenue_impact_pct": -0.18
+    }
+  ],
+  "narrative_summary": "基本面主轴是「零售效率拐点 + AWS 利润率回升 + AI 相关资本开支上升」三者拉扯。短期业绩已证明履约与技术投入可以转化为更高的分部利润，但 AI 数据中心与电力成本曲线将决定利润率斜率能否延续。",
+  "overall_sentiment": "偏乐观"
+}

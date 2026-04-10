@@ -1,0 +1,62 @@
+{
+  "profitability": {
+    "gross_margin_current": 6.43,
+    "gross_margin_prior": 6.42,
+    "operating_margin_current": 2.51,
+    "operating_margin_prior": 2.35,
+    "net_margin_current": 1.97,
+    "net_margin_prior": 1.84,
+    "roe_current": 2.9,
+    "roa_current": 1.33,
+    "ebitda_current": null,
+    "ebitda_margin_current": null
+  },
+  "growth": {
+    "revenue_growth_yoy_pct": 2.18,
+    "net_income_growth_yoy_pct": 9.66,
+    "eps_growth_yoy_pct": null,
+    "gross_profit_growth_yoy_pct": 2.28
+  },
+  "cash_flow": {
+    "free_cash_flow": -180,
+    "fcf_margin_pct": -0.46,
+    "fcf_conversion_pct": null,
+    "capex_intensity_pct": 13.01
+  },
+  "leverage": {
+    "debt_equity_ratio": 0.51,
+    "net_debt": 11664,
+    "net_debt_ebitda": null,
+    "interest_coverage_ratio": 2.73
+  },
+  "valuation": {
+    "stock_price": null,
+    "pe_ratio": null,
+    "market_cap": null,
+    "ev": null,
+    "ev_ebitda": null,
+    "note": "非上市企业，无公开股价与市盈率。"
+  },
+  "trends": {
+    "net_income": {
+      "label": "↑ Increasing",
+      "class": "positive",
+      "analysis": "2024 年合并净利润约 773 亿元，同比约 +9.7%（披露口径）。在营收增速约 2.2% 的背景下，利润增速快于收入，反映成本增速与收入基本同步、非经常性损益与费用结构可能带来边际改善，但仍需关注后续监管监审与燃料、设备价格节奏。"
+    },
+    "net_margin": {
+      "label": "↑ Increasing",
+      "class": "positive",
+      "analysis": "净利率由约 1.84% 提升至约 1.97%，升幅有限但方向改善；电网业务毛利率常年处于低个位数属监管与成本传导机制下的行业常态。"
+    },
+    "fcf": {
+      "label": "↓ Decreasing",
+      "class": "negative",
+      "analysis": "在特高压与主网持续大投下，经营现金流虽充沛但难以覆盖投资性现金流出，模型估计 2024 年自由现金流仍为负且缺口较 2023 年略有扩大；外部融资与债务滚动仍是平衡资本开支的重要手段。"
+    }
+  },
+  "unit": "billions CNY (亿元人民币)，比率类为 %",
+  "notes": [
+    "ROE/ROA 按合并净利润与合并权益/总资产计算，低于制造业属公用事业行业特性。",
+    "利息保障倍数采用营业利润/利息费用近似，若采用 EBITDA 口径倍数将明显提高。"
+  ]
+}

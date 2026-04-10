@@ -1,0 +1,47 @@
+=== HTML 报告验证报告 ===
+文件：Breville_Research_CN.html
+验证时间：2026年4月8日
+
+[PASS] — 无 CRITICAL 项；存在少量 WARNING 供人工复核。
+
+--- 1. Section 完整性 ---
+[PASS] 6 个 section 均存在（section-summary / financials / prediction / sankey / porter / appendix）。
+
+--- 2. KPI 卡片 ---
+[PASS] kpi-grid 下恰好 4 张 kpi-card，含 kpi-label/value/change/sub。
+[PASS] kpi-card 与 kpi-change 方向类名与财务方向一致。
+[PASS] 营业收入 HTML「16.97亿澳元」与 financial_data.json 营收 1696.6 百万澳元（≈16.97 亿澳元）偏差 <1%。
+
+--- 3. CSS 变量 ---
+[PASS] :root 与 [data-theme="dark"] 中必备变量齐备（与锁定模板一致）。
+
+--- 4. 图表容器与数据 ---
+[PASS] Waterfall：非空数组；首项 type=baseline；末项 type=result；累计 6.5+5.38−0.4=11.48%。
+[PASS] Sankey 实际/预测均含 9 节点、8 链接；source/target 索引有效；value>0。
+[PASS] 实际侧勾稽：1076.1+620.5=1696.6；133+175+108+204.5=620.5；68.6+135.9=204.5。
+[PASS] 预测侧勾稽：1199.7+691.7=1891.4；148.3+195.1+120.4+227.9=691.7；76.4+151.5=227.9。
+[PASS] Radar：porterScores 三组各 5 个整数 1–5。
+
+--- 5. 波特五力 ---
+[PASS] 三个 porter-panel 各含 5 个 li 与 score-dot；class s1–s5 与数组一致。
+[PASS] porter-text 为中文且每段超过 100 汉字。
+
+--- 6. 页面结构 ---
+[PASS] lang=zh-CN；D3 / d3-sankey / Chart.js / Noto Sans SC；toggleTheme、switchTab、redrawAllCharts、DOMContentLoaded 均存在。
+[PASS] rating-badge 使用 neutral。
+
+--- 7. 占位符残留 ---
+[PASS] 未检出「{{」「}}」残留。
+
+--- 8. 数字格式 ---
+[PASS] 抽查营收、净利、FCF、税率示意为澳元/百分比，无 NaN/undefined/null/Infinity 字样。
+
+--- 说明性 WARNING ---
+[WARNING] 总资产 1100 百万澳元为估算，ROA 与资产负债率对报表原文为一阶近似。
+[WARNING] 自由现金流来自第三方汇总，与法定现金流量表可能存在口径差。
+[WARNING] 宏观因子仍以美国变量为主，澳大利亚收入存在 β 国别错配；预测宜作情景区间。
+
+=== 总结 ===
+CRITICAL 错误：0
+WARNING  警告：3（方法论文本已披露，非模板缺陷）
+状态：通过（含说明性警告）

@@ -1,0 +1,61 @@
+{
+  "profitability": {
+    "gross_margin_current": 81.3,
+    "gross_margin_prior": 79.3,
+    "operating_margin_current": 28.6,
+    "operating_margin_prior": 19.0,
+    "net_margin_current": 23.5,
+    "net_margin_prior": 15.4,
+    "roe_current": 74.6,
+    "roa_current": 13.5,
+    "ebitda_current": null,
+    "ebitda_margin_current": null
+  },
+  "growth": {
+    "revenue_growth_yoy_pct": 32.0,
+    "net_income_growth_yoy_pct": 102.1,
+    "eps_growth_yoy_pct": 101.9,
+    "gross_profit_growth_yoy_pct": 35.3
+  },
+  "cash_flow": {
+    "free_cash_flow": 3762.0,
+    "fcf_margin_pct": 8.4,
+    "fcf_conversion_pct": 35.5,
+    "capex_intensity_pct": 11.2
+  },
+  "leverage": {
+    "debt_equity_ratio": 2.19,
+    "net_debt": 27741.0,
+    "net_debt_ebitda": null,
+    "interest_coverage_ratio": 21.3
+  },
+  "valuation": {
+    "stock_price": 780.0,
+    "pe_ratio": 66.6,
+    "market_cap": 739440.0,
+    "ev": null,
+    "ev_ebitda": null,
+    "note": "股价取 2026 年初前后代表性区间约 780 美元/股（示意）；市盈率 ≈ 股价/上年 EPS。"
+  },
+  "trends": {
+    "net_income": {
+      "label": "↑ Increasing",
+      "class": "positive",
+      "analysis": "2024 年净利润同比翻倍，主要受 Mounjaro 与 Zepbound 放量、肿瘤等产品线共振及毛利率扩张驱动；同时存在 IPR&D 与税负年度间波动，需跟踪非经常性项目。"
+    },
+    "net_margin": {
+      "label": "↑ Increasing",
+      "class": "positive",
+      "analysis": "净利率由约 15% 抬升至 23% 以上，反映高毛利 incretin 组合占比上升与经营杠杆；未来若降价或返利扩大，净利率或向均值回归。"
+    },
+    "fcf": {
+      "label": "↑ Increasing",
+      "class": "positive",
+      "analysis": "自由现金流随盈利改善而大幅回升，但仍显著低于净利润，因资本开支、营运资本与并购相关现金需求居高；扩产期 FCF 转化率需持续观察。"
+    }
+  },
+  "unit": "millions USD，比率类为 %",
+  "notes": [
+    "ROE 偏高部分源于回购后账面权益相对较低及盈利激增，宜结合 ROIC 与现金流一并解读。"
+  ]
+}

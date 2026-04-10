@@ -1,0 +1,67 @@
+{
+  "profitability": {
+    "gross_margin_current": 56.28,
+    "gross_margin_prior": 60.92,
+    "operating_margin_current": 21.91,
+    "operating_margin_prior": 27.53,
+    "net_margin_current": 23.01,
+    "net_margin_prior": 28.55,
+    "roe_current": 23.95,
+    "roa_current": 15.77,
+    "ebitda_current": null,
+    "ebitda_margin_current": null,
+    "ebitda_note": "公司未在 FY2025 业绩公告中披露折旧摊销，故不直接给出 EBITDA。"
+  },
+  "growth": {
+    "revenue_growth_yoy_pct": 9.65,
+    "net_income_growth_yoy_pct": -11.62,
+    "eps_growth_yoy_pct": -11.81,
+    "gross_profit_growth_yoy_pct": 1.3
+  },
+  "cash_flow": {
+    "free_cash_flow": 106238.69,
+    "free_cash_flow_prior": 121329.292,
+    "fcf_margin_pct": 24.6,
+    "fcf_conversion_pct": 106.92,
+    "capex_intensity_pct": 0.16
+  },
+  "leverage": {
+    "debt_equity_ratio": 0.0,
+    "asset_liability_ratio_current": 34.15,
+    "asset_liability_ratio_prior": 37.96,
+    "net_debt": -422308.27,
+    "net_debt_ebitda": null,
+    "interest_coverage_ratio": null
+  },
+  "valuation": {
+    "stock_price": 104.0,
+    "pe_ratio": 10.84,
+    "market_cap": 154168.98,
+    "ev": 93779.7,
+    "ev_ebitda": null,
+    "note": "股价参考 2026-04-08 第三方行情快照；估值为近似市场快照。"
+  },
+  "trends": {
+    "net_income": {
+      "label": "↓ Decreasing",
+      "class": "negative",
+      "analysis": "FY2025 净利润同比下降约 11.6% 至 994 亿元，核心拖累来自销售营销投入和生态建设支出上升。公司在国内主站补贴、商家扶持以及 Temu 供应链改造上的持续投入，对利润释放形成阶段性压制。"
+    },
+    "net_margin": {
+      "label": "↓ Decreasing",
+      "class": "negative",
+      "analysis": "净利率由 FY2024 的 28.5% 下滑至 FY2025 的 23.0%，反映平台仍在以利润换取中长期供给与履约能力。虽然 PDD 仍具较强现金创造能力，但 2026 年利润率能否企稳，将取决于 Temu 本地化模型的效率提升速度。"
+    },
+    "fcf": {
+      "label": "↓ Decreasing",
+      "class": "negative",
+      "analysis": "自由现金流按近似口径由 FY2024 的 1,213 亿元回落至 FY2025 的 1,062 亿元，降幅约 12%。不过考虑公司 2025 年末仍持有逾 4,223 亿元现金及短投，这一下滑更多体现主动投资节奏变化，而非现金流安全边际削弱。"
+    }
+  },
+  "unit": "millions RMB",
+  "notes": [
+    "由于公司披露的是“利息及投资收益净额”，利息保障倍数与 EBITDA 指标不做机械展示。",
+    "资产负债率采用总负债/总资产口径；模板中的“资产负债率”与 financial_metrics.md 中的 Debt/Equity 不同。",
+    "自由现金流使用近似 capex 估算，更适合做方向性判断。"
+  ]
+}

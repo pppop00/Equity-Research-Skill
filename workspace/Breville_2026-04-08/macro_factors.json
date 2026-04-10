@@ -1,0 +1,47 @@
+{
+  "company": "Breville Group Limited",
+  "sector_beta_row": "Consumer Discretionary",
+  "phi": 0.5,
+  "reference": "references/prediction_factors.md",
+  "factor_assumptions": [
+    {
+      "factor": "Fed Funds Rate",
+      "current_level_note": "美国政策利率仍高于疫情前中枢",
+      "forecast_direction": "2026年温和下行区间假设",
+      "macro_change_pct": 6.0,
+      "beta": 0.5,
+      "interpretation": "利率回落利好可选消费信贷与高端耐用品替换周期。"
+    },
+    {
+      "factor": "Real GDP Growth",
+      "macro_change_pct": 3.2,
+      "beta": 1.5,
+      "interpretation": "美国及主要OECD温和复苏支撑境外销售基本盘。"
+    },
+    {
+      "factor": "PCE Inflation",
+      "macro_change_pct": 5.5,
+      "beta": -0.5,
+      "interpretation": "通胀粘性抬高营销与物流成本，对利润率略偏负面。"
+    },
+    {
+      "factor": "USD Index (DXY)",
+      "macro_change_pct": -2.5,
+      "beta": -0.3,
+      "interpretation": "美元走弱一般有利于非美报表转换与出口型制造布局（公司披露存在汇率对冲）。"
+    },
+    {
+      "factor": "WTI Crude Oil",
+      "macro_change_pct": -8.0,
+      "beta": -0.2,
+      "interpretation": "油价下行降低塑料与跨洋运输成本边界利好。"
+    },
+    {
+      "factor": "Consumer Confidence",
+      "macro_change_pct": 2.8,
+      "beta": 1.2,
+      "interpretation": "信心改善与厨房电器/咖啡赛道升级需求正相关。"
+    }
+  ],
+  "data_source_note": "宏观变量为2026情景假设区间，非单一官方预测；β取消费可选行业默认矩阵。"
+}

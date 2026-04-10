@@ -1,0 +1,80 @@
+{
+  "company": "Amazon.com, Inc.",
+  "sector": "非必需消费",
+  "phi": 0.5,
+  "beta_source": "references/prediction_factors.md — Consumer Discretionary 行",
+  "data_freshness": "2026-04-08",
+  "factors": [
+    {
+      "name": "联邦基金利率",
+      "current_value": 3.625,
+      "forecast_value": 3.4,
+      "factor_change_pct": 6.21,
+      "beta": 0.5,
+      "phi": 0.5,
+      "adjustment_pct": 1.553,
+      "unit": "利率水平%",
+      "source": "与仓库其他美股报告一致的利率路径情景"
+    },
+    {
+      "name": "美国实际 GDP 增速",
+      "current_value": 2.3,
+      "forecast_value": 2.4,
+      "factor_change_pct": 4.348,
+      "beta": 1.5,
+      "phi": 0.5,
+      "adjustment_pct": 3.261,
+      "unit": "同比%",
+      "source": "2026 年宏观一致预期区间"
+    },
+    {
+      "name": "核心 PCE 通胀",
+      "current_value": 2.5,
+      "forecast_value": 2.7,
+      "factor_change_pct": 8.0,
+      "beta": -0.5,
+      "phi": 0.5,
+      "adjustment_pct": -2.0,
+      "unit": "同比%",
+      "source": "温和上行情景"
+    },
+    {
+      "name": "美元指数 DXY",
+      "current_value": 104,
+      "forecast_value": 102,
+      "factor_change_pct": -1.923,
+      "beta": -0.3,
+      "phi": 0.5,
+      "adjustment_pct": 0.288,
+      "unit": "指数点位",
+      "source": "美元偏弱假设"
+    },
+    {
+      "name": "WTI 原油价格",
+      "current_value": 92,
+      "forecast_value": 82,
+      "factor_change_pct": -10.87,
+      "beta": -0.2,
+      "phi": 0.5,
+      "adjustment_pct": 1.087,
+      "unit": "美元/桶",
+      "source": "能源价格路径情景"
+    },
+    {
+      "name": "消费者信心指数",
+      "current_value": 97,
+      "forecast_value": 100,
+      "factor_change_pct": 3.093,
+      "beta": 1.2,
+      "phi": 0.5,
+      "adjustment_pct": 1.856,
+      "unit": "指数",
+      "source": "信心温和修复"
+    }
+  ],
+  "total_macro_adjustment_pct": 6.045,
+  "notes": [
+    "β 采用非必需消费行业默认向量，反映亚马逊对消费周期与可选支出更敏感。",
+    "亚马逊同时具云服务属性；若将宏观 β 切换为 Technology，预测弹性会略不同。"
+  ]
+}

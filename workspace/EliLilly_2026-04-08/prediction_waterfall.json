@@ -1,0 +1,22 @@
+{
+  "company": "Eli Lilly and Company",
+  "sector_beta_row": "Healthcare",
+  "phi": 0.5,
+  "baseline_revenue_growth_pct": 24.0,
+  "baseline_note": "以管理层披露的 2026 年营收指引区间中位相对 2025 年实际约 651.8 亿美元所隐含增速为锚（约 mid‑20%s），并酌情调降以反映基数效应与竞争，得到 24% 基准。",
+  "macro_adjustments": [
+    { "factor": "Fed Funds Rate", "macro_change_pct": 6.21, "beta": 0.1, "phi": 0.5, "adjustment_pct": 0.31 },
+    { "factor": "US Real GDP Growth", "macro_change_pct": 0.0, "beta": 0.5, "phi": 0.5, "adjustment_pct": 0.0 },
+    { "factor": "PCE Inflation", "macro_change_pct": 8.0, "beta": -0.1, "phi": 0.5, "adjustment_pct": -0.4 },
+    { "factor": "USD Index (DXY)", "macro_change_pct": -2.0, "beta": -0.2, "phi": 0.5, "adjustment_pct": 0.2 },
+    { "factor": "WTI Crude Oil", "macro_change_pct": -6.67, "beta": -0.1, "phi": 0.5, "adjustment_pct": 0.33 },
+    { "factor": "Consumer Confidence", "macro_change_pct": 3.06, "beta": 0.1, "phi": 0.5, "adjustment_pct": 0.15 }
+  ],
+  "macro_subtotal_pct": 0.59,
+  "company_specific_adjustment_pct": 2.4,
+  "company_specific_note": "Medicare/Part D 可及性安排、Zepbound 装置与渠道事件合计约 +2.4ppt，已扣除竞品压力项。",
+  "predicted_revenue_growth_pct": 26.99,
+  "confidence": "medium",
+  "predicted_fiscal_year_label": "FY2026E（相对 FY2025 实际）",
+  "waterfall_formula_check": "24.0 + 0.59 + 2.4 = 26.99"
+}

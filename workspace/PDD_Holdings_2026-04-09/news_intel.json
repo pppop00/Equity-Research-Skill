@@ -1,0 +1,61 @@
+{
+  "company": "PDD Holdings Inc.",
+  "sector": "Consumer Discretionary",
+  "data_freshness": "2026-04-09",
+  "company_events": [
+    {
+      "type": "regulatory / tariff",
+      "description": "美国 de minimis 免税政策收紧后，Temu 从中国直发模式的价格优势被削弱，公司管理层在 2026-03-25 业绩会上明确表示需加大供应链与履约投入来适应新的外部环境。",
+      "revenue_impact_pct": -1.2,
+      "impact_direction": "negative",
+      "confidence": "high",
+      "source": "PDD Holdings FY2025 业绩公告；MarketWatch，2026-03-25。"
+    },
+    {
+      "type": "competition",
+      "description": "国内电商竞争仍然激烈，阿里、京东、抖音电商持续以补贴、低价和商家扶持争夺供给与流量，使平台变现率和营销回报率承压。",
+      "revenue_impact_pct": -0.9,
+      "impact_direction": "negative",
+      "confidence": "medium",
+      "source": "FY2025 业绩公告管理层表述；行业公开报道汇总。"
+    },
+    {
+      "type": "local fulfillment",
+      "description": "Temu 正在加快本地仓、本地商家和半托管/本地履约模式，以降低关税与清关扰动。该模式短期压缩利润率，但有助于缓解北美业务的政策冲击。",
+      "revenue_impact_pct": 0.2,
+      "impact_direction": "positive",
+      "confidence": "medium",
+      "source": "管理层公开发言与市场报道，2026Q1。"
+    },
+    {
+      "type": "balance sheet support",
+      "description": "截至 2025 年末，公司现金及短期投资合计约 4,223 亿元，为商家扶持、全球合规投入与履约基础设施建设提供了充足弹药。",
+      "revenue_impact_pct": 0.1,
+      "impact_direction": "positive",
+      "confidence": "high",
+      "source": "PDD Holdings FY2025 业绩公告。"
+    }
+  ],
+  "company_specific_adjustment_pct": -1.8,
+  "industry_dynamics": {
+    "supplier_power": "较低至中等。平台型电商的上游以商家和履约合作方为主，商家总体分散，但跨境物流、广告投放和支付链路仍存在局部集中度。",
+    "buyer_power": "高。消费者在阿里、京东、拼多多、抖音和 Temu 之间切换成本极低，价格敏感度高，促销频次直接影响转化。",
+    "new_entrants": "中等。要复制大平台的用户规模、算法分发、商家生态与履约能力并不容易，但短视频平台和区域型跨境平台仍能以流量入口切入。",
+    "substitutes": "中等。线下零售、品牌自营商城、即时零售与社交电商都会分流需求，但低价和高性价比场景仍是平台电商的核心优势。",
+    "rivalry": "很高。中国电商和全球低价跨境电商都已进入存量博弈期，价格战、商家费率和履约效率成为竞争主轴。"
+  },
+  "forward_looking": {
+    "supplier_power": "预计抬升。若 Temu 继续转向本地履约，海外仓、物流与合规服务商的重要性会上升。",
+    "buyer_power": "维持高位。消费恢复偏弱叠加平台选择增多，价格和补贴仍将主导用户留存。",
+    "new_entrants": "略有上升。内容平台、区域市场玩家以及本地化跨境新平台仍会持续切入细分市场。",
+    "substitutes": "上升。即时零售和品牌私域能力成熟后，会在高频消费与品牌品类上分流平台订单。",
+    "rivalry": "维持极高。2026 年最核心的竞争变量不只是 GMV，而是补贴效率、物流时效与海外合规成本。"
+  },
+  "key_analyst_views": [
+    "市场目前承认 PDD 仍具备稀缺的现金流创造能力，但不再愿意为“高增长自动延续”支付溢价。",
+    "2026 年的关键分水岭是 Temu 能否在本地化转型中守住增长，同时避免利润率继续快速下滑。"
+  ],
+  "notes": [
+    "公司未单独披露 Temu 的收入与利润，关于海外业务的判断更多依赖管理层表述与行业跟踪。"
+  ]
+}

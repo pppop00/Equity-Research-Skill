@@ -1,0 +1,21 @@
+{
+  "company": "国家电网有限公司",
+  "sector_beta_row": "Utilities",
+  "phi": 0.35,
+  "baseline_revenue_growth_pct": 2.18,
+  "baseline_note": "以 2024 年相对 2023 年合并营业收入同比 +2.18%（年报/摘要披露）为基准情景锚。",
+  "macro_adjustments": [
+    { "factor": "Fed Funds Rate", "macro_change_pct": 6.21, "beta": 1.2, "phi": 0.35, "adjustment_pct": 2.61, "macro_note": "使用降息幅度 −Δ% 计入正向调整（与 REITs 示例同构）" },
+    { "factor": "US Real GDP Growth", "macro_change_pct": 0, "beta": 0.3, "phi": 0.35, "adjustment_pct": 0 },
+    { "factor": "PCE Inflation", "macro_change_pct": 8.0, "beta": -0.1, "phi": 0.35, "adjustment_pct": -0.28 },
+    { "factor": "USD Index (DXY)", "macro_change_pct": -2.0, "beta": 0, "phi": 0.35, "adjustment_pct": 0 },
+    { "factor": "WTI Crude Oil", "macro_change_pct": -6.67, "beta": -0.2, "phi": 0.35, "adjustment_pct": 0.47 }
+  ],
+  "macro_subtotal_pct": 2.8,
+  "company_specific_adjustment_pct": 0.75,
+  "company_specific_note": "新闻情报中「十五五」投资规划、重点特高压工程与电网高质量发展政策等事件合计约 +0.75 个百分点；已扣减较小的会计/综合收益扰动项。",
+  "predicted_revenue_growth_pct": 5.73,
+  "confidence": "medium",
+  "predicted_fiscal_year_label": "2025E–2026E 合并营收情景",
+  "waterfall_formula_check": "2.18 + 2.80 + 0.75 = 5.73（宏观分项四舍五入微调）"
+}

@@ -1,0 +1,75 @@
+{
+  "company": "Amazon.com, Inc.",
+  "company_cn": "亚马逊公司",
+  "ticker": "AMZN",
+  "sector": "非必需消费 / 综合零售与云服务",
+  "fiscal_year": "FY2024",
+  "fiscal_year_end": "2024-12-31",
+  "prior_fiscal_year": "FY2023",
+  "currency": "USD",
+  "data_source": "Amazon Form 10-K（截至2024-12-31）及2024年四季报新闻稿（ir.aboutamazon.com / SEC ex 99.1）",
+  "data_confidence": "high",
+  "income_statement": {
+    "current_year": {
+      "label": "FY2024",
+      "revenue": 637959,
+      "cost_of_sales": 326288,
+      "gross_profit": 311671,
+      "fulfillment": 98505,
+      "technology_and_infrastructure": 88544,
+      "sales_and_marketing": 43907,
+      "general_and_administrative": 11359,
+      "other_operating_net": 763,
+      "total_operating_expenses": 569366,
+      "operating_income": 68593,
+      "interest_expense": 2439,
+      "income_tax_expense": 9265,
+      "net_income": 59248,
+      "diluted_eps": 5.53,
+      "diluted_shares_mn": 10721
+    },
+    "prior_year": {
+      "label": "FY2023",
+      "revenue": 574785,
+      "cost_of_sales": 304739,
+      "gross_profit": 270046,
+      "fulfillment": 90619,
+      "technology_and_infrastructure": 85622,
+      "sales_and_marketing": 44370,
+      "general_and_administrative": 11816,
+      "other_operating_net": 767,
+      "total_operating_expenses": 537933,
+      "operating_income": 36852,
+      "interest_expense": 3275,
+      "net_income": 30425,
+      "diluted_eps": 2.90,
+      "diluted_shares_mn": 10492
+    },
+    "unit": "百万美元",
+    "sankey_mapping_note": "为适配模板九节点桑基图：将「履约费用+销售与市场费用」合并入销售费用；通用及行政与其他经营净额合并入管理费用；技术与基础设施映射为研发费用。"
+  },
+  "balance_sheet": {
+    "label": "2024-12-31",
+    "total_assets": 624894,
+    "total_equity": 285970,
+    "long_term_debt": 52623,
+    "current_portion_debt": 5017,
+    "unit": "百万美元"
+  },
+  "cash_flow": {
+    "label": "FY2024",
+    "operating_cash_flow": 115877,
+    "free_cash_flow_gaap": 38219,
+    "unit": "百万美元",
+    "note": "自由现金流为经营现金流扣除物业及设备购置（公司披露 TTM 口径）。"
+  },
+  "segment_data": [
+    { "name": "北美", "revenue": 387497, "pct_of_total": 60.7 },
+    { "name": "国际", "revenue": 142906, "pct_of_total": 22.4 },
+    { "name": "AWS", "revenue": 107556, "pct_of_total": 16.9 }
+  ],
+  "notes": [
+    "2024 年净销售额 6,379.59 亿美元，同比约 +11%；AWS 净销售额约 1,075.56 亿美元（约 +19%）。",
+    "2024 年营业利润约 685.93 亿美元，营业利润率约 10.8%；净利润约 592.48 亿美元。"
+  ]
+}
