@@ -1101,7 +1101,7 @@ window.addEventListener('resize', () => {
 | `{{EXCHANGE}}` | Text | e.g. NASDAQ |
 | `{{SECTOR}}` | Text | GICS-style sector in **English** |
 | `{{REPORT_DATE}}` | Text | e.g. April 8, 2026 |
-| `{{DATA_SOURCE}}` | Text | Short English source summary |
+| `{{DATA_SOURCE}}` | Text | One-line header summary: use the **ultimate publisher** per **`references/report_style_guide_en.md` (Appendix source attribution)** (e.g. `Primary financials: U.S. SEC EDGAR; Macro: FOMC/IMF illustrative`). Do **not** treat `sec_edgar_bundle.json` or the script name as the public-facing source — they are just the fetch path from **SEC**. |
 | `{{RATING_CLASS}}` | class | `overweight` / `neutral` / `underweight` |
 | `{{RATING_EN}}` | Text | Overweight / Neutral / Underweight |
 | `{{KPI1_DIRECTION}}` 等 | class | `up` / `down` / `neutral-kpi` |
@@ -1125,7 +1125,7 @@ window.addEventListener('resize', () => {
 | `{{PORTER_FORWARD_TEXT}}` | HTML | Forward tab: same list shape and order; `forward_perspective`. |
 | `{{FACTOR_ROWS}}` | HTML | Factor table rows from `macro_factors.json` |
 | `{{MACRO_FACTOR_COMMENTARY}}` | HTML | **From `macro_factors.json` → `macro_factor_commentary` only** (see `agents/macro_scanner.md` Step 7b). Institutional transmission narrative; `<p>` blocks OK; no Markdown. |
-| `{{APPENDIX_SOURCE_ROWS}}` | HTML | Appendix source rows |
+| `{{APPENDIX_SOURCE_ROWS}}` | HTML | Multiple `<tr>…</tr>`. **Specific source** column: name the **original publisher** (see `references/report_style_guide_en.md`). **SEC:** anything ultimately from **EDGAR / sec.gov / data.sec.gov**, including **MD&A and Note 16 Revenue** inside a **Form 10-K** — label **U.S. SEC EDGAR** (optionally add form + section in parentheses). If populated via `sec_edgar_fetch.py` → `sec_edgar_bundle.json`, still label **SEC** (you may add “XBRL slices”); do **not** imply the bundle is a separate non-SEC origin. Use **Bloomberg**, **Reuters**, **Company IR**, etc. only when that channel is the true first source. |
 | `{{PHI_VALUE}}` | 文字 | 通常为 0.5 |
 | `{{CONFIDENCE_EN}}` | Text | High / Medium / Low |
 | `{{METHODOLOGY_DETAIL}}` | Text | β row choice, baseline, geography; **must** incorporate `prediction_waterfall.json` → `qc_deliberation.methodology_note` when present (Analyst + dual-QC synthesis for the appendix) |

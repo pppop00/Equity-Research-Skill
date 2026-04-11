@@ -1105,7 +1105,7 @@ window.addEventListener('resize', () => {
 | `{{EXCHANGE}}` | 文字 | 交易所，例如 NASDAQ |
 | `{{SECTOR}}` | 文字 | 行业，例如 半导体 |
 | `{{REPORT_DATE}}` | 文字 | 报告日期，例如 2026年4月8日 |
-| `{{DATA_SOURCE}}` | 文字 | 数据来源描述 |
+| `{{DATA_SOURCE}}` | 文字 | 页眉一行「数据来源」摘要：按 **`references/report_style_guide_cn.md`（附录与页眉披露口径）** 写**最终权威出处**（如 `主要财务：美国 SEC EDGAR；宏观：FOMC/IMF 等示意`）。勿用仅含 `sec_edgar_bundle.json` 或脚本文件名的表述代替 **SEC**；脚本只是从 SEC 拉数的手段。 |
 | `{{RATING_CLASS}}` | class | `overweight` / `neutral` / `underweight` |
 | `{{RATING_CN}}` | 文字 | 增持 / 中性 / 减持 |
 | `{{KPI1_DIRECTION}}` 等 | class | `up` / `down` / `neutral-kpi` |
@@ -1129,7 +1129,7 @@ window.addEventListener('resize', () => {
 | `{{PORTER_FORWARD_TEXT}}` | HTML | 前景展望：同上列表格式与顺序；来自 `forward_perspective`。 |
 | `{{FACTOR_ROWS}}` | HTML | 预测因子明细表行 |
 | `{{MACRO_FACTOR_COMMENTARY}}` | HTML | **来自 `macro_factors.json` → `macro_factor_commentary`（勿在 HTML 中另写）**：2–4 段机构视角传导说明，衔接表中六项合计与瀑布图「宏观调整」柱；可用 `<p>…</p>`，禁止 Markdown；见 `agents/macro_scanner.md` Step 7b |
-| `{{APPENDIX_SOURCE_ROWS}}` | HTML | 数据来源表行 |
+| `{{APPENDIX_SOURCE_ROWS}}` | HTML | 附录表 `<tr>…</tr>` 多行。`具体来源` 列：**以信息最初发布方为准**（见 `references/report_style_guide_cn.md`）。**SEC：**含 `data.sec.gov`/`sec.gov` 拉取的 **Form 10-K/10-Q** 全文内容（**MD&A、Note 16 Revenue 等附注均属 SEC 申报文件一部分**）— 统一写 **美国 SEC EDGAR**，括号可标 `Form 10-K`、章节名；若经 `sec_edgar_fetch.py` → `sec_edgar_bundle.json`，仍标 **SEC**（可加「经 XBRL 切片」），勿把 bundle 写成与 SEC 并列的第三方。**非 SEC**（Bloomberg、Reuters、公司 IR 等）则写全名。 |
 | `{{PHI_VALUE}}` | 文字 | 通常为 0.5 |
 | `{{CONFIDENCE_CN}}` | 文字 | 高 / 中等 / 低 |
 | `{{METHODOLOGY_DETAIL}}` | 文字 | 具体β 行选用、基线口径、地域与行业说明；若 `prediction_waterfall.json` 含 `qc_deliberation.methodology_note`，**必须**将其并入本段（置于段首或段末，保持纯文本/HTML 换行 `<br>`），使附录体现 Analyst + 双 QC 合议后的方法论补充 |

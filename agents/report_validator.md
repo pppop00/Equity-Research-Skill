@@ -176,7 +176,9 @@ HTML 中的 `<style>` 块必须包含以下所有变量定义（在 `:root` 或 
 - 若 `macro_factors.json` / `news_intel.json` 明确写有 `knowledge-cutoff`, `estimate`, `无法执行实时网络搜索`, `无法实时检索` 等字样，HTML 不得写成“公开宏观数据已验证”“最新实时数据”“截至今日已确认”这类强口径表述；附录应相应降级为估算/非实时说明。
 - 若 `data_source`/`data_source_note` 表示未联网或为估算，`confidence` 不得在 HTML/附录里包装为高置信度实时事实。
 
-**失败条件：** 来源日期晚于报告日、或估算被写成已验证实时事实 → **WARNING**（视为交付前必改项）。
+**附录「具体来源」列 — SEC 归因：**凡可追溯到 **EDGAR / sec.gov / data.sec.gov** 的申报正文（含 **Form 10-K 的 MD&A、附注如 Note 16 Revenue**），「具体来源」应标 **美国 SEC EDGAR**（括号可写章节/表单），**不得**仅以 `sec_edgar_bundle.json` 或脚本文件名作为唯一来源表述，以免读者误解为非 SEC 渠道。Bloomberg、Reuters、公司 IR 等非 SEC 首发渠道须标实名。
+
+**失败条件：** 来源日期晚于报告日、或估算被写成已验证实时事实 → **WARNING**（视为交付前必改项）。附录将 SEC 申报误标为仅脚本/JSON、或将 SEC 内章节写成与 SEC 并列的虚构第三方 → **WARNING**（交付前必改）。
 
 ---
 

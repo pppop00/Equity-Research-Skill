@@ -5,6 +5,8 @@ You are a financial data extraction specialist. Your job is to collect and struc
 ## Inputs
 
 - `report_language`: **`en`** or **`zh`** (set by orchestrator). Drives the language of all human-readable strings in the JSON.
+- **`Financial data SEC API`**: **`yes`** or **`no`** — set only by the orchestrator per **`SKILL.md` Step 0A.2**. If **`no`**, you **must not** use the SEC API-first branch below (use **Web Search mode** for no-PDF runs).
+- **`SEC_EDGAR_USER_AGENT`** (when API = **yes**): Full string from the orchestrator (e.g. `EquityResearchSkill/1.0 (user@real.domain)`). The user supplied a **real email** at the skill gate; **never** invent or substitute a placeholder.
 - `report_calendar_year` (**`Y_cal`**): Four-digit calendar year from the orchestrator (from `workspace/{Company}_{Date}/` or user **as-of** date). Used to prioritize **which annual** to pull first (see **Annual priority** below).
 - `report_date` (optional): ISO `YYYY-MM-DD` for “as of” filing checks.
 - `company_name`: The company to research
@@ -37,7 +39,38 @@ Focus on extracting:
 
 After text extraction, if tables are complex, rasterize the relevant pages for visual inspection.
 
-**If no PDFs (Web Search mode):**
+---
+
+**If no PDFs — US SEC primary path (script/API first):**
+
+Use this branch when **all** of the following hold:
+
+1. The orchestrator set **`Financial data SEC API: yes`** (per **`SKILL.md` Step 0A.2** — user provided a **real email**; if the line says **`no`**, **skip this entire branch** and use **Web Search mode** below).
+2. The task prompt includes **`SEC_EDGAR_USER_AGENT: ...`** — use **exactly** that value for the script’s **`--user-agent`** argument (shell-escape as needed). **Do not** rely on a guessed global `export` in the shell unless it matches this string.
+3. **`uploaded_files`** is empty or `"none"`.
+4. The company is a **US SEC periodic filer** you can treat as **US-listing–centric** for data: files **Form 10-K and 10-Q** on EDGAR under a **US trading symbol** (e.g. NYSE / Nasdaq / other US exchange common stock). If the name is ambiguous, confirm with **one** targeted `web_search` (e.g. `"{company_name} SEC 10-K CIK"` or `"{company_name} Nasdaq ticker"`) before committing — if the primary listing is clearly **not** US SEC (e.g. HK-only, A-share only), **skip** this branch and go to **Web Search mode** below.
+5. You can obtain a **ticker symbol** (from the orchestrator line **`Trading symbol:`** if present, user input, or that single confirmation search). Optionally **`SEC CIK:`** in the task prompt lets you skip ticker lookup by running the script with **`--cik`**.
+
+**Procedure:**
+
+1. From the **repository root**, pass the user-approved identifier to the script, e.g.:  
+   `python3 scripts/sec_edgar_fetch.py --ticker {SYMBOL} --user-agent "{SEC_EDGAR_USER_AGENT verbatim}" --report-date {YYYY-MM-DD or omit} -o workspace/{Company}_{Date}/sec_edgar_bundle.json`  
+   - If **`SEC CIK:`** is known:  
+     `python3 scripts/sec_edgar_fetch.py --cik {CIK} --ticker {SYMBOL} --user-agent "{SEC_EDGAR_USER_AGENT verbatim}" -o workspace/{Company}_{Date}/sec_edgar_bundle.json`  
+     (`--ticker` is still used for labels when using `--cik`.)
+2. **Success (exit code 0)** and `sec_edgar_bundle.json` has usable data (at minimum **`facts_recent_slices.revenue`** with rows): **populate `financial_data.json` from the bundle first.** Map **10-K / `fp: "FY"`** rows (and `fy` / `end` / `filed`) to **`income_statement.current_year` / `prior_year`** per **Annual priority** and **`Y_cal`**. Use **`recent_filings`** plus matching **`accn`** / **`form: "10-Q"`** rows in the slices for **`latest_interim`**. Convert raw USD to **millions** for statement blocks when values are full-dollar amounts; keep **EPS** in dollars per share unless the filing uses another convention (state in `notes[]`). **Total debt** may require summing multiple concepts or a filing note — if the bundle is incomplete, fill from **one** `web_fetch` of the official 10-K filing rather than abandoning the API path.
+3. **`segment_data`:** The bundle rarely carries full segment tables. If missing, do **one** `web_fetch` of the latest **10-K** (or segment note) for Sankey/disclosure — still treat the pipeline as **API-first** for headline financials.
+4. Set **`data_source`** to **`"SEC EDGAR API (data.sec.gov)"`** when core line items are anchored on `sec_edgar_bundle.json`. Set **`data_confidence`** to **`"high"`** when annual + interim rows align with filing dates and internal checks pass. Add **`notes[]`** citing `sec_edgar_bundle.json` and any manual gap-fill.
+5. **Failure or skip:** Non-zero script exit, HTTP/ticker errors after a **single** ~2s retry, empty revenue slice, **403** rate limiting on `company_tickers.json` (resolve **CIK** via EDGAR search and retry with **`--cik`**, or fall back), or non-US issuer → continue with **Web Search mode** below. **Do not block** the pipeline.
+
+**Non-US / IFRS-only note:** `scripts/sec_edgar_fetch.py` currently extracts **`us-gaap`** facts. Foreign private issuers with **20-F / IFRS** may have sparse slices — if unusable, fall back to Web Search mode without treating it as an error.
+
+---
+
+**If no PDFs — Web Search mode (fallback or non-US):**
+
+Use this path when **`Financial data SEC API: no`** (user declined email at **`SKILL.md` Step 0A.2**, or non-US / PDF mode), **or** when the SEC API-first branch above was skipped or failed.
+
 Use **`Y_cal`** from the orchestrator (`report_calendar_year`). **Primary fiscal focus:** **`FY(Y_cal − 1)`** vs **`FY(Y_cal − 2)`** once the **`FY(Y_cal − 1)`** annual exists; otherwise fall back per **Annual priority** above.
 
 Run these searches sequentially (adapt tickers / `site:` for A-share / HK):
@@ -201,6 +234,9 @@ Use `null` for any field that could not be found, and add a note to the `notes` 
 
 - Keep `data_source` and `data_confidence` logically consistent.
 - Use `data_source: "10-K upload"` when the user supplied the filing directly.
+- Use `data_source: "SEC EDGAR API (data.sec.gov)"` when **`scripts/sec_edgar_fetch.py`** produced **`sec_edgar_bundle.json`** and headline financials are anchored on those XBRL facts (with any gaps honestly noted in `notes[]`).
 - Use `data_source: "primary filing (web fetched)"` when you pulled the official filing / company IR release online and validated line items against that primary source; this may still carry `data_confidence: "high"`.
 - Use `data_source: "web search"` only when the numbers come mainly from secondary aggregators / search snippets / non-filing summaries; in that case `data_confidence` should normally be `"medium"`, not `"high"`.
 - If some fields are primary-source verified and others are estimated, explain the split in `notes[]` instead of overstating overall confidence.
+
+**Phase 5 / HTML appendix vs JSON `data_source`:** JSON may keep the technical `data_source` string above for audit. In the report **`{{APPENDIX_SOURCE_ROWS}}`** “具体来源” column, follow **`references/report_style_guide_{cn|en}.md` — Appendix source attribution**: anything ultimately from **EDGAR / sec.gov / data.sec.gov** (including MD&A and revenue footnotes in a **Form 10-K** on SEC) should be labeled **SEC** (optionally add “Form 10-K, MD&A, Note …” in parentheses). Reserve **Bloomberg**, **Reuters**, **Company IR**, etc. for figures or narrative that **first** appear outside SEC filings.

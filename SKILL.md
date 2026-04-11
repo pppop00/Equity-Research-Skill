@@ -1,7 +1,7 @@
 ---
 name: equity-research
 description: >
-  Full-stack equity research report generator. Trigger when the user wants to analyze a company, generate an equity research report, fundamental analysis, or stock investment research. Works with a company name (web search) or uploaded filings (10-K / 10-Q PDFs, HK/A-share reports). After the user chooses report language (English or Chinese), outputs one professional interactive HTML report (Sankey revenue flow, macro waterfall, Porter Five Forces).
+  Full-stack equity research report generator. Trigger when the user wants to analyze a company, generate an equity research report, fundamental analysis, or stock investment research. Works with a company name (web search) or uploaded filings (10-K / 10-Q PDFs, HK/A-share reports). After the user chooses report language (English or Chinese), outputs one professional interactive HTML report (Sankey revenue flow, macro waterfall, Porter Five Forces). For US SEC API data pulls, the skill asks for a real contact email first (SEC policy); if the user declines, financials fall back to web search.
 
   TRIGGER on: "equity research", "research report", "analyze [company]", "financial analysis of [company]", "做研报", "研究报告", "分析[公司]", English/Chinese equivalents, or user uploads a 10-K/10-Q and wants full research (not only a revenue-flow diagram).
 ---
@@ -12,11 +12,17 @@ Generate a professional equity research report for any public company. You are t
 
 ---
 
-## Step 0A: Report language — **mandatory gate (before any Phase 1 work)**
+## Step 0A: Mandatory gates — **language + SEC contact (before workspace & Phase 1)**
 
-**Do not start Phase 1** (no agents, no `workspace/` writes, no JSON generation) until `report_language` is resolved to exactly one of: **`en`** | **`zh`**.
+**Do not create `workspace/`** and **do not start Phase 1** (no agents, no JSON generation) until **both** §0A.1 and §0A.2 below are satisfied for this run.
 
-### When language is already explicit
+---
+
+### 0A.1 Report language
+
+Resolve `report_language` to exactly one of: **`en`** | **`zh`** before anything else in Step 0A.
+
+#### When language is already explicit
 
 Treat any of the following as explicit (map and proceed **without** asking):
 
@@ -24,24 +30,77 @@ Treat any of the following as explicit (map and proceed **without** asking):
 |--------------------------------|----------------------------------|
 | `English`, `EN`, `英文`, `英语`, `in English`, `English report`, `英文研报`, `generate English` | `Chinese`, `ZH`, `中文`, `简体`, `Chinese report`, `中文研报`, `生成中文` |
 
-If the user states both or contradictory cues, ask one short clarification before Phase 1.
+If the user states both or contradictory cues, ask one short clarification (still **no** workspace / Phase 1).
 
-### When language is **not** explicit
+#### When language is **not** explicit
 
 Reply **only** with this prompt and **stop** until the user answers:
 
 > **What language should the final HTML report use — English or Chinese (中文)?**  
 > Reply with **English** or **Chinese**.
 
-After the user answers, map **English** → `en`, **Chinese** / **中文** → `zh`. If the reply is ambiguous, ask again (still **do not** run Phase 1).
+After the user answers, map **English** → `en`, **Chinese** / **中文** → `zh`. If the reply is ambiguous, ask again.
 
-### Persist for the whole run
+#### Persist `report_language`
 
 - Store `report_language` for all subsequent phases.
 - Every agent task prompt (Phase 1+) **must** include:  
   `Report language: en` **or** `Report language: zh`  
   When `en`: **all narrative text in intermediate JSON and the final HTML must be English** (numbers and tickers as usual).  
   When `zh`: use Chinese for narrative as today; final HTML from `report_writer_cn.md`.
+
+---
+
+### 0A.2 US SEC EDGAR API — **real contact email gate (same priority as 0A.1)**
+
+SEC fair-access rules require a **truthful, contactable** identifier in the HTTP `User-Agent` when calling `data.sec.gov` (see `scripts/sec_edgar_fetch.py`). The orchestrator **must not** invent, placeholder, or guess an email.
+
+#### When this sub-step applies
+
+Evaluate **after** 0A.1 is done. **All** must be true:
+
+1. **No uploaded SEC PDFs** for this run as the primary financial input — i.e. **Mode A** (company name / ticker only). If the user attached **10-K / 10-Q** PDFs (**Mode B/C**), set **`financial_data_sec_api = no`** and **skip** the rest of 0A.2 (Agent 1 uses file extraction per `agents/financial_data_collector.md`).
+2. The research target is **intended as a US-listed SEC periodic filer** (NYSE / Nasdaq / other US exchange; **10-K / 10-Q** on EDGAR). **Treat as US** when the user says e.g. **美股**, **US listing**, **NASDAQ / NYSE**, gives a **bare US ticker** (`MSFT`), or clearly names a **known US-only** listing context. **Treat as non-US** when the user says e.g. **港股 / A股 / 伦敦**, primary listing is clearly non-US, or the company is private / not an SEC periodic filer.
+3. **If listing is unclear**, you may use **at most one** `web_search` whose **sole purpose** is to determine whether the **primary listing** is US SEC — still **no** workspace until 0A.2 is resolved. If the answer is not US SEC, set **`financial_data_sec_api = no`** and skip the email ask.
+
+#### When 0A.2 does **not** apply
+
+Set **`financial_data_sec_api = no`** and proceed to Step 0B.
+
+#### When 0A.2 **does** apply — ask for email (or explicit decline)
+
+**Stop** — do **not** run Step 0B yet — until the user either supplies a **real email** or **explicitly declines** the SEC API path.
+
+Use wording that matches **`report_language`**:
+
+**If `report_language = en`**, ask (adapt politely):
+
+> To use the **SEC EDGAR API** (`data.sec.gov`) for faster, structured US filings, SEC policy requires a **real contact email** in the request User-Agent.  
+> **Please reply with one email address** (we will use it only as `EquityResearchSkill/1.0 (you@domain.com)` for this run).  
+> If you **do not want to provide an email**, reply **`no email`** — we will use **web search + primary filing fetches** instead (no SEC API-first script).
+
+**If `report_language = zh`**, ask (adapt politely):
+
+> 若本轮走 **SEC 官方 EDGAR 数据接口**（`data.sec.gov`），按 SEC 要求必须在请求头 User-Agent 中包含**真实、可联系的邮箱**。  
+> 请直接回复**一个您本人可收信的邮箱**（仅用于本轮标识字符串，例如 `EquityResearchSkill/1.0 (您@域名)`）。  
+> 若**不愿提供邮箱**，请回复 **`不提供邮箱`** 或 **`no email`** — 则本轮财务数据改为 **网络检索 + 源站抓取**，**不**调用 `sec_edgar_fetch.py` 的 API 优先路径。
+
+#### Resolve replies
+
+| Outcome | Set |
+|--------|-----|
+| User sends a **plausible single email address** | **`financial_data_sec_api = yes`**, **`SEC_EDGAR_USER_AGENT = EquityResearchSkill/1.0 (email@normalized)`** — strip surrounding spaces; **reject** obvious placeholders (`example.com`, `test@test`, `user@localhost`) by asking once more for a **real** mailbox. |
+| User declines: **`no email`**, **`不提供邮箱`**, or unmistakable refusal | **`financial_data_sec_api = no`** |
+| Ambiguous | Ask once more; **still no Step 0B** until resolved. |
+
+If the user **already** supplied one plausible email **and** confirmed a US SEC / **美股** context **before** you send the template ask (e.g. same message after language is clear), you may set **`financial_data_sec_api = yes`** **without** repeating the question — still apply the **placeholder rejection** rule.
+
+**Never** fabricate or assume an email. If the user never supplies one and never declines, keep clarifying — same discipline as 0A.1.
+
+#### Persist for Agent 1
+
+- Every Agent 1 task prompt **must** include exactly one line: **`Financial data SEC API: yes`** or **`Financial data SEC API: no`**.
+- If **`yes`**, also include: **`SEC_EDGAR_USER_AGENT: EquityResearchSkill/1.0 (user@domain.com)`** (the same string Agent 1 passes to `scripts/sec_edgar_fetch.py` as **`--user-agent`**).
 
 ---
 
@@ -53,7 +112,7 @@ After the user answers, map **English** → `en`, **Chinese** / **中文** → `
 - **Mode B** — Company name + 10-K PDF → File-based mode  
 - **Mode C** — Company name + 10-K + 10-Q PDF → Full File mode  
 
-**Only after Step 0A is satisfied**, create:
+**Only after Step 0A (§0A.1 + §0A.2 when applicable) is satisfied**, create:
 
 ```
 workspace/{Company}_{Date}/
@@ -92,7 +151,7 @@ Use this on **every** run so Section II, Section IV (Sankey), and Phase 2.5 use 
 5. **Phase 2.5 — `prediction_waterfall.json`**  
    - **`predicted_fiscal_year_label`** **must match** the Sankey **forecast** tab (default **`FY(latest_actual + 1)E`**). The waterfall “预测财年” line should use the **same** label.
 
-Pass **`Report calendar year: {Y_cal}`** (and **`Report date: {YYYY-MM-DD}`** if known) into **every** Agent 1 task prompt so searches target the correct 10-K / 年报.
+Pass **`Report calendar year: {Y_cal}`** (and **`Report date: {YYYY-MM-DD}`** if known) into **every** Agent 1 task prompt so searches target the correct 10-K / 年报. When the company is US-listed and the symbol is known, also pass **`Trading symbol:`** and, if available, **`SEC CIK:`** so Agent 1 can run **`scripts/sec_edgar_fetch.py`** without an extra ticker-resolution step.
 
 ---
 
@@ -126,9 +185,13 @@ Spawn or run Agents 1–3. **Each task prompt must include `Report language: {en
 
 ```
 Report language: {en|zh}
+Financial data SEC API: {yes|no}
+SEC_EDGAR_USER_AGENT (only if yes): {EquityResearchSkill/1.0 (user@real.domain)}
 Report calendar year: {Y_cal}
 Report date (optional): {YYYY-MM-DD}
 Company: {company_name}
+Trading symbol (optional): {e.g. MSFT — helps US SEC API path; else unknown}
+SEC CIK (optional): {10-digit CIK if known; else unknown}
 Uploaded files: {PDFs or "none"}
 Output path: workspace/{Company}_{Date}/financial_data.json
 Follow agents/financial_data_collector.md

@@ -78,3 +78,21 @@ Confidence for `{{CONFIDENCE_EN}}`: **High**, **Medium**, **Low**.
 ## Date format
 
 Use unambiguous English dates for `{{REPORT_DATE}}`, e.g. **April 8, 2026** (not slash-only numeric if avoidable).
+
+---
+
+## Appendix and header: **Specific source** column (required)
+
+Readers care about the **original publisher** of the information, not intermediate repo filenames. In **`{{APPENDIX_SOURCE_ROWS}}`** and the header **`{{DATA_SOURCE}}`**, use the **authoritative origin**.
+
+| How the data was obtained | Suggested **Specific source** text | Avoid |
+|-----------------------------|-----------------------------------|--------|
+| `scripts/sec_edgar_fetch.py` → `sec_edgar_bundle.json` ( `data.sec.gov` / EDGAR APIs ) | **U.S. SEC EDGAR** (optional parenthetical: `data.sec.gov`, fetched via this skill’s script) | Listing only the script or `sec_edgar_bundle.json` as if it were separate from SEC |
+| Reading **Form 10-K / 10-Q** on **sec.gov** Archives (**MD&A**, **Note 16 Revenue**, etc.) | **U.S. SEC EDGAR** (parenthetical: Form 10-K MD&A, Note 16 Revenue) | Implying MD&A/notes are a non-SEC “third source”; they are **part of the SEC filing** |
+| Company **IR** press release / PDF (not hosted on sec.gov) | **Company IR** (domain if helpful) | SEC |
+| **Bloomberg** / **Reuters** / other press | **Bloomberg**, **Reuters**, etc. | SEC |
+| Secondary aggregators (Yahoo Finance, etc.) | Name the aggregator; **Medium** confidence is usually appropriate | SEC |
+
+**Rule of thumb:** If the line item ultimately ties to the **EDGAR-filed statutory disclosure**, label the source **SEC** (optionally name the form and section). Use **Bloomberg**, **Reuters**, **Company IR**, etc. **only** when that channel is where the figure or narrative first appears.
+
+For `{{DATA_SOURCE}}`, use a short parallel summary, e.g. `Primary financials: U.S. SEC EDGAR; Macro: …`.

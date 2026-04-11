@@ -151,12 +151,30 @@
 
 ---
 
+## 附录与页眉：「具体来源」列披露口径（必读）
+
+读者关心的是**信息最初出自哪里**，而不是仓库里的中间文件名。**「具体来源」列写法定/权威发布方**；脚本与 JSON 可在工作底稿或 `notes[]` 里保留技术路径。
+
+| 实际获取方式 | 附录「具体来源」建议写法 | 不要这样写 |
+|--------------|--------------------------|------------|
+| `scripts/sec_edgar_fetch.py` 拉取 `data.sec.gov` / submissions，写入 `sec_edgar_bundle.json` | **美国 SEC EDGAR**（可加括号：`data.sec.gov`，经本技能脚本拉取） | 仅写脚本名或 `sec_edgar_bundle.json` 作为唯一来源，让读者误以为是「非 SEC」 |
+| 打开 **sec.gov Archives** 上的 Form **10-K / 10-Q** HTML/PDF（含 **MD&A、Note 16 Revenue** 等附注与讨论）摘录数字 | **美国 SEC EDGAR**（括号内写章节位置，如：`Form 10-K` MD&A、Note 16 Revenue） | 把「10-K MD&A」写成与 SEC 并列的第三方；MD&A 与附注**是申报文件组成部分**，来源仍是 **SEC** |
+| 公司 **IR 网站**新闻稿 / 投资者关系 PDF（非 sec 托管） | **公司 IR**（可写域名） | 写 SEC |
+| **Bloomberg** / **Reuters** / 财经媒体网页 | **Bloomberg**、**Reuters** 等媒体全名 | 写 SEC |
+| Yahoo Finance、Macrotrends 等二级聚合 | **Yahoo Finance** 等（并标置信度中等为宜） | 写 SEC |
+
+**原则一句话：**凡数字或表格**最终可追溯到向 SEC 提交或托管在 EDGAR 的法定披露**，附录统一标 **SEC**；**仅在非 SEC 渠道首次出现**时才标该渠道名。
+
+页眉 `{{DATA_SOURCE}}` 可与上表一致，用简短并列：`主要财务：美国 SEC EDGAR；宏观：…`（宏观若来自 IMF/FOMC 等则如实写）。
+
+---
+
 ## 图表标注规范
 
 - 图表标题：简洁明了，格式"[内容]——[时间]"，例如"收入流向图——FY2025实际"
 - 坐标轴标签：中文，含单位
 - 悬停提示格式："[节点名]：X.Xbn美元 / X.X%"
-- 数据来源说明（图表下方）："数据来源：[公司10-K / 网络搜索] | Equity Research Skill"
+- 数据来源说明（图表下方）：以**最终权威出处**表述，例如「数据来源：美国 SEC EDGAR（Form 10-K）」或「数据来源：Bloomberg（示意）」；勿用仅含脚本文件名的表述代替 SEC；可接「| Equity Research Skill」
 - 预测数据须标注"（预测值）"
 
 ---

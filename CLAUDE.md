@@ -21,6 +21,11 @@ python3 scripts/extract_report_template.py --lang cn --sha256 -o workspace/MyCo_
 python3 scripts/extract_report_template.py --lang en --sha256 -o workspace/MyCo_2026-04-08/_locked_en_skeleton.html
 ```
 
+**US SEC EDGAR bundle (Agent 1 API-first path; orchestrator obtains a real user email per `SKILL.md` Step 0A.2, then passes `--user-agent`):**
+```bash
+python3 scripts/sec_edgar_fetch.py --ticker MSFT --user-agent "EquityResearchSkill/1.0 (you@example.com)" --report-date 2026-04-11 -o workspace/Microsoft_2026-04-11/sec_edgar_bundle.json
+```
+
 ## Architecture
 
 This is an **AI skill pack** — not a traditional software application. The "code" is primarily markdown files that instruct AI assistants (Claude, ChatGPT, Cursor) how to produce equity research reports.

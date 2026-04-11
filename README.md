@@ -4,6 +4,8 @@ An **equity research** skill pack for AI assistants such as **ChatGPT**, **Claud
 
 **Report language:** The orchestrator (**`SKILL.md`**) must **ask once** whether the final HTML should be **English** or **Chinese** if the user did not already specify. **Phase 1 must not start** until the user answers. Intermediate JSON and the final report match that language. **English** reports use the same layout as Chinese; output is `{Company}_Research_EN.html` (header: English name + ticker only). Chinese output remains `{Company}_Research_CN.html`.
 
+**US SEC API (optional path):** For **Mode A** (no uploaded PDFs) and a **US-listed SEC filer**, the orchestrator asks for a **real contact email** (SEC policy) before creating `workspace/`; if the user declines, financials use **web search** only — see **`SKILL.md` Step 0A.2**.
+
 The workflow collects data, runs financial and industry analysis, and produces **one interactive HTML research report** with a **Sankey revenue flow**, a **macro-factor waterfall chart**, and a **Porter Five Forces** radar.
 
 **Repository:** [github.com/pppop00/Equity-Research-Skill](https://github.com/pppop00/Equity-Research-Skill)
