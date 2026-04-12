@@ -198,7 +198,7 @@ The Phase 2.5 macro table and Section III must use **macro indicators from the r
 
 ---
 
-## Phase 1 + 2 (Macro) + 3 (News): Parallel data collection
+## Phase 1: Parallel data collection via Agents 1–3
 
 Spawn or run Agents 1–3. **Each task prompt must include `Report language: {en|zh}`.**
 
@@ -248,7 +248,10 @@ Output path: workspace/{Company}_{Date}/news_intel.json
 Follow agents/news_researcher.md
 ```
 
-**Wait for all three to finish.**
+**Execution order inside Phase 1:**  
+- Start **Agent 1 / Agent 2 / Agent 3** in parallel.  
+- **Agent 4** may start **as soon as Agent 1 and Agent 3 finish**; it does **not** need to wait for Agent 2.  
+- But do **not** leave Phase 1 until **all three base agents** have completed, because later phases depend on the full set of `financial_data.json` / `macro_factors.json` / `news_intel.json`.
 
 **Post-collection macro regime reconciliation:** After `financial_data.json` and `news_intel.json` exist, re-check `macro_factors.json` → `macro_regime_context` before Phase 2.5. If filings, geographic/segment mix, or news materially contradict Agent 2's initial `sub_industry`, `company_role`, `sector_regime`, or transmission channels, amend `macro_regime_context` and `macro_factor_commentary` (or re-run Agent 2). Do not change β values merely because the role/regime text changed; only adjust β when `beta_source: "adjusted"` is supported and the waterfall is recomputed.
 
@@ -256,7 +259,7 @@ Follow agents/news_researcher.md
 
 ## Agent 4 — Edge Insight Writer
 
-Use `agents/edge_insight_writer.md` after Agent 1 and Agent 3 have finished. This agent exists to make every report contain one evidence-backed, non-obvious reading rather than a generic company summary.
+Use `agents/edge_insight_writer.md` after **Agent 1 and Agent 3** have finished. This agent exists to make every report contain one evidence-backed, non-obvious reading rather than a generic company summary. **Agent 2 may still be running while Agent 4 executes.**
 
 ```
 Report language: {en|zh}
@@ -299,6 +302,21 @@ Same formula as `references/prediction_factors.md`.
 **Macro geography:** Copy factor **labels and ordering** from `macro_factors.json` (which must already follow **Step 0D** + `agents/macro_scanner.md`). Do not reintroduce US-only names if `primary_operating_geography` is **`Greater_China`** or another non-US region.  
 **Forecast horizon label:** Set **`predicted_fiscal_year_label`** to **`FY(latest_actual + 1)E`** where **`latest_actual`** is the fiscal year in `financial_data.json` → **`income_statement.current_year`** (e.g. FY2025 actual → **FY2026E**). This must match the Sankey **forecast** tab (Step 0C §4). Only use a later year (e.g. FY2027E) if you deliberately extend the horizon and keep **Sankey + waterfall + appendix** consistent.  
 **If `en`:** use English for factor display names in `prediction_waterfall.json` where they are meant for the HTML table; numeric fields unchanged.
+**Company-specific adjustment source of truth:** Treat **`news_intel.json`** as the **raw event layer** and **`prediction_waterfall.json`** as the **final model layer**. In other words:
+- `news_intel.json` should supply **event-level** estimates via `company_events[].revenue_impact_pct`
+- `prediction_waterfall.json` must own the final **`company_specific_adjustment_pct`** and any normalized `company_events_detail`
+- Do **not** let `news_intel.json` define a competing root-level total adjustment
+- When the final model value differs from the simple net sum of news events, explain the reason in `company_events_detail`, `key_assumptions`, `notes`, or `qc_deliberation.methodology_note`
+**Required event-to-model methodology:** If `company_events_detail[]` is present, each row should use the structured formula from `references/prediction_factors.md`:
+`final_impact_pct = raw_impact_pct × timing_weight × (1 - overlap_ratio) × run_rate_weight × probability_weight × realization_weight`
+where:
+- `raw_impact_pct` traces back to `news_intel.json`
+- `timing_weight` captures forecast-year inclusion
+- `overlap_ratio` removes double-counted baseline / macro / event effects
+- `run_rate_weight` reflects interim / TTM evidence
+- `probability_weight` reflects likelihood of monetization within the forecast year
+- `realization_weight` is an execution / monetization haircut (can also be used analogously to a liquidity-style haircut in low-certainty or private-company contexts)
+`company_specific_adjustment_pct` should equal the sum of all `company_events_detail[].final_impact_pct` values, within rounding tolerance.
 
 **Macro factor commentary (Section III):** `macro_factors.json` must include **`macro_factor_commentary`** (string, HTML-safe) written per **`agents/macro_scanner.md` Step 7b** — analyst-style explanation of **why** the six macro slots affect **this** company’s revenue/margins and how the rows sum to **`total_macro_adjustment_pct`** (bridge to the waterfall “宏观调整 / macro adjustment” bar). Phase 5 copies it into **`{{MACRO_FACTOR_COMMENTARY}}`** verbatim; do not invent a second narrative in HTML.
 **Macro regime context:** `macro_factors.json` must include **`macro_regime_context`** from `agents/macro_scanner.md` Step 2b. Treat it as the canonical role/regime explanation for macro transmission (`sub_industry`, `company_role`, `sector_regime`, `primary_transmission_channels`, `sign_reversal_watchlist`). It is **not** a second β table and must not override the six-slot β model unless Agent 2 separately sets `beta_source: "adjusted"` with evidence.
@@ -306,11 +324,11 @@ Same formula as `references/prediction_factors.md`.
 
 Save `prediction_waterfall.json`.
 
-**Interim → model bridge (when material):** If **`latest_interim`** (or TTM read from filings) implies a **material** change in revenue run-rate vs. extrapolating from the last **full year** alone, Phase 2.5 may adjust **`company_specific_adjustment_pct`** / **`company_events_detail`** in `prediction_waterfall.json` and add **at most one clarifying sentence** to **`macro_factor_commentary`** (must remain consistent with `macro_factors.json` totals). This **feeds the same** **`predicted_revenue_growth_pct`** used for **Section III** waterfall and **Section IV** Sankey **forecast** tab — keep **`SANKEY_ANALYSIS_TEXT`** and methodology appendix aligned with that choice.
+**Interim → model bridge (when material):** If **`latest_interim`** (or TTM read from filings) implies a **material** change in revenue run-rate vs. extrapolating from the last **full year** alone, Phase 2.5 may adjust **`company_specific_adjustment_pct`** / **`company_events_detail`** in `prediction_waterfall.json` and add **at most one clarifying sentence** to **`macro_factor_commentary`** (must remain consistent with `macro_factors.json` totals). This final model value may differ from the simple event net sum in `news_intel.json` when timing, overlap, run-rate, probability, or realization haircuts justify it, but `prediction_waterfall.json` remains the only final source of truth for delivery. This **feeds the same** **`predicted_revenue_growth_pct`** used for **Section III** waterfall and **Section IV** Sankey **forecast** tab — keep **`SANKEY_ANALYSIS_TEXT`** and methodology appendix aligned with that choice.
 
 ---
 
-## Phase 2.6 — Macro adversarial QC（双审查员，并行）
+## Phase 2.6 — Macro adversarial QC（双审查员，并行；标准完整版默认执行）
 
 在初稿 `prediction_waterfall.json` / `macro_factors.json` 定稿前，由两名**独立** QC 审查员挑战「基于数据的宏观与预测叙述」。Spawn 或顺序执行（Claude.ai 则顺序执行）：
 
@@ -323,7 +341,7 @@ Report language: {en|zh}
 Primary operating geography: {同 Step 0D}
 Sector / 行业: {与 Agent 2 一致}
 Company: {company_name}
-Inputs: workspace/{Company}_{Date}/macro_factors.json, prediction_waterfall.json, news_intel.json
+Inputs: workspace/{Company}_{Date}/macro_factors.json, prediction_waterfall.json, financial_analysis.json, news_intel.json
 Output path: workspace/{Company}_{Date}/qc_macro_peer_a.json
 Follow agents/qc_macro_peer_a.md
 ```
@@ -355,9 +373,13 @@ Save `porter_analysis.json`.
 
 ---
 
-## Phase 3.5 — Porter adversarial QC（双审查员，并行）
+## Phase 3.5 — Porter adversarial QC（双审查员，并行；标准完整版默认执行）
 
 对初稿 `porter_analysis.json` 进行独立挑战（供应商/买方/新进入者/替代品/竞争强度、主要竞争者是否遗漏等）。
+两位 peer 的输出必须把**“挑战了论证/分类边界”**与**“建议改分”**分开表达：  
+- 若 peer 认为初稿论据、归类或命名有问题，但**最终仍应保留原分**，则这是 **reasoning / boundary challenge**，不是改分建议。  
+- 只有 peer 明确认为**当前分数应改成另一整数分值**时，才是 **score-change challenge**。  
+后续 Phase 3.6 必须根据这一差异决定 HTML 写“维持 X 分”还是“从 X 调整到 Y 分”；**不得**因为正文想写得像经过 QC，就倒推一个并不存在的初稿分数。
 
 ### QC Porter — Peer A（分数与证据）
 
@@ -391,18 +413,24 @@ Follow agents/qc_porter_peer_b.md
 
 **File:** `agents/qc_resolution_merge.md`
 
-对 **Phase 2.6** 与 **Phase 3.5** 的全部质疑进行裁定：**质疑成立则修改**初稿对应字段；**不成立则保留**分析师原文。生成审计轨迹并写入合议摘要。
+对 **Phase 2.6** 与 **Phase 3.5** 的全部质疑进行裁定：**质疑成立则修改**初稿对应字段；**不成立则保留**分析师原文。生成审计轨迹并写入合议摘要。  
+对 Porter 路径，合议必须额外回答一个结构化问题：**该维度最终是否真的改分？**  
+- 若只采纳了 QC 的论证纠偏、命名纠偏、分类边界纠偏，但**分数不变**，则 `qc_audit_trail.json` 要清楚落成 **maintain / retained**，后续 Phase 5 只能写“维持 X 分”。  
+- 只有审计轨迹记录了 **`score_changed = true`**（或等价 `score_before != score_after`）时，Phase 5 才能写“从 X 调整到 Y 分”。
+- **完整版默认流程：** Phase 2.6 / 3.5 / 3.6 视为标准 full-run 主路径，而不是可随意省略的装饰步骤。只有在用户明确要求轻量草稿、快速样稿、或手动跳过对抗审查时，才可不生成 `qc_audit_trail.json`；此时 Phase 5 不得伪装成已完成双 QC 的成稿口吻。
 
 ```
 Report language: {en|zh}
 Company: {company_name}
 Inputs:
+  - financial_analysis.json (if Phase 2 already wrote macro-driven summary/thesis text)
   - macro_factors.json, prediction_waterfall.json, news_intel.json
   - qc_macro_peer_a.json, qc_macro_peer_b.json
   - porter_analysis.json, financial_data.json (as needed)
   - qc_porter_peer_a.json, qc_porter_peer_b.json
 Outputs:
   - workspace/{Company}_{Date}/qc_audit_trail.json
+  - 必要时原地更新 financial_analysis.json（若宏观/预测叙述已被写入并被 QC 推翻）
   - 原地更新 prediction_waterfall.json（含 qc_deliberation）
   - 原地更新 porter_analysis.json（含 qc_deliberation）
 Follow agents/qc_resolution_merge.md
@@ -449,7 +477,7 @@ python3 scripts/extract_report_template.py --lang cn --sha256 \
   -o workspace/{Company}_{Date}/_locked_cn_skeleton.html
 ```
 
-Then fill **only** `{{PLACEHOLDER}}` markers in the extracted file (or paste into your editor from the same extract) and save as `{Company}_Research_CN.html`. Do not alter the locked HTML/CSS/JS skeleton. **`{{SUMMARY_PARA_1}}`–`{{SUMMARY_PARA_4}}`** ← `financial_analysis.json` → `summary_para_1` … `summary_para_4`; `{{SUMMARY_PARA_2}}` must reflect `edge_insights.json` → `chosen_insight` / `summary_para_2_draft`. **`{{MACRO_FACTOR_COMMENTARY}}`** ← copy **verbatim** from `macro_factors.json` → `macro_factor_commentary`. **`{{PORTER_COMPANY_TEXT}}` / `{{PORTER_INDUSTRY_TEXT}}` / `{{PORTER_FORWARD_TEXT}}`** — use the **five-`<li>` unordered-list** format; **do not** use a **title-style** opening like **「力名（X/5）：」** (scores stay on radar and the score list). When dual-QC **changes a Porter score**, the matching `<li>` **should** follow the **sentence template** in `references/report_style_guide_cn.md` §波特五力 (**QC合议认为…，并将…评分由 a 调整为 b，原因是…**; then continue analysis). See `references/porter_framework.md` §Phase 5 HTML. **Post-processing caution:** Do **not** delete HTML comment lines that contain `-->` solely because they include illustrative `{{…}}` text — removing the only closing `-->` for a multi-line `<!--` will comment out the Porter/Appendix DOM (see `agents/report_writer_cn.md` 写作规范、`agents/report_validator.md` §5).
+Then fill **only** `{{PLACEHOLDER}}` markers in the extracted file (or paste into your editor from the same extract) and save as `{Company}_Research_CN.html`. Do not alter the locked HTML/CSS/JS skeleton. **`{{SUMMARY_PARA_1}}`–`{{SUMMARY_PARA_4}}`** ← `financial_analysis.json` → `summary_para_1` … `summary_para_4`; `{{SUMMARY_PARA_2}}` must reflect `edge_insights.json` → `chosen_insight` / `summary_para_2_draft`. **`{{MACRO_FACTOR_COMMENTARY}}`** ← copy **verbatim** from `macro_factors.json` → `macro_factor_commentary`. **`{{PORTER_COMPANY_TEXT}}` / `{{PORTER_INDUSTRY_TEXT}}` / `{{PORTER_FORWARD_TEXT}}`** — use the **five-`<li>` unordered-list** format; **do not** use a **title-style** opening like **「力名（X/5）：」** (scores stay on radar and the score list). Each `<li>` must reflect the **real QC resolution** from `qc_audit_trail.json` / `porter_analysis.qc_deliberation`: if the force **did not change score**, write the **maintain** form; only if the audit trail proves a real score change may you write the **from–to adjust** form. **Never invent a prior score to satisfy the style template.** See `references/porter_framework.md` §Phase 5 HTML and `references/report_style_guide_cn.md` §波特五力. **Post-processing caution:** Do **not** delete HTML comment lines that contain `-->` solely because they include illustrative `{{…}}` text — removing the only closing `-->` for a multi-line `<!--` will comment out the Porter/Appendix DOM (see `agents/report_writer_cn.md` 写作规范、`agents/report_validator.md` §5).
 After placeholders are filled, you **may** remove **only** single-line, self-contained instructional comments that still contain sample `{{...}}` text **if** you have **positively verified** that the line is not the closing leg of a multi-line `<!-- ... -->` block (e.g. a standalone `<!-- … {{…}} … -->`). **If there is any doubt, do not delete the comment line** — leave it, or rewrite the comment so it no longer contains `{{` / `}}`, instead of removing a line that might be the only `-->` closing an earlier `<!--`. Deliverables must not contain unreplaced real placeholders; optional comment cleanup must never risk breaking the DOM.
 
 ### If `report_language = en`
@@ -465,7 +493,7 @@ python3 scripts/extract_report_template.py --lang en --sha256 \
   -o workspace/{Company}_{Date}/_locked_en_skeleton.html
 ```
 
-Then fill **only** placeholders and save as `{Company}_Research_EN.html`. **`{{SUMMARY_PARA_1}}`–`{{SUMMARY_PARA_4}}`** ← `financial_analysis.json` → `summary_para_1` … `summary_para_4`; `{{SUMMARY_PARA_2}}` must reflect `edge_insights.json` → `chosen_insight` / `summary_para_2_draft`. **`{{MACRO_FACTOR_COMMENTARY}}`** ← copy **verbatim** from `macro_factors.json` → `macro_factor_commentary`. Porter placeholders **`{{PORTER_COMPANY_TEXT}}` / `{{PORTER_INDUSTRY_TEXT}}` / `{{PORTER_FORWARD_TEXT}}`**: same **five-`<li>` `<ul>`** rules as Chinese — no **title-style** opening like **"Force (4/5):"**; when QC **changes a score**, use the **template** in `references/report_style_guide_en.md` §Porter Five Forces (**Dual-QC deliberation held that …, and adjusted … from *a* to *b*, because …**).
+Then fill **only** placeholders and save as `{Company}_Research_EN.html`. **`{{SUMMARY_PARA_1}}`–`{{SUMMARY_PARA_4}}`** ← `financial_analysis.json` → `summary_para_1` … `summary_para_4`; `{{SUMMARY_PARA_2}}` must reflect `edge_insights.json` → `chosen_insight` / `summary_para_2_draft`. **`{{MACRO_FACTOR_COMMENTARY}}`** ← copy **verbatim** from `macro_factors.json` → `macro_factor_commentary`. Porter placeholders **`{{PORTER_COMPANY_TEXT}}` / `{{PORTER_INDUSTRY_TEXT}}` / `{{PORTER_FORWARD_TEXT}}`**: same **five-`<li>` `<ul>`** rules as Chinese — no **title-style** opening like **"Force (4/5):"**. If the audit trail says a force was **maintained**, write a maintained / remains sentence; only when QC **actually changed the score** may you use the **from–to adjustment** template in `references/report_style_guide_en.md` §Porter Five Forces. Never fabricate a prior score for stylistic symmetry.
 
 **Post-processing:** Same HTML comment rule as Chinese — do **not** strip lines that close a `<!--` block inside the Porter company panel (see `report_writer_en.md`). If you might remove a single-line comment that contains sample `{{...}}` text, apply the same **“only when sure / otherwise leave or reword”** rule as in the Chinese branch above.
 

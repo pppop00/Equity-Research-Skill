@@ -17,7 +17,7 @@ The workflow collects data, runs financial and industry analysis, and produces *
 ## What you get
 
 - **Single deliverable:** `{Company}_Research_CN.html` — open locally in a browser; light / dark theme toggle included.
-- **Intermediate JSON:** financials (`financial_data.json`), macro factors with **`macro_regime_context`** (`macro_factors.json`), news intel, **`edge_insights.json`** (Agent 4: one evidence-backed “edge” for the summary), prediction waterfall, Porter analysis, optional **`qc_audit_trail.json`** after adversarial QC, and **`final_report_data_validation.json`** after the final data validation pass — easy to audit or pipe into other tools.
+- **Intermediate JSON:** financials (`financial_data.json`), macro factors with **`macro_regime_context`** (`macro_factors.json`), news intel, **`edge_insights.json`** (Agent 4: one evidence-backed “edge” for the summary), prediction waterfall, Porter analysis, **`qc_audit_trail.json`** in the standard full workflow after adversarial QC, and **`final_report_data_validation.json`** after the final data validation pass — easy to audit or pipe into other tools. `prediction_waterfall.json` is the final model source of truth for `company_specific_adjustment_pct`; when `company_events_detail[]` is present it should use the structured raw-to-final bridge fields (`raw_impact_pct`, timing / overlap / run-rate / probability / realization weights, `final_impact_pct`, `adjustment_reason`). `qc_audit_trail.json` may be absent only in intentionally shortened runs that explicitly skip QC.
 - **Macro + summary depth:** **`macro_regime_context`** ties macro narrative to company role and cycle (not a second β table); **`edge_insights.json`** supplies the second investment-summary paragraph — both wired in **`SKILL.md`** and the listed agents.
 - **Traceable process:** orchestration in **`SKILL.md`** at repo root; sub-tasks in **`agents/`**; formulas and sector β tables in **`references/`**.
 
@@ -104,7 +104,7 @@ If you change the fenced HTML inside `agents/report_writer_*.md`, update the exp
 ### ChatGPT (web / desktop)
 
 - Use **Advanced Data Analysis** (Code Interpreter) or **file upload**: ZIP `SKILL.md`, `agents/`, and `references/`, or paste the critical sections.
-- Be explicit: **run the full `SKILL.md` pipeline**; for the final HTML step, **only** fill the template in `report_writer_cn.md` — do not rewrite the page structure.
+- Be explicit: **run the full `SKILL.md` pipeline**; for the final HTML step, **only** fill the template in `report_writer_cn.md` **or** `report_writer_en.md` according to the report language — do not rewrite the page structure.
 
 ---
 

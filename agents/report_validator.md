@@ -13,6 +13,7 @@
 - `workspace/{Company}_{Date}/macro_factors.json`
 - `workspace/{Company}_{Date}/news_intel.json`
 - `workspace/{Company}_{Date}/prediction_waterfall.json`
+- `workspace/{Company}_{Date}/porter_analysis.json`
 - `workspace/{Company}_{Date}/final_report_data_validation.json`
 - `workspace/{Company}_{Date}/qc_audit_trail.json`（若本次运行包含 Phase 2.6–3.6 对抗审查）
 
@@ -125,8 +126,9 @@ HTML 中的 `<style>` 块必须包含以下所有变量定义（在 `:root` 或 
 - `.score-dot` 的 class 包含 `s1`-`s5` 之一，与 `porterScores` 数组值对应
 - 每个 tab-panel 中有 `.porter-text` 且：若 `<html lang="zh-CN">` 则正文 ≥ **100 个汉字**；若 `<html lang="en-US">`（或 `lang="en"`）则正文 ≥ **450 个英文字符**（约同等信息量）
 - **推荐版式（Phase 5）：** 每个 `.porter-text` 内为**单个 `<ul>` 含恰好 5 个 `<li>`**（顺序对应五力），且**不在** `<li>` 内重复「X/5」起句——见 `references/report_style_guide_cn.md` / `report_style_guide_en.md` 波特五力 / Porter Five Forces。若仅为连续 `<p>` 而无列表 → **WARNING**（风格偏离，交付前可接受但建议对齐技能包规范）。
+- **中文 Porter 句式（Phase 5 新规范）：** 若 `<html lang="zh-CN">`，每个 `<li>` 应以前置的 **QC 合议结论句** 开头，并使用**维持/调整**显式格式，例如 **「经QC合议，维持供应商议价能力为3分。……」** 或 **「经QC合议，决定将供应商议价能力评分从4分调整为3分。……」**。不要只写普通分析段，也不要只在调分时才出现该句式。**同时核对审计链一致性：** 若正文写成“从 X 调整到 Y”，则 `qc_audit_trail.json` / `porter_analysis.qc_deliberation` 中必须存在该维度被采纳并改分的记录；若 `qc_audit_trail.json` 有显式 `score_changed: false`（或 `score_before = score_after`），HTML 就不得写成调整句式；若无记录，则判为 **WARNING（疑似编造调分）**。
 
-**失败条件：** li 数量不是5 → CRITICAL；score-dot class 与数组不符 → WARNING；达不到上述字数/字符门槛 → WARNING。
+**失败条件：** li 数量不是5 → CRITICAL；score-dot class 与数组不符 → WARNING；达不到上述字数/字符门槛 → WARNING；中文 Porter `<li>` 未使用上述 QC 合议维持/调整句式 → WARNING（交付前必改）；正文声称“从 X 调整到 Y”但审计链无对应改分记录，或审计链显式表明 `score_changed: false` / `score_before = score_after` → WARNING（交付前必改）。
 
 ---
 

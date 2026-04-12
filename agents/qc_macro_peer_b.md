@@ -41,7 +41,10 @@
    - `baseline_growth_pct` 与 `baseline_source` 是否可辩护；是否忽略明显的行业逆风（在 `news_intel` 中已有而 baseline 仍过于乐观）。
 
 9. **公司特定项**  
-   - `company_events_detail` 与 `company_specific_adjustment_pct` 是否与新闻情报方向一致；有无遗漏重大逆风或重复计入。
+   - `news_intel.json` 只提供原始事件层（`company_events[].revenue_impact_pct`）；`prediction_waterfall.json` 中的 `company_specific_adjustment_pct` 才是最终模型值。  
+   - 检查 `company_events_detail` 与 `company_specific_adjustment_pct` 是否与新闻情报方向一致；若最终模型值与事件净和不同，是否交代了 timing、overlap、run-rate、probability 或 realization haircut，而不是无解释漂移。  
+   - 若 `company_events_detail[]` 使用结构化字段，检查 narrative 是否与这些权重一致：例如 `timing_weight < 1.0` 应对应“并非全部在 FY2026E 内兑现”，`realization_weight < 1.0` 应对应执行 / 转化 / 兑现打折，而不是写成另一种 unrelated 理由。  
+   - 挑战遗漏重大逆风、重复计入，或把原始事件层误当成最终模型总值的写法。
 
 10. **概率与措辞**  
    - 初稿是否把情景估计写成确定性结论；挑战过度自信的句子（不要求你改 HTML，只输出质疑）。

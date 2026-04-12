@@ -15,7 +15,74 @@ Predicted_Revenue_Growth =
 
 **Baseline_Growth:** Annualized growth rate from 10-Q YTD data (`YTD_revenue / quarters_reported × 4` vs prior year full-year), or analyst consensus from web search if no 10-Q available.
 
-**Company_Specific_Adjustment:** Sum of `revenue_impact_pct` from all `company_events` in `news_intel.json`.
+**Company_Specific_Adjustment:** Final model-owned company adjustment written to **`prediction_waterfall.json` → `company_specific_adjustment_pct`** in Phase 2.5. As a starting point, derive it from the net sum of **`news_intel.json` → `company_events[].revenue_impact_pct`**, then adjust only if needed for timing, overlap / double-counting, interim run-rate evidence, or forecast-year probability.
+
+**Source-of-truth discipline:**
+- `news_intel.json` = **raw event layer** (`company_events[].revenue_impact_pct`)
+- `prediction_waterfall.json` = **final model layer** (`company_specific_adjustment_pct`, `company_events_detail`)
+- Do **not** create a competing root-level `company_specific_adjustment_pct` in `news_intel.json`
+
+### Recommended event-to-model formula
+
+For each company-specific event in `prediction_waterfall.json` → `company_events_detail[]`, compute:
+
+```text
+final_impact_pct =
+  raw_impact_pct
+  × timing_weight
+  × (1 - overlap_ratio)
+  × run_rate_weight
+  × probability_weight
+  × realization_weight
+```
+
+Then:
+
+```text
+company_specific_adjustment_pct =
+  Σ company_events_detail[].final_impact_pct
+```
+
+### Field meanings
+
+- `raw_impact_pct`
+  - The raw event-level estimate, normally traceable to `news_intel.json` → `company_events[].revenue_impact_pct`
+- `timing_weight` (`0.0–1.0`)
+  - How much of the event is expected to fall inside the forecast fiscal year
+- `overlap_ratio` (`0.0–1.0`)
+  - The share already reflected in baseline growth, macro recovery, or another event line
+- `run_rate_weight` (`0.5–1.5`, default `1.0`)
+  - Interim / TTM evidence adjustment: use `<1.0` when the observed realization pace lags the headline claim; use `>1.0` only with strong filed evidence
+- `probability_weight` (`0.0–1.0`)
+  - Estimated probability that the event will monetize in the forecast year
+- `realization_weight` (`0.0–1.0`, default `1.0`)
+  - A monetization / execution haircut. This can be used analogously to a valuation haircut in cases such as weak contractual certainty, low disclosure, difficult channel conversion, or private-company / illiquid realization contexts
+- `final_impact_pct`
+  - The model-adopted event contribution after all discounts / adjustments
+- `adjustment_reason`
+  - Plain-language explanation for why `final_impact_pct` differs from `raw_impact_pct`
+
+### Required schema in `prediction_waterfall.json`
+
+`company_events_detail[]` should use this structure whenever company-specific events are included:
+
+```json
+{
+  "name": "HBO Max Germany/Italy/UK rollout",
+  "raw_impact_pct": 0.8,
+  "timing_weight": 0.5,
+  "overlap_ratio": 0.0,
+  "run_rate_weight": 1.0,
+  "probability_weight": 1.0,
+  "realization_weight": 1.0,
+  "final_impact_pct": 0.4,
+  "direction": "positive",
+  "adjustment_reason": "Only part of the rollout is expected to contribute within FY2026E; the rest falls outside the forecast window.",
+  "source": "10-K and FY2025 results release"
+}
+```
+
+The orchestrator may omit `company_events_detail[]` only when there are no material company-specific events. If the array exists, prefer the full schema above so QC and validators can recompute the final value.
 
 ---
 

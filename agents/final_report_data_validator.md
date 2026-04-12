@@ -82,11 +82,23 @@
 
 - 明确区分：
   - `company_specific_adjustment_pct` = **净调整总和**
-  - `company_events_detail[].impact_pct` = **单一事件分项**
+  - `company_events_detail[].final_impact_pct` = **单一事件分项的最终模型值**
+- **source-of-truth：**
+  - `news_intel.json` 提供**原始事件层**：`company_events[].revenue_impact_pct`
+  - `prediction_waterfall.json` 提供**最终模型层**：`company_specific_adjustment_pct`
+  - 若两者不同，不应直接判错；应检查 `prediction_waterfall.json` 是否说明了 timing、overlap、run-rate、probability、或 realization haircut 等原因
+- **禁止**把 `news_intel.json` 中原始事件净和直接当成最终交付口径，除非 `prediction_waterfall.json` 明确与之相同
+- 若 `company_events_detail[]` 使用结构化 schema，则必须逐项复算：  
+  `final_impact_pct = raw_impact_pct × timing_weight × (1 - overlap_ratio) × run_rate_weight × probability_weight × realization_weight`
+- 逐项检查：
+  - `raw_impact_pct` 是否可追溯到 `news_intel.json`
+  - `timing_weight`、`overlap_ratio`、`run_rate_weight`、`probability_weight`、`realization_weight` 是否在合理范围内
+  - `adjustment_reason` 是否与这些权重的经济含义一致
+- `company_specific_adjustment_pct` 应等于 `sum(company_events_detail[].final_impact_pct)`（允许 ±0.01 rounding）
 - 如果文字提到某个事件（如 Paramount）由 `+3.0%` 下调到 `+1.5%`，必须同时明确：
   - 这是 **该事件分项** 的变化；
   - 整体 `company_specific_adjustment_pct` 变为多少。
-- **失败条件：** 把单项分值写成总调整，或让读者无法判断 `+1.5%` 是子项还是总项 → **WARNING**；若因此导致总计被写错 → **CRITICAL**
+- **失败条件：** 把单项分值写成总调整，或让读者无法判断 `+1.5%` 是子项还是总项 → **WARNING**；把 `news_intel.json` 原始事件层误当成最终模型口径且未说明 `prediction_waterfall.json` 的调整原因 → **WARNING**；结构化公式无法复算、权重超出合理范围、或 `company_specific_adjustment_pct` 与分项净和不一致 → **CRITICAL**
 
 ### 6. Sankey 与利润表 / 现金流的桥接一致性
 
@@ -139,6 +151,22 @@
   - `mixed_gaap_nongaap`：不同利润层级混用
   - `stale_value_not_reconciled`：QC 后旧值未完全替换
   - `wording_ambiguity`：分项与总项、口径边界或上下文限定不清
+
+### 10. Porter QC 审计链一致性
+
+- 若存在 `qc_audit_trail.json`，必须核对：
+  - `porter_analysis.json` 的相关段落是否与审计轨迹一致；
+  - HTML 第五节 Porter 三个 tab 的维持/调整表述是否与审计轨迹一致；
+  - 是否存在 **审计轨迹写“维持原分”**，但 HTML 或 `porter_analysis.json` 却写成 **“从 X 调整到 Y”** 的情况；
+  - 是否存在 **peer challenge 被采纳但只是 reasoning / classification 修正**，结果下游误写成改分。
+- 对每个 Porter 维度，至少判断：
+  - `final_score`
+  - `score_changed`（若 `qc_audit_trail` 有显式字段则直接使用；否则根据 resolution 文义判断）
+  - HTML / JSON 是否使用了匹配的 maintained-score 或 adjusted-from-to wording
+- **失败条件：**
+  - 审计链与 HTML / `porter_analysis.json` 对“维持 / 调整”结论不一致 → **CRITICAL**
+  - `qc_audit_trail` 无法支持 HTML 中的 “from X to Y” 叙述 → **CRITICAL**
+  - QC 后仍残留旧的 pre-QC wording 或旧分值 → **CRITICAL**
 
 ## 修复顺序
 

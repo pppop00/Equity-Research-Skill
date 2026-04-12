@@ -6,7 +6,8 @@
 
 - `workspace/{Company}_{Date}/macro_factors.json`
 - `workspace/{Company}_{Date}/prediction_waterfall.json`
-- `workspace/{Company}_{Date}/news_intel.json`（公司事项与 `revenue_impact`）
+- `workspace/{Company}_{Date}/financial_analysis.json`（若其中已写入宏观叙述、摘要或预测相关结论）
+- `workspace/{Company}_{Date}/news_intel.json`（公司事项与 `revenue_impact_pct`）
 - `references/prediction_factors.md`（β 表、φ、因子顺序与符号含义）
 - 编排器提供的：`Report language: en|zh`，`Primary operating geography`，**Sector / 行业**（用于核对所用 β 行是否与行业标签一致，例如 NVIDIA → Semiconductors）
 
@@ -20,10 +21,21 @@
    - 对每一因子：宏观变化（%）、β、φ 与得到的 `adjustment_pct` 是否自洽；**叙述中的「正向/负向」**是否与 `macro_factors.json` / `prediction_waterfall.json` 中该因子的经济含义一致（参考 `prediction_factors.md` 的 sign interpretation）。
 
 3. **重复计算与双计**  
-   - `news_intel` 中已折入公司项的关税、一次性事件，是否在宏观项中再次全额计入；若初稿在 `key_assumptions` / `notes` 中已提示重叠，挑战是否仍低估风险。
+   - `news_intel.json` → `company_events[].revenue_impact_pct` 中已折入公司项的关税、一次性事件，是否在宏观项中再次全额计入；若初稿在 `key_assumptions` / `notes` 中已提示重叠，挑战是否仍低估风险。
 
-4. **地域**  
+4. **公司特定项公式一致性**  
+   - 若 `prediction_waterfall.json` 含 `company_events_detail[]`，检查每一项是否可由以下公式复算：  
+     `final_impact_pct = raw_impact_pct × timing_weight × (1 - overlap_ratio) × run_rate_weight × probability_weight × realization_weight`
+   - `raw_impact_pct` 是否可追溯到 `news_intel.json` → `company_events[].revenue_impact_pct`
+   - `overlap_ratio` 是否真的用于去重，而不是把主观下调伪装成“去重”
+   - `run_rate_weight` 若偏离 1.0，是否有 `latest_interim` / TTM 证据支撑
+   - `probability_weight` / `realization_weight` 是否被滥用成任意打折工具而无证据说明
+
+5. **地域**  
    - `primary_operating_geography` 与宏观序列是否一致；不得出现「中国区营收为主」却全文用美国 CPI 而不加说明的情况。
+
+6. **Phase 2 / 2.5 叙事一致性**  
+   - 若 `financial_analysis.json` 中已经出现宏观驱动、收入预测、利率/汇率/消费信心等传导叙述，应与 `macro_factors.json`、`prediction_waterfall.json` 保持一致；不要只检查模型表，不检查已经写进分析正文的宏观结论。
 
 ## 输出
 
@@ -36,7 +48,7 @@
   "challenges": [
     {
       "id": "MA-001",
-      "target": "prediction_waterfall|macro_factors|baseline_narrative",
+      "target": "prediction_waterfall|macro_factors|financial_analysis.summary_para_3|financial_analysis.thesis",
       "issue": "一句话标题",
       "qc_argument": "质疑理由，引用具体字段名或公式",
       "suggested_fix": "若质疑成立时建议的修改方向（数值或表述）",
