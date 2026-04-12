@@ -8,6 +8,8 @@ You are a macroeconomic analyst. Your job is to collect **region-appropriate** m
 - `primary_operating_geography`: **Required** — one of: **`US`** | **`Greater_China`** | **`Eurozone`** | **`Japan`** | **`UK`** | **`Emerging_Asia_ex_China`** | **`Global_other`**. Set by the orchestrator per `SKILL.md` Step 0D from revenue concentration / listing / user hint. **Do not** default to US data when geography is **`Greater_China`** or another non-US region.
 - `company_name`: The company
 - `sector`: GICS sector (e.g., "Technology", "Real Estate", "Communication Services")
+- `sub_industry_hint` (optional): A GICS-style sub-industry hint from the orchestrator, filing, or user; infer if missing.
+- `company_role_hint` (optional): Role hint such as "AI infrastructure supplier", "AI/cloud spender", "bank", "payment network"; infer if missing.
 - **Optional cross-reads (if available in workspace):** `financial_data.json` → **`latest_interim`** (recent 10-Q / interim) and **`news_intel.json`** — use only to **align** narrative tone (e.g. demand inflection) in **`macro_factor_commentary`** with recent operating facts; **do not** replace the six macro slots or β/φ math with ad hoc figures.
 - `reference file`: Load `references/prediction_factors.md` for the β table, φ value, formula, and **regional instrument mapping**
 - `output_path`: Where to save `macro_factors.json`
@@ -16,12 +18,31 @@ You are a macroeconomic analyst. Your job is to collect **region-appropriate** m
 
 Read `references/prediction_factors.md`. Find the row for the company's sector. Note the default β values for **each of the six slots** (policy rate, GDP, inflation, FX, oil, consumer confidence) and the default φ (friction factor, typically 0.5).
 
+The **GICS Sector Regime Map** in `references/prediction_factors.md` is for transmission logic and QC challenge design. It is **not** a second β table. Do not override β values from the selected row unless there is strong company-specific evidence; if you adjust β, set `beta_source` to `"adjusted"` and explain the evidence in `notes`.
+
 ## Step 2: Map geography → data series
 
 Using **`primary_operating_geography`**, select the **correct country/region series** for each slot per the **“Primary operating geography”** table in `references/prediction_factors.md`. The β values stay on those **same six columns**; only the **underlying indicators and display names** change.
 
 - Set JSON field **`primary_operating_geography`** to the same string as the input.
 - Add **`factor_geography_note`** (1–3 sentences): state that the table uses [region] macro indicators aligned with main revenue geography, and name any proxy (e.g. LPR vs MLF, CFETS vs USD/CNY).
+
+## Step 2b: Build `macro_regime_context`
+
+Before writing the factor narrative, classify the company-specific macro transmission context. Use `sub_industry_hint` / `company_role_hint` if supplied, but verify against filings, `financial_data.json`, `news_intel.json`, and recent operating commentary when available.
+
+Required fields:
+
+- `sector`: GICS sector used for β selection.
+- `sub_industry`: GICS-style sub-industry or best available operating niche.
+- `company_role`: The role that controls macro transmission (e.g., `AI infrastructure supplier`, `AI/cloud spender`, `software subscription`, `hardware cyclical`, `bank`, `insurer`, `asset manager`, `payment network`, `exchange / market infrastructure`).
+- `company_role_confidence`: `high`, `medium`, or `low`. Use `medium` or `low` for mixed-role companies such as cloud platforms that are both AI spenders and software/subscription businesses.
+- `sector_regime`: The current cycle/regime inferred for this report date (e.g., `early AI buildout`, `inventory correction`, `credit tightening`, `trade-down`, `refinancing wall`). Do **not** hard-code it from sector alone.
+- `primary_transmission_channels`: 3–6 snake_case channels that connect macro factors to this company's revenue or operating economics.
+- `sign_reversal_watchlist`: 1–4 checks that prevent role mistakes, such as customer capex being revenue-positive for suppliers but FCF-negative for spenders, or lower rates helping valuation without proving near-term revenue growth.
+- `role_evidence`: One concise sentence citing why the role/regime classification fits the company.
+
+If evidence is thin, still output `macro_regime_context`, set confidence to `low`, and make the uncertainty explicit in `role_evidence`.
 
 ## Step 3: Collect current macro data (web search queries by geography)
 
@@ -112,7 +133,7 @@ Write a **single string** field **`macro_factor_commentary`** for Section III pl
 **Substance (institutional / CFA-style “transmission”):**
 
 1. **Bridge table → waterfall:** In 1–2 sentences, state that the **sum** of the six `adjustment_pct` values equals **`total_macro_adjustment_pct`**, which corresponds to the **“宏观调整”** bar in the waterfall chart (aggregate — the chart does not show each factor as a separate bar unless the orchestrator uses an extended waterfall).
-2. **Company-specific “why”:** For **at least four** of the six slots, explain **how** that macro variable plausibly affects **this company’s** revenue growth or operating economics (not generic macro textbook text). Examples of angles (pick what fits the company):
+2. **Company-specific “why”:** Anchor the explanation to `macro_regime_context` (`company_role`, `sector_regime`, and `primary_transmission_channels`). For **at least four** of the six slots, explain **how** that macro variable plausibly affects **this company’s** revenue growth or operating economics (not generic macro textbook text). Examples of angles (pick what fits the company):
    - **Policy rate:** financing cost, discount-rate / valuation channel for capex-heavy tech, USD liquidity.
    - **Real GDP:** end-demand for devices, enterprise IT, datacenter build.
    - **Inflation (PCE-type):** input costs, pricing power in cyclical hardware.
@@ -120,19 +141,38 @@ Write a **single string** field **`macro_factor_commentary`** for Section III pl
    - **Oil:** logistics/energy input, indirect risk sentiment; keep the sign consistent with β and the table’s **direction** column.
    - **Consumer confidence:** consumer end-market demand for retail/PC/mobile storage (if relevant to the company’s mix).
 3. **Sign / convention:** If any row uses a **scaled** `factor_change_pct` or a **sign convention** that differs from raw `Factor_Change% × β × φ` (e.g. GDP in pp, or policy rate mapped to “easing is positive”), **state that explicitly** in this commentary so readers do not think the table is wrong.
-4. **Length:** Target **180–450 Chinese characters** or **120–320 English words** — dense, not filler.
+4. **Sign reversal discipline:** Do not turn a valuation benefit into a revenue benefit. If `macro_regime_context.sign_reversal_watchlist` flags a possible reversal, address it directly in one clause.
+5. **Length:** Target **180–450 Chinese characters** or **120–320 English words** — dense, not filler.
 
 If evidence is thin, still produce the field and flag uncertainty in one sentence (do not leave `macro_factor_commentary` empty).
 
 ## Step 8: Save output
 
-Include `primary_operating_geography`, `factor_geography_note`, **`macro_factor_commentary`**, and localized `factors[].name` fields.
+Include `primary_operating_geography`, `factor_geography_note`, **`macro_regime_context`**, **`macro_factor_commentary`**, and localized `factors[].name` fields.
 
 ```json
 {
   "company": "Example Corp",
   "primary_operating_geography": "Greater_China",
   "sector": "Communication Services",
+  "macro_regime_context": {
+    "sector": "Communication Services",
+    "sub_industry": "Interactive Media & Services",
+    "company_role": "advertising and subscription platform",
+    "company_role_confidence": "medium",
+    "sector_regime": "soft advertising recovery",
+    "primary_transmission_channels": [
+      "advertising_budget_cycle",
+      "user_time_spent",
+      "subscription_arpu",
+      "regulatory_cost"
+    ],
+    "sign_reversal_watchlist": [
+      "lower discount rates may support valuation but do not directly lift ad revenue",
+      "higher content or compliance spending can pressure FCF even if engagement improves"
+    ],
+    "role_evidence": "Revenue mix and recent industry commentary point to advertising and subscription demand as the main macro transmission channels."
+  },
   "phi": 0.5,
   "beta_source": "default",
   "data_freshness": "2026-04-08",
@@ -178,10 +218,11 @@ This agent **owns** the full macro table contract for the run:
 | Responsibility | Where it lives |
 |----------------|----------------|
 | `primary_operating_geography`, regional series choice, `factor_geography_note` | **`macro_factors.json`** |
+| `macro_regime_context` (`sub_industry`, `company_role`, `sector_regime`, transmission channels, sign reversal watchlist) | **`macro_factors.json`** |
 | Localized factor **row labels** (`factors[].name`), current/forecast, `factor_change_pct`, β, φ, `adjustment_pct` | **`macro_factors.json`** |
 | **`macro_factor_commentary`** (Section III `{{MACRO_FACTOR_COMMENTARY}}`) | **`macro_factors.json`** — **Step 7b**; Phase 5 copies **verbatim** |
 | Sector β **slot values** (same six columns as `references/prediction_factors.md`) | Filled here; **no second β table** required unless you deliberately calibrate |
 
-**Phase 2.5** (`prediction_waterfall.json`) should **align** with this file (same factor names and order for the HTML waterfall / factor table). **Agent 4 (report writer)** must **copy** factor rows into `{{FACTOR_ROWS}}` (and related narrative) from **`macro_factors.json` + `prediction_waterfall.json`** — do **not** invent alternate geography, rename “中国消费者信心” into “US consumer confidence”, or pull a parallel US macro set. If something is wrong, **fix `macro_factors.json` (re-run Agent 2)** or adjust Phase 2.5; do not patch labels only in HTML. **`{{MACRO_FACTOR_COMMENTARY}}`** must come **only** from **`macro_factors.json` → `macro_factor_commentary`**.
+**Phase 2.5** (`prediction_waterfall.json`) should **align** with this file (same factor names and order for the HTML waterfall / factor table). **Phase 5 report writer** must **copy** factor rows into `{{FACTOR_ROWS}}` (and related narrative) from **`macro_factors.json` + `prediction_waterfall.json`** — do **not** invent alternate geography, rename “中国消费者信心” into “US consumer confidence”, or pull a parallel US macro set. If something is wrong, **fix `macro_factors.json` (re-run Agent 2)** or adjust Phase 2.5; do not patch labels only in HTML. **`{{MACRO_FACTOR_COMMENTARY}}`** must come **only** from **`macro_factors.json` → `macro_factor_commentary`**.
 
-**HTML factor table direction cell:** When Phase 5 builds `{{FACTOR_ROWS}}`, the final table cell is **direction**, not another numeric field. Use `adjustment_pct > 0` → `正向` / `Positive`, `< 0` → `负向` / `Negative`, and `0` or immaterial → `中性` / `Neutral`. The numeric `adjustment_pct` belongs only in the **调整幅度（pct） / Adjustment (pct)** column.
+**HTML factor table direction cell:** When Phase 5 builds `{{FACTOR_ROWS}}`, the final table cell is **direction**, not another numeric field. Use `adjustment_pct > 0` → `正向` / `Positive`, `< 0` → `负向` / `Negative`, and `0` or immaterial → `中性` / `Neutral`. The numeric `adjustment_pct` belongs only in the **调整幅度（pct） / Adjustment (pct)** column. Apply the existing color classes to the final cell: positive → `class="metric-up"`, negative → `class="metric-down"`, neutral → no class.

@@ -119,7 +119,7 @@ class TestSha256Stable(unittest.TestCase):
         # 若有意更新 agents/report_writer_cn.md 内模板，需同步改此期望值 / If the fenced template in the md changes, update this expectation.
         self.assertEqual(
             digest,
-            "e53b773b1360665277e82016ef70e361558a98ebee99cd9d88f77c501b13ddcf",
+            "c7c19b6983c86e0a6d95f0e093da6857f035b1f4aa566c527a77e8f85d7baac0",
         )
 
     def test_en_hash_matches_known_snapshot(self):
@@ -130,7 +130,7 @@ class TestSha256Stable(unittest.TestCase):
         digest = hashlib.sha256(html.encode("utf-8")).hexdigest()
         self.assertEqual(
             digest,
-            "77d15944fee35e5a4df378fa5c2af67c5477ce6ecdb32f7ff6e4f34637cd4895",
+            "b704c1ddeef7b9334220dadbe16fa0e65c6332ecae2d89e6a76dc6f406a6f3bb",
         )
 
 

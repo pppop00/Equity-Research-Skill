@@ -63,6 +63,69 @@ These are the default starting values. Adjust based on company-specific characte
 
 ---
 
+## GICS Sector Regime Map — transmission context, not a second β table
+
+Use this map to explain **how** macro factors transmit to the company and to stress-test the narrative. It does **not** override the six β slots above. Keep β values from the selected sector row unless Agent 2 has strong evidence to adjust them; if adjusted, set `beta_source` to `"adjusted"` and explain the evidence in `notes`.
+
+| GICS sector | Default key transmissions |
+|-------------|---------------------------|
+| Information Technology | Enterprise IT budgets, AI/cloud capex, semiconductor cycle, USD, discount-rate-sensitive valuation |
+| Communication Services | Advertising cycle, user time spent, subscription ARPU, regulation, content costs |
+| Consumer Discretionary | Real wages, consumer confidence, credit availability, inventory, promotions, traffic |
+| Consumer Staples | Food/raw material inflation, price pass-through, volume elasticity, trade-down |
+| Health Care | Reimbursement policy, drug cycle, patent cliffs, clinical/approval events, utilization |
+| Financials | Yield curve, NIM, credit losses, capital markets activity, asset quality |
+| Real Estate | Cap rates, financing costs, tenant demand, occupancy, refinancing wall |
+| Industrials | PMI, order backlog, infrastructure/defense budgets, inventory cycle, fuel costs |
+| Energy | Oil/gas prices, production, supply discipline, geopolitics, service costs |
+| Materials | Commodity prices, China/global industrial demand, energy costs, inventory cycle |
+| Utilities | Regulated returns, load growth, fuel costs, interest rates, capex plans |
+
+### Company Role Overlay
+
+Within a sector, macro direction can reverse by role. Agent 2 must classify `company_role` with evidence and confidence before writing the macro transmission narrative.
+
+| Sector | Company role | Typical transmission logic |
+|--------|--------------|----------------------------|
+| Information Technology | AI infrastructure supplier | Customer capex and data center buildout are usually revenue-positive; watch inventory digestion and export controls. |
+| Information Technology | AI/cloud spender | Capex may build long-term capability but pressure near-term FCF; do not call capex a near-term revenue tailwind without demand evidence. |
+| Information Technology | Software subscription | Rates mainly affect valuation; revenue depends more on seat growth, churn, pricing, and enterprise budgets. |
+| Information Technology | Hardware cyclical | Consumer/enterprise replacement cycles, channel inventory, and promotions can dominate headline GDP. |
+| Financials | Bank | Yield curve, deposit beta, loan growth, credit cost, and asset quality drive earnings transmission. |
+| Financials | Insurer | Investment yield and underwriting cycle matter more than bank NIM. |
+| Financials | Asset manager | AUM, market beta, net flows, and fee rates dominate. |
+| Financials | Payment network | Nominal consumption, cross-border volume, take rate, and regulation dominate. |
+| Financials | Exchange / market infrastructure | Volatility, trading volume, listings, and data/services revenue dominate. |
+
+### Required macro regime context
+
+`macro_factors.json` must include a `macro_regime_context` object:
+
+```json
+{
+  "sector": "Information Technology",
+  "sub_industry": "Semiconductors",
+  "company_role": "AI infrastructure supplier",
+  "company_role_confidence": "high",
+  "sector_regime": "early AI buildout",
+  "primary_transmission_channels": [
+    "customer_capex",
+    "data_center_buildout",
+    "inventory_cycle",
+    "rate_sensitive_valuation"
+  ],
+  "sign_reversal_watchlist": [
+    "customer capex is revenue-positive for suppliers but FCF-negative for spenders",
+    "lower discount rates support valuation but do not automatically lift near-term revenue"
+  ],
+  "role_evidence": "Revenue mix and recent commentary indicate primary exposure to AI infrastructure demand."
+}
+```
+
+`sector_regime` is the current cycle/regime inferred from filings, `news_intel.json`, and macro sources. Do not hard-code it from sector alone; for example, semiconductors may be in AI buildout, inventory correction, export-control disruption, or mature replacement depending on the report date and company mix.
+
+---
+
 ## Macro Factor Registry (US — default labels)
 
 If `primary_operating_geography` = **`US`**, agents search for these **US** series:

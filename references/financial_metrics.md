@@ -255,7 +255,15 @@ Save to `workspace/{Company}_{Date}/financial_analysis.json`:
   "geographic_revenue": {
     "analysis": "FY2025 net revenue: Americas $X.XB (~43%), Europe ~26%, Greater China ~18%; top region share stable YoY; geographic concentration moderate."
   },
-  "summary_para_4": "Section I fourth paragraph — industry niche, market share (multi-year if sourced in news_intel), main operating footprint vs revenue geography, reputation/recognition. zh ≈80–120 characters; en ~55–90 words. Plain text only. Source: Phase 2 synthesis from news_intel.json → industry_position, reconciled with financial_data.json geographic disclosure.",
+  "edge_insight": {
+    "source_file": "edge_insights.json",
+    "headline": "Chosen edge insight headline",
+    "confidence": "high"
+  },
+  "summary_para_1": "Section I first paragraph — merged company/business overview plus latest financial performance. zh 160–200 Chinese characters; en 90–130 words. Plain text only.",
+  "summary_para_2": "Section I second paragraph — use edge_insights.json summary_para_2_draft; must include surface read, hidden rule/reframed read, and investment implication. zh 160–200 Chinese characters; en 90–130 words. Plain text only.",
+  "summary_para_3": "Section I third paragraph — core thesis and catalysts, expanded with concrete drivers and constraints. zh 160–200 Chinese characters; en 90–130 words. Plain text only.",
+  "summary_para_4": "Section I fourth paragraph — industry niche, market share (multi-year if sourced in news_intel), main operating footprint vs revenue geography, reputation/recognition. zh 160–200 Chinese characters; en 90–130 words. Plain text only. Source: Phase 2 synthesis from news_intel.json → industry_position, reconciled with financial_data.json geographic disclosure.",
   "unit": "millions USD",
   "notes": []
 }

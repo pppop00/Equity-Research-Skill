@@ -5,6 +5,30 @@
   "phi": 0.5,
   "beta_source": "adjusted",
   "data_freshness": "2026-04-09",
+  "primary_operating_geography": "Greater_China",
+  "factor_geography_note": "该版本沿用美国宏观变量作为 Temu 和美元融资/消费情景的代理，但 PDD 主站收入仍主要暴露于中国消费和平台竞争，因此 β 已下调，宏观结果只能作为方向性情景。",
+  "macro_regime_context": {
+    "sector": "Consumer Discretionary",
+    "sub_industry": "Internet Retail / E-commerce Platforms",
+    "company_role": "marketplace platform with cross-border discount retail exposure",
+    "company_role_confidence": "medium",
+    "sector_regime": "growth quality reset under domestic competition and cross-border policy friction",
+    "primary_transmission_channels": [
+      "consumer_discretionary_demand",
+      "merchant_ad_budget",
+      "cross_border_tariff_and_fulfillment_cost",
+      "platform_subsidy_intensity",
+      "foreign_exchange_translation",
+      "valuation_and_capital_market_risk_appetite"
+    ],
+    "sign_reversal_watchlist": [
+      "lower U.S. rates may help valuation more directly than revenue",
+      "higher transaction services revenue may reflect fulfillment or cross-border activity rather than high-margin commission expansion",
+      "strong revenue growth can coincide with margin compression when subsidy and logistics investment rise"
+    ],
+    "role_evidence": "FY2025 revenue grew 9.7% while net margin fell from 28.6% to 23.0%; news_intel records de minimis policy pressure, Temu localization investment, and intense domestic platform competition."
+  },
+  "macro_factor_commentary": "<p>表中六项调整幅度合计为 +2.82pct，对应瀑布图中的「宏观调整」柱；但 PDD 的宏观传导不能按典型美国可选消费股机械理解，因为主站更多受中国消费、商家投放和平台竞争影响，Temu 则受美国消费、汇率、关税与跨境履约成本影响。</p><p>利率下行主要通过估值、风险偏好和商家融资环境间接影响收入，不应直接写成订单增长；美国 GDP 与消费者信心改善对 Temu 订单有正向作用，但会被 de minimis 政策、物流本地化成本和补贴强度抵消。美元走弱、通胀和油价回落有助于跨境采购、履约与消费者购买力，但传导强度低于平台自身补贴效率和单位经济模型。</p><p>因此本报告把宏观项作为情景修正，而把公司特定调整 -1.8pct 放在更重要位置：它反映政策扰动、国内竞争和本地履约投入对 FY2026 增长质量的约束。</p>",
   "factors": [
     {
       "name": "Fed Funds Rate",

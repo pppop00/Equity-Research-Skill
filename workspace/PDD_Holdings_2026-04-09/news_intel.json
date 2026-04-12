@@ -2,6 +2,24 @@
   "company": "PDD Holdings Inc.",
   "sector": "Consumer Discretionary",
   "data_freshness": "2026-04-09",
+  "industry_position": {
+    "summary": "PDD 同时暴露于中国综合电商和全球低价跨境电商；主站低价心智、长尾商家供给和 Temu 全球供给网络是核心定位。",
+    "confidence": "medium"
+  },
+  "consensus_traps": [
+    {
+      "common_read": "交易服务收入占比接近 50%，说明 Temu 规模和利润池已经可以从分部收入中直接拆分。",
+      "better_read": "PDD 未披露 Temu 收入、利润或地区收入，交易服务可能混合佣金、履约相关服务和跨境业务活动，不能直接还原海外业务单位经济模型。",
+      "evidence_needed": "公司单列 Temu 收入/利润、地区收入，或披露交易服务内部构成。",
+      "confidence": "high"
+    },
+    {
+      "common_read": "FY2025 收入仍增长 9.7%，说明高增长逻辑只是正常放缓。",
+      "better_read": "利润率和自由现金流同步回落，说明公司正在用投入换取供应链、本地履约和商家生态，增长质量比收入增速本身更关键。",
+      "evidence_needed": "销售营销费用、经营利润率、自由现金流和管理层对外部环境的表述。",
+      "confidence": "high"
+    }
+  ],
   "company_events": [
     {
       "type": "regulatory / tariff",

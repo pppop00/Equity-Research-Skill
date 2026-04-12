@@ -1,6 +1,6 @@
 # English equity research report style guide
 
-For **Agent 4A** (`agents/report_writer_en.md`). Tone: institutional sell-side / buy-side research (concise, third person, no hype).
+For the Phase 5 English HTML report writer (`agents/report_writer_en.md`). Tone: institutional sell-side / buy-side research (concise, third person, no hype).
 
 ---
 
@@ -47,9 +47,17 @@ Porter list labels (English): **Supplier power**, **Buyer power**, **Threat of n
 
 ---
 
-## Section I — Investment summary (fourth paragraph, `{{SUMMARY_PARA_4}}`)
+## Section I — Investment Summary
 
-**Paragraph 4 (~55–90 words):** Industry **niche / sub-industry scope**, **market share** with a **multi-year series when credible** (state the **metric scope** and **source** — IDC/Gartner/Omdia/company-cited trackers, etc.; if unavailable, say so and use segment revenue or qualitative position). **Main operating footprint** (HQ, manufacturing, R&D hubs) vs **largest revenue geographies** — **must align** with **`financial_data.json`** geographic disclosure when present; reconcile with **`news_intel.json` → `industry_position`**. **Reputation / market recognition** (awards, marquee customers) only with sources. Plain text in the placeholder; no Markdown. Phase 2 writes the final prose to **`financial_analysis.json` → `summary_para_4`**.
+Use four paragraphs, each **90–130 words**, plain English only, no Markdown. Each paragraph has a distinct job:
+
+**Paragraph 1 (`{{SUMMARY_PARA_1}}`):** Merge the old company overview and latest financial performance: business model, core revenue engine, revenue scale, YoY growth, margin or cash-flow quality, and listing context when relevant.
+
+**Paragraph 2 (`{{SUMMARY_PARA_2}}`):** Must come from **`edge_insights.json` → `summary_para_2_draft`**. Use the three-step logic: surface read → hidden rule / reframed read → investment implication. Readers should understand why a disclosed number should not be interpreted in the generic way. Do not replace this with broad industry commentary.
+
+**Paragraph 3 (`{{SUMMARY_PARA_3}}`):** Keep the core thesis / catalysts role: demand drivers, product cycle, strategy, customer behavior, and constraints such as regulation, supply, price, budget cycles, or competition. Do not repeat the edge insight.
+
+**Paragraph 4 (`{{SUMMARY_PARA_4}}`):** Keep the industry-position role: industry **niche / sub-industry scope**, **market share** with a **multi-year series when credible** (state the **metric scope** and **source** — IDC/Gartner/Omdia/company-cited trackers, etc.; if unavailable, say so and use segment revenue or qualitative position). **Main operating footprint** (HQ, manufacturing, R&D hubs) vs **largest revenue geographies** must align with **`financial_data.json`** geographic disclosure when present; reconcile with **`news_intel.json` → `industry_position`**. **Reputation / market recognition** only with sources. Phase 2 writes the final prose to **`financial_analysis.json` → `summary_para_4`**.
 
 ---
 

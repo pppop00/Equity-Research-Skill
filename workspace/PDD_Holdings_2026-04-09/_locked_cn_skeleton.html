@@ -216,12 +216,14 @@ body {
 .kpi-card:hover { box-shadow: var(--shadow-hover); }
 .kpi-card.up   { border-left-color: var(--accent-green); background: var(--kpi-up-bg); }
 .kpi-card.down { border-left-color: var(--accent-red);   background: var(--kpi-down-bg); }
-.kpi-card.neutral-kpi { border-left-color: var(--accent-amber); }
+/* neutral-kpi：语义上区别于 up（勿误用绿色暗示「已健康」），视觉上与亏损卡一致（红边+浅红底），避免琥珀色与相邻亏损卡割裂 */
+.kpi-card.neutral-kpi { border-left-color: var(--accent-red); background: var(--kpi-down-bg); }
 .kpi-label  { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.04em; margin-bottom: 6px; }
 .kpi-value  { font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
 .kpi-change { font-size: 12px; font-weight: 600; }
 .kpi-change.up   { color: var(--accent-green); }
 .kpi-change.down { color: var(--accent-red);   }
+.kpi-change.neutral-kpi { color: var(--text-secondary); }
 .kpi-sub    { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
 /* --- Metrics Table --- */
 .metrics-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; }
@@ -243,13 +245,14 @@ body {
 /* --- Trend Cards --- */
 .trend-cards { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
 .trend-card {
-  border-left: 4px solid var(--border);
+  border-left: 4px solid var(--accent-green);
   padding: 12px 16px;
   border-radius: 0 8px 8px 0;
   background: var(--bg);
 }
 .trend-card.up   { border-left-color: var(--accent-green); }
-.trend-card.down { border-left-color: var(--accent-red);   }
+.trend-card.down { border-left-color: var(--accent-green); }
+.trend-card.trend-geo { border-left-color: var(--accent-green); }
 .trend-card-label { font-weight: 700; font-size: 13px; margin-bottom: 5px; color: var(--text-primary); }
 .trend-card-text  { font-size: 13px; color: var(--text-secondary); line-height: 1.75; }
 /* --- Tabs --- */
@@ -359,7 +362,7 @@ body {
 .score-dot.s1, .score-dot.s2 { background: var(--accent-green); }
 .score-dot.s3               { background: var(--accent-amber); }
 .score-dot.s4, .score-dot.s5 { background: var(--accent-red); }
-.porter-text { font-size: 13px; line-height: 1.85; color: var(--text-secondary); }
+.porter-text { font-size: 13px; line-height: 1.85; color: var(--text-secondary); word-break: break-word; }
 /* --- Appendix --- */
 .appendix-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 16px; }
 .appendix-table th {
@@ -371,7 +374,7 @@ body {
   font-weight: 600;
 }
 [data-theme="dark"] .appendix-table th { background: var(--primary-light, #1a3a6e); }
-.appendix-table td { padding: 7px 12px; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text-secondary); }
+.appendix-table td { padding: 7px 12px; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text-secondary); vertical-align: top; word-break: break-word; }
 .appendix-table tr:last-child td { border-bottom: none; }
 .disclaimer-box {
   background: var(--bg);
@@ -393,6 +396,24 @@ body {
   line-height: 1.8;
   margin-bottom: 16px;
 }
+.macro-factor-commentary {
+  margin-top: 18px;
+  border-left: 4px solid var(--accent-green);
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border-radius: 0 8px 8px 0;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.macro-factor-commentary-label {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.macro-factor-commentary-body p { margin: 0 0 0.65em 0; }
+.macro-factor-commentary-body p:last-child { margin-bottom: 0; }
 /* --- Responsive --- */
 @media (max-width: 900px) {
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
@@ -443,10 +464,12 @@ body {
   <div class="section" id="section-summary">
     <div class="section-title">一、投资摘要</div>
 
-    <!-- 3段公司介绍，每段约80-120字 -->
+    <!-- 4段投资摘要，每段160-200字；第2段必须体现 edge_insights.json 的非共识洞察 -->
     <p class="summary-para">{{SUMMARY_PARA_1}}</p>
     <p class="summary-para">{{SUMMARY_PARA_2}}</p>
     <p class="summary-para">{{SUMMARY_PARA_3}}</p>
+    <!-- 第4段：行业内份额/细分赛道/口碑与认可度/主要运营地与收入来源地（160-200字）；见 news_intel industry_position + financial_analysis summary_para_4 -->
+    <p class="summary-para">{{SUMMARY_PARA_4}}</p>
 
     <div class="two-col">
       <div class="highlights-box">
@@ -538,7 +561,7 @@ body {
       </tbody>
     </table>
 
-    <!-- 趋势分析：固定 3 张 trend-card，顺序固定 -->
+    <!-- 趋势分析：固定 5 张 trend-card；左边框均为绿色（up/down/trend-geo 仅作可选语义类，不再改颜色） -->
     <div class="trend-cards">
       <div class="trend-card {{TREND1_DIRECTION}}">
         <div class="trend-card-label">归母净利润趋势</div>
@@ -551,6 +574,14 @@ body {
       <div class="trend-card {{TREND3_DIRECTION}}">
         <div class="trend-card-label">自由现金流趋势</div>
         <div class="trend-card-text">{{TREND3_TEXT}}</div>
+      </div>
+      <div class="trend-card {{TREND_UPDATE_DIRECTION}}">
+        <div class="trend-card-label">最新经营更新</div>
+        <div class="trend-card-text">{{LATEST_OPERATING_UPDATE_TEXT}}</div>
+      </div>
+      <div class="trend-card trend-geo">
+        <div class="trend-card-label">地区收入结构</div>
+        <div class="trend-card-text">{{GEO_REVENUE_TEXT}}</div>
       </div>
     </div>
   </div>
@@ -585,6 +616,11 @@ body {
         {{FACTOR_ROWS}}
       </tbody>
     </table>
+
+    <div class="macro-factor-commentary">
+      <div class="macro-factor-commentary-label">宏观因子传导阐释</div>
+      <div class="macro-factor-commentary-body">{{MACRO_FACTOR_COMMENTARY}}</div>
+    </div>
 
     <div class="disclaimer-box" style="margin-top:16px;">
       预测数据为概率性估计，仅供参考，不构成投资建议。本报告中的收入预测基于宏观因子量化模型，使用行业敏感度系数（β）及市场磨损因子（φ = {{PHI_VALUE}}），结合公开宏观经济预测数据及公司特定情报生成。实际结果可能与预测存在重大差异。
@@ -634,8 +670,7 @@ body {
         </div>
         <div>
           <ul class="porter-scores" id="scores-company">
-            <!-- 5 行，顺序固定：供应商议价能力 / 买方议价能力 / 新进入者威胁 / 替代品威胁 / 行业竞争强度
-              格式：<li><span class="score-dot s{{分数}}">{{分数}}</span>{{力名称}}</li> -->
+            <!-- 5 个 li：供应商议价能力、买方议价能力、新进入者威胁、替代品威胁、行业竞争强度；占位符见下方填充规则，勿删本行注释或引入未闭合的 HTML 注释 -->
             {{PORTER_COMPANY_SCORES}}
           </ul>
           <div class="porter-text">{{PORTER_COMPANY_TEXT}}</div>

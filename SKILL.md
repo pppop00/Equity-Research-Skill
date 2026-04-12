@@ -229,6 +229,8 @@ Report language: {en|zh}
 Company: {company_name}
 Primary operating geography: {US|Greater_China|Eurozone|Japan|UK|Emerging_Asia_ex_China|Global_other}
 Sector hint: {infer or ask user}
+Sub-industry hint (optional): {from filings/user/news, else infer}
+Company role hint (optional): {e.g. AI infrastructure supplier, AI/cloud spender, bank, payment network, else infer}
 Reference: references/prediction_factors.md
 Output path: workspace/{Company}_{Date}/macro_factors.json
 Follow agents/macro_scanner.md
@@ -248,17 +250,39 @@ Follow agents/news_researcher.md
 
 **Wait for all three to finish.**
 
+**Post-collection macro regime reconciliation:** After `financial_data.json` and `news_intel.json` exist, re-check `macro_factors.json` → `macro_regime_context` before Phase 2.5. If filings, geographic/segment mix, or news materially contradict Agent 2's initial `sub_industry`, `company_role`, `sector_regime`, or transmission channels, amend `macro_regime_context` and `macro_factor_commentary` (or re-run Agent 2). Do not change β values merely because the role/regime text changed; only adjust β when `beta_source: "adjusted"` is supported and the waterfall is recomputed.
+
+---
+
+## Agent 4 — Edge Insight Writer
+
+Use `agents/edge_insight_writer.md` after Agent 1 and Agent 3 have finished. This agent exists to make every report contain one evidence-backed, non-obvious reading rather than a generic company summary.
+
+```
+Report language: {en|zh}
+Company: {company_name}
+Inputs: workspace/{Company}_{Date}/financial_data.json, workspace/{Company}_{Date}/news_intel.json
+Output path: workspace/{Company}_{Date}/edge_insights.json
+Follow agents/edge_insight_writer.md
+```
+
+**Wait for Agent 4 to finish before Phase 2.** Do not let Phase 2 write `summary_para_2` without reading `edge_insights.json`.
+
 ---
 
 ## Phase 2: Financial analysis (orchestrator, inline)
 
-Read `financial_data.json`; compute metrics per `references/financial_metrics.md`.  
+Read `financial_data.json`, `news_intel.json`, and `edge_insights.json`; compute metrics per `references/financial_metrics.md`.  
 **Fiscal year labels (“当年 / 上年”, KPI 财年, `METRICS_YEAR_CUR` / `METRICS_YEAR_PREV`):** Must match **`income_statement.current_year`** and **`prior_year`** as fixed by **Step 0C** (latest **published** full-year pair; default target **`FY(Y_cal − 1)`** vs **`FY(Y_cal − 2)`** when that annual exists). **YoY / 同比** is always those two **consecutive** full fiscal years in the JSON. If only interim (e.g. 9M) exists for the newest year, either keep the table on the last two **full** fiscal years with a **`notes[]`** lag explanation per Step 0C, or add a clearly labeled “最近中期 vs 上年同期” block — do not mix without stating it.
 **Financial metrics table (`{{METRICS_ROWS}}`) — final column is a conclusion label, not a number:** In Section II, the fourth column **`同比变动` / `YoY movement`** must be a qualitative verdict after reading the current/prior values, not a raw delta such as `+0.62%`. Use the controlled vocabulary in `references/financial_metrics.md` (e.g. **显著改善 / 改善 / 恶化 / 权益缺口收窄**; English equivalents for `en`). Put numeric deltas in narrative text or notes when useful, but the table cell itself is the verdict.
 **Latest operating update (Section II, fourth trend-card — **最新经营更新** / **Latest operating update**):** Fill **`latest_operating_update`** in `financial_analysis.json` → **`{{LATEST_OPERATING_UPDATE_TEXT}}`** and **`{{TREND_UPDATE_DIRECTION}}`**, using **`financial_data.json` → `latest_interim`** (10-Q / TTM / interim) **as produced by Agent 1**, plus filings and **`news_intel.json`** for guidance. **Lead with the covered period** so readers do not confuse interim momentum with full-year YoY; **headline growth = YoY** unless the user or filing explicitly centers QoQ (then say so). Rules: **`references/financial_metrics.md`** (Latest operating update) and **`references/report_style_guide_{cn|en}.md`** (Latest operating update).  
 **Geographic revenue (Section II, fifth trend-card):** Fill **`geographic_revenue.analysis`** → **`{{GEO_REVENUE_TEXT}}`** from filings / `financial_data.json` (regional amounts, shares, growth, concentration as disclosed). Rules: **`references/financial_metrics.md`** (Geographic revenue mix) — keep the **card text factual**; do not add meta-lines like “this card does not discuss FX.”  
 **Evidence gate for narrative claims:** Any valuation statement in summary / thesis / appendix (e.g. “估值处于历史低位”, target price, upside/downside, cheap/expensive vs history/peers) must be backed by non-null fields in `financial_analysis.json` → `valuation` or by explicitly cited market-data sources in the appendix. If valuation fields are unavailable, remove the valuation claim instead of hand-waving it. Likewise, do not present a live-market conclusion as fact when the underlying market-data fields are `null`.
-**Investment Summary — fourth paragraph (`{{SUMMARY_PARA_4}}`):** Compose **`financial_analysis.json` → `summary_para_4`** from **`news_intel.json` → `industry_position`** (Agent 3 web search: market-share time series, niche definition, reputation, operating vs revenue geography). **Reconcile** with **`financial_data.json`** geographic revenue and segment names — filings **override** inconsistent web snippets. Target length: **≈80–120 Chinese characters** (`zh`) or **~55–90 English words** (`en`). If third-party share data is thin, keep the paragraph honest and qualitative rather than fabricating a series. Plain text only (no Markdown).
+**Investment Summary paragraphs (`{{SUMMARY_PARA_1}}`–`{{SUMMARY_PARA_4}}`):** Write all four paragraphs into `financial_analysis.json` as `summary_para_1` through `summary_para_4`; each must be plain text, no Markdown. For `zh`, target **160–200 Chinese characters each**. For `en`, target **90–130 words each**. Structure:
+- **`summary_para_1`** = combine the old company/business overview and latest financial performance into one paragraph: business model, revenue scale, YoY growth, margin/cash-flow quality, and listing context when relevant.
+- **`summary_para_2`** = use **`edge_insights.json` → `summary_para_2_draft`** as the base. It must include the chosen edge insight's surface read, hidden rule / reframed read, and investment implication. Do not replace it with generic industry commentary.
+- **`summary_para_3`** = keep the existing core thesis / catalysts role, expanded to the new length with concrete drivers and constraints.
+- **`summary_para_4`** = keep the existing industry position role: use **`news_intel.json` → `industry_position`** (market-share time series, niche definition, reputation, operating vs revenue geography), reconciled with **`financial_data.json`** geographic revenue and segment names. Filings override inconsistent web snippets; if third-party share data is thin, keep the paragraph honest and qualitative rather than fabricating a series.
 
 **HTML narrative (no Markdown):** All strings that fill `{{SUMMARY_PARA_*}}`, `{{TREND*_TEXT}}`, `{{LATEST_OPERATING_UPDATE_TEXT}}`, `{{GEO_REVENUE_TEXT}}`, thesis, Sankey note, etc. must be **plain text** — do **not** use `**` / `*` / backticks; the template does not run a Markdown processor. See `references/report_style_guide_cn.md` or `report_style_guide_en.md` and `agents/report_writer_*.md`.  
 **KPI 第三卡（自由现金流）方向：** 若两年 FCF 均为负但同比向零收窄，**勿**填 `{{KPI3_DIRECTION}}` = `up`（易与「已健康」混淆）；用 **`neutral-kpi`**，且 `{{KPI3_CHANGE}}` **须带可核对金额**并标明仍未转正。详见 `references/report_style_guide_cn.md` / `references/financial_metrics.md`（KPI card direction）。  
@@ -277,7 +301,8 @@ Same formula as `references/prediction_factors.md`.
 **If `en`:** use English for factor display names in `prediction_waterfall.json` where they are meant for the HTML table; numeric fields unchanged.
 
 **Macro factor commentary (Section III):** `macro_factors.json` must include **`macro_factor_commentary`** (string, HTML-safe) written per **`agents/macro_scanner.md` Step 7b** — analyst-style explanation of **why** the six macro slots affect **this** company’s revenue/margins and how the rows sum to **`total_macro_adjustment_pct`** (bridge to the waterfall “宏观调整 / macro adjustment” bar). Phase 5 copies it into **`{{MACRO_FACTOR_COMMENTARY}}`** verbatim; do not invent a second narrative in HTML.
-**Macro factor table (`{{FACTOR_ROWS}}`) — final column is direction, not another pct:** The Section III factor table has a separate **`调整幅度（pct）`** column. Its final **`方向` / `Direction`** column must be a qualitative direction label: **正向 / 负向 / 中性** (`zh`) or **Positive / Negative / Neutral** (`en`). Do **not** put `adjustment_pct`, `factor_change_pct`, or any `+/-x%` numeric string in the final direction cell.
+**Macro regime context:** `macro_factors.json` must include **`macro_regime_context`** from `agents/macro_scanner.md` Step 2b. Treat it as the canonical role/regime explanation for macro transmission (`sub_industry`, `company_role`, `sector_regime`, `primary_transmission_channels`, `sign_reversal_watchlist`). It is **not** a second β table and must not override the six-slot β model unless Agent 2 separately sets `beta_source: "adjusted"` with evidence.
+**Macro factor table (`{{FACTOR_ROWS}}`) — final column is direction, not another pct:** The Section III factor table has a separate **`调整幅度（pct）`** column. Its final **`方向` / `Direction`** column must be a qualitative direction label: **正向 / 负向 / 中性** (`zh`) or **Positive / Negative / Neutral** (`en`). Do **not** put `adjustment_pct`, `factor_change_pct`, or any `+/-x%` numeric string in the final direction cell. Color the final direction cell with the existing table classes: positive → `<td class="metric-up">正向</td>` / `<td class="metric-up">Positive</td>`; negative → `<td class="metric-down">负向</td>` / `<td class="metric-down">Negative</td>`; neutral → `<td>中性</td>` / `<td>Neutral</td>` (no extra CSS class).
 
 Save `prediction_waterfall.json`.
 
@@ -409,7 +434,7 @@ python3 scripts/extract_report_template.py --lang cn --sha256 \
   -o workspace/{Company}_{Date}/_locked_cn_skeleton.html
 ```
 
-Then fill **only** `{{PLACEHOLDER}}` markers in the extracted file (or paste into your editor from the same extract) and save as `{Company}_Research_CN.html`. Do not alter the locked HTML/CSS/JS skeleton. **`{{SUMMARY_PARA_4}}`** ← `financial_analysis.json` → `summary_para_4` (industry position / share / geography narrative). **`{{MACRO_FACTOR_COMMENTARY}}`** ← copy **verbatim** from `macro_factors.json` → `macro_factor_commentary`. **`{{PORTER_COMPANY_TEXT}}` / `{{PORTER_INDUSTRY_TEXT}}` / `{{PORTER_FORWARD_TEXT}}`** — use the **five-`<li>` unordered-list** format and **do not duplicate** force scores in body text (see `references/report_style_guide_cn.md` §波特五力、`references/porter_framework.md` §Phase 5 HTML). **Post-processing caution:** Do **not** delete HTML comment lines that contain `-->` solely because they include illustrative `{{…}}` text — removing the only closing `-->` for a multi-line `<!--` will comment out the Porter/Appendix DOM (see `agents/report_writer_cn.md` 写作规范、`agents/report_validator.md` §5).
+Then fill **only** `{{PLACEHOLDER}}` markers in the extracted file (or paste into your editor from the same extract) and save as `{Company}_Research_CN.html`. Do not alter the locked HTML/CSS/JS skeleton. **`{{SUMMARY_PARA_1}}`–`{{SUMMARY_PARA_4}}`** ← `financial_analysis.json` → `summary_para_1` … `summary_para_4`; `{{SUMMARY_PARA_2}}` must reflect `edge_insights.json` → `chosen_insight` / `summary_para_2_draft`. **`{{MACRO_FACTOR_COMMENTARY}}`** ← copy **verbatim** from `macro_factors.json` → `macro_factor_commentary`. **`{{PORTER_COMPANY_TEXT}}` / `{{PORTER_INDUSTRY_TEXT}}` / `{{PORTER_FORWARD_TEXT}}`** — use the **five-`<li>` unordered-list** format and **do not duplicate** force scores in body text (see `references/report_style_guide_cn.md` §波特五力、`references/porter_framework.md` §Phase 5 HTML). **Post-processing caution:** Do **not** delete HTML comment lines that contain `-->` solely because they include illustrative `{{…}}` text — removing the only closing `-->` for a multi-line `<!--` will comment out the Porter/Appendix DOM (see `agents/report_writer_cn.md` 写作规范、`agents/report_validator.md` §5).
 After placeholders are filled, you **may** remove **only** single-line, self-contained instructional comments that still contain sample `{{...}}` text **if** you have **positively verified** that the line is not the closing leg of a multi-line `<!-- ... -->` block (e.g. a standalone `<!-- … {{…}} … -->`). **If there is any doubt, do not delete the comment line** — leave it, or rewrite the comment so it no longer contains `{{` / `}}`, instead of removing a line that might be the only `-->` closing an earlier `<!--`. Deliverables must not contain unreplaced real placeholders; optional comment cleanup must never risk breaking the DOM.
 
 ### If `report_language = en`
@@ -425,7 +450,7 @@ python3 scripts/extract_report_template.py --lang en --sha256 \
   -o workspace/{Company}_{Date}/_locked_en_skeleton.html
 ```
 
-Then fill **only** placeholders and save as `{Company}_Research_EN.html`. **`{{SUMMARY_PARA_4}}`** ← `financial_analysis.json` → `summary_para_4`. **`{{MACRO_FACTOR_COMMENTARY}}`** ← copy **verbatim** from `macro_factors.json` → `macro_factor_commentary`. Porter placeholders **`{{PORTER_COMPANY_TEXT}}` / `{{PORTER_INDUSTRY_TEXT}}` / `{{PORTER_FORWARD_TEXT}}`**: same **five-`<li>` `<ul>`** rules as Chinese (see `references/report_style_guide_en.md` §Porter Five Forces).
+Then fill **only** placeholders and save as `{Company}_Research_EN.html`. **`{{SUMMARY_PARA_1}}`–`{{SUMMARY_PARA_4}}`** ← `financial_analysis.json` → `summary_para_1` … `summary_para_4`; `{{SUMMARY_PARA_2}}` must reflect `edge_insights.json` → `chosen_insight` / `summary_para_2_draft`. **`{{MACRO_FACTOR_COMMENTARY}}`** ← copy **verbatim** from `macro_factors.json` → `macro_factor_commentary`. Porter placeholders **`{{PORTER_COMPANY_TEXT}}` / `{{PORTER_INDUSTRY_TEXT}}` / `{{PORTER_FORWARD_TEXT}}`**: same **five-`<li>` `<ul>`** rules as Chinese (see `references/report_style_guide_en.md` §Porter Five Forces).
 
 **Post-processing:** Same HTML comment rule as Chinese — do **not** strip lines that close a `<!--` block inside the Porter company panel (see `report_writer_en.md`). If you might remove a single-line comment that contains sample `{{...}}` text, apply the same **“only when sure / otherwise leave or reword”** rule as in the Chinese branch above.
 
@@ -446,6 +471,7 @@ Then fill **only** placeholders and save as `{Company}_Research_EN.html`. **`{{S
 - HTML: `*_Research_CN.html` **or** `*_Research_EN.html` (whichever Phase 5 produced)  
 - `financial_data.json`  
 - `financial_analysis.json`
+- `edge_insights.json`
 - `macro_factors.json`
 - `news_intel.json`
 - `prediction_waterfall.json`  
@@ -453,7 +479,9 @@ Then fill **only** placeholders and save as `{Company}_Research_EN.html`. **`{{S
 
 Run all checks; fix CRITICAL issues until zero remain.  
 Treat **checklist item 2** in `agents/report_validator.md` (KPI **`.kpi-value`**: leading **`-`** for negatives—no 「约负」/「净亏损约」/ **no 「约」 on Chinese KPI headline figures**; **`neutral-kpi`** card CSS must match the locked template—red bar + `kpi-down-bg`, not amber-only + white) as a **pre-delivery** fix: do not ship HTML that fails these even if labeled WARNING.
-Treat **checklist items 8b and 8c** in `agents/report_validator.md` as **pre-delivery** fixes: Section II metrics-table final column must be a qualitative verdict (e.g. `改善`, `恶化`, `权益缺口收窄`), and Section III factor-table final column must be direction (`正向` / `负向` / `中性`), never a repeated `+/-x%` numeric adjustment.
+Treat **checklist item 7c** in `agents/report_validator.md` (`macro_regime_context`) as a **pre-delivery** fix: do not ship if role/regime fields are missing or if Section III / methodology contradicts the role-based transmission context.
+Treat **checklist item 7d** in `agents/report_validator.md` (`edge_insights.json` and investment-summary paragraph 2) as a **pre-delivery** fix: do not ship if the edge insight is missing, generic, unsupported, or absent from `{{SUMMARY_PARA_2}}`.
+Treat **checklist items 8b and 8c** in `agents/report_validator.md` as **pre-delivery** fixes: Section II metrics-table final column must be a qualitative verdict (e.g. `改善`, `恶化`, `权益缺口收窄`), and Section III factor-table final column must be direction (`正向` / `负向` / `中性`) with the required color class for positive/negative cells, never a repeated `+/-x%` numeric adjustment.
 Treat **checklist item 9** in `agents/report_validator.md` (segment/region list must use percentages consistently with `segment_data`, or use amounts only for all items) as a **pre-delivery** fix: do not ship HTML with mixed formats.
 Treat the following as **pre-delivery blockers** as well, even if they are classified as WARNING in the validator output: narrative claims unsupported by JSON fields, appendix/source dates later than the report date, “real-time/current/latest” wording when the underlying data is knowledge-cutoff or estimated, and geographic mix text that mixes regions with product/brand labels.
 

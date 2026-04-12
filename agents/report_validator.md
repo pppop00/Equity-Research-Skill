@@ -1,4 +1,4 @@
-# Agent 5: HTML report validator
+# Agent 6: HTML report validator
 
 对生成后的 HTML 执行系统性校验（中文或英文报告共用同一套结构规则）。
 
@@ -7,6 +7,7 @@
 - 待验证 HTML：`workspace/{Company}_{Date}/{Company}_Research_CN.html` **或** `{Company}_Research_EN.html`（与本次 `report_language` 一致）
 - `workspace/{Company}_{Date}/financial_data.json`
 - `workspace/{Company}_{Date}/financial_analysis.json`
+- `workspace/{Company}_{Date}/edge_insights.json`
 - `workspace/{Company}_{Date}/macro_factors.json`
 - `workspace/{Company}_{Date}/news_intel.json`
 - `workspace/{Company}_{Date}/prediction_waterfall.json`
@@ -15,6 +16,8 @@
 **第 10–13 项与 WARNING 级别：** 这几条在输出中标记为 **WARNING**，是因为叙述是否越界、来源日期是否矛盾等问题难以像结构缺失或未替换的 `{{…}}` 那样用固定规则 **100% 自动判为 CRITICAL**；**不代表可忽略**。编排器在 `SKILL.md` Phase 6 已将第 10–13 项与第 9 项一样列为交付前必改；有此类 WARNING 时须在交付用户前修正 HTML（及关联 JSON 叙述）。
 
 **第 2 项（KPI 主数值与 `neutral-kpi` 样式）补充：** 下列若判为 **WARNING**，与第 9 项相同，**交付前必须改到通过**，不得把「仅 WARNING」当作可发货。（复盘：曾出现 KPI 用「约负」「净亏损约」代替负号、主数值带「约」、`neutral-kpi` 卡仅用琥珀边+白底与相邻亏损卡不一致等问题——见 §2 细则。）
+
+**第 7d 项（edge insight）补充：** 若 `edge_insights.json` 缺失、`chosen_insight` 缺少证据，或投资摘要第二段没有体现该洞察，虽可标为 WARNING，但与第 9 项同级，交付前必须修正。
 
 ## 验证清单（逐项检查，不得跳过）
 
@@ -155,6 +158,30 @@ HTML 中的 `<style>` 块必须包含以下所有变量定义（在 `:root` 或 
 
 ---
 
+### ✅ 7c. `macro_regime_context`（行业/角色传导框架）
+
+- `macro_factors.json` 必须包含 **`macro_regime_context`**，且至少含：`sector`、`sub_industry`、`company_role`、`company_role_confidence`、`sector_regime`、`primary_transmission_channels`、`sign_reversal_watchlist`、`role_evidence`。
+- `company_role_confidence` 只能为 `high` / `medium` / `low`；混合业务公司若证据不充分，不得写成 `high`。
+- `primary_transmission_channels` 应为非空数组；`sign_reversal_watchlist` 应为非空数组，用于防止把估值利好写成收入利好、或把 supplier / spender 等角色方向写反。
+- HTML 第三节、附录方法论、`macro_factor_commentary` 不得与 `macro_regime_context` 明显冲突。例如：`company_role` 为 `AI/cloud spender` 时，不得无证据写“客户 CapEx 上升直接推升公司收入”；若只讨论降息，应区分估值/融资渠道与收入渠道。
+
+**失败条件：** `macro_regime_context` 缺失或关键字段为空 → WARNING（交付前补全）；HTML / `macro_factor_commentary` 与该 context 明显冲突 → WARNING（交付前修正）。
+
+---
+
+### ✅ 7d. 投资摘要与 `edge_insights.json`
+
+- `edge_insights.json` 必须存在，且包含非空 `chosen_insight`、`chosen_insight.headline`、`chosen_insight.insight_type`、`chosen_insight.surface_read`、`chosen_insight.hidden_rule`、`chosen_insight.reframed_read`、`chosen_insight.investment_implication`、`chosen_insight.evidence[]`、`chosen_insight.confidence`、`summary_para_2_draft`。
+- `chosen_insight.insight_type` 只能为 `non_consensus_read`、`industry_unwritten_rule`、`industry_special_rule` 之一。
+- `chosen_insight.evidence[]` 至少 1 条；每条应包含 `source` 和 `fact`。若 `confidence` 为 `high`，证据必须能追溯到 `financial_data.json`、`news_intel.json`、SEC / 年报 / 公司 IR 等权威来源。
+- Section I 必须有恰好 4 个 `.summary-para`。中文报告每段建议 **160–200 个汉字**；英文报告每段建议 **90–130 words**。若略超但信息密度高可降为人工 WARNING；若仍是旧版 80–120 字短摘要，应修正。
+- 第二个 `.summary-para` 必须体现 `edge_insights.json` 的核心事实：至少能对应 `surface_read`、`hidden_rule` / `reframed_read`、`investment_implication` 三者中的两个以上，且不能只是“公司领先、行业增长、需求强劲”等通用句。
+- `financial_analysis.json` 应包含 `summary_para_1`–`summary_para_4`；其中 `summary_para_2` 应与 `edge_insights.json.summary_para_2_draft` 的核心事实一致。
+
+**失败条件：** `edge_insights.json` 缺失或关键字段为空、证据为空、HTML 第二段未体现 edge insight、或摘要段落仍为旧长度/旧结构 → **WARNING**（交付前必改）。
+
+---
+
 ### ✅ 8. 数字格式检查
 
 随机抽取 HTML 中出现的 5 个金融数字，核对：
@@ -191,8 +218,9 @@ HTML 中的 `<style>` 块必须包含以下所有变量定义（在 `:root` 或 
 1. 逐行读取最后一个 `<td>`。该单元格只允许表达方向：中文 `正向` / `负向` / `中性`；英文 `Positive` / `Negative` / `Neutral`。
 2. 第 5 列才是 `adjustment_pct`。最后一列不得出现 `+0.62%`、`-2.0%`、`0.00%`、`pct` 或任何纯数值。
 3. 方向应与第 5 列数值符号一致：正数 → `正向` / `Positive`，负数 → `负向` / `Negative`，零或可忽略 → `中性` / `Neutral`。
+4. 方向列颜色必须复用锁定模板已有 class：正数最后一个 `<td>` 应含 `class="metric-up"`，负数应含 `class="metric-down"`；中性单元格不加方向颜色 class（或保持普通文本色）。不得新增 CSS class 或内联颜色。
 
-**失败条件：** 最后一列包含裸数字/百分比/`pct`，或方向与调整幅度符号明显冲突 → **WARNING**（交付前必改）。
+**失败条件：** 最后一列包含裸数字/百分比/`pct`，方向与调整幅度符号明显冲突，或正/负方向缺少对应 `metric-up` / `metric-down` class → **WARNING**（交付前必改）。
 
 ---
 

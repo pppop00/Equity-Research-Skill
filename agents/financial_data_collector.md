@@ -35,6 +35,7 @@ Focus on extracting:
 - Consolidated Statements of Cash Flows
 - Revenue disaggregation notes (usually Note 1, 2, or a dedicated "Revenue" note)
 - Segment information tables
+- Disclosure-basis footnotes that can change economic interpretation, especially geographic revenue basis (customer headquarters vs destination / end customer), bill-to vs ship-to, channel / distributor concentration, customer concentration, backlog / remaining performance obligations, and segment recast notes
 - Company description and business overview (for sector identification)
 
 After text extraction, if tables are complex, rasterize the relevant pages for visual inspection.
@@ -125,6 +126,17 @@ After annuals are populated, **this agent owns** pulling the **most recent quali
 - Gross Profit - OpEx ≈ Operating Income
 - Flag any large discrepancies as data quality issues
 
+## Step 2b: Extract Disclosure Quirks for Edge Insight
+
+Populate `disclosure_quirks[]` whenever the filing contains a footnote or MD&A caveat that changes how a headline number should be read. This is an input to Agent 4 (`agents/edge_insight_writer.md`), so prioritize quirks that can support a non-obvious report paragraph.
+
+Good examples:
+- Geographic revenue reported by **customer headquarters** while end customers / deployment locations differ.
+- ODM, distributor, reseller, or channel partners acting as procurement nodes rather than final demand.
+- Segment revenue reclassification, gross vs net revenue presentation, ARR / run-rate vs GAAP revenue, pass-through costs, backlog conversion timing, customer concentration, or unusual one-time revenue pull-forward.
+
+Each item must cite the filing section or source and explain why the disclosure changes interpretation. Do not add generic business risks here.
+
 ## Step 3: Identify Company Metadata
 
 From the filing or web search, extract:
@@ -205,6 +217,17 @@ Save to `output_path`:
     {"name": "Mac", "revenue": 29984, "pct_of_total": 7.7},
     {"name": "iPad", "revenue": 26694, "pct_of_total": 6.8},
     {"name": "Wearables, Home & Accessories", "revenue": 37005, "pct_of_total": 9.5}
+  ],
+  "disclosure_quirks": [
+    {
+      "topic": "Geographic revenue",
+      "reported_basis": "Customer headquarters location",
+      "economic_basis": "End customer / deployment geography",
+      "why_it_matters": "Reported Taiwan revenue may overstate Taiwan end-demand exposure.",
+      "evidence": "76% of Data Center revenue from Taiwan-headquartered customers was attributed to U.S. and European end customers.",
+      "source": "Form 10-K revenue note",
+      "confidence": "high"
+    }
   ],
   "latest_interim": {
     "form_type": "10-Q",

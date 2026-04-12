@@ -71,6 +71,30 @@
       "pct_of_total": 49.57
     }
   ],
+  "disclosure_quirks": [
+    {
+      "topic": "Segment revenue and Temu opacity",
+      "reported_basis": "Revenue by service type: online marketing services and other vs transaction services",
+      "economic_basis": "Business model economics by domestic marketplace vs Temu / overseas fulfillment and merchant services",
+      "why_it_matters": "Transaction services revenue cannot be mechanically treated as Temu revenue or high-margin commission income because PDD does not separately disclose Temu revenue, profit, or geographic revenue.",
+      "evidence": "FY2025 transaction services revenue was RMB 214.063B, or 49.57% of total revenue; company disclosures do not provide a standalone Temu P&L.",
+      "source": "PDD Holdings FY2025 results release",
+      "confidence": "high"
+    }
+  ],
+  "latest_interim": {
+    "form_type": "FY2025 Q4 earnings release",
+    "fiscal_period_label": "Q4 FY2025",
+    "period_end": "2025-12-31",
+    "filing_date": "2026-03-25",
+    "revenue": 110610.0,
+    "revenue_yoy_pct": 12.0,
+    "revenue_qoq_pct": null,
+    "net_income": null,
+    "operating_cash_flow_ytd": 106938.69,
+    "source_url": "PDD Holdings FY2025 fourth quarter and full-year results release",
+    "notes": "Q4 FY2025 revenue growth is used as the latest operating slope in this report; company did not issue a separate FY2026 quarter before the report date."
+  },
   "notes": [
     "FY2025 财务口径来自 PDD Holdings 2026-03-25 发布的第四季度及全年未经审计业绩公告。",
     "截至 2026-04-09，最新已披露的审计年报仍为 FY2024 20-F（2025-04-29 挂网）。",

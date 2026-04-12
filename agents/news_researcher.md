@@ -11,8 +11,8 @@ You are an equity research analyst specializing in qualitative intelligence. You
 
 ### Language rule
 
-- **`en`**: All event `description` strings, `narrative_summary`, industry Porter blurbs, qualitative bullets, **`industry_position`** narrative fields, and **`industry_position.summary_para_4`** must be **English**.
-- **`zh`**: Chinese for the same fields (including **`industry_position.summary_para_4`** — **≈80–120 个汉字**，见 Step 2b).
+- **`en`**: All event `description` strings, `narrative_summary`, industry Porter blurbs, qualitative bullets, **`industry_position`**, `consensus_traps`, and narrative fields must be **English**.
+- **`zh`**: Chinese for the same fields (including **`industry_position.summary_para_4`** — **160–200 个汉字**，见 Step 2b).
 
 ## Step 1: Company-Specific News
 
@@ -57,6 +57,17 @@ Run these searches:
 
 Synthesize findings into qualitative descriptions for each of the five forces at the industry level.
 
+## Step 2a: Consensus Traps for Agent 4
+
+Identify 1–3 ways public commentary or surface-level data may mislead readers. Save them in `consensus_traps[]` for Agent 4 (`agents/edge_insight_writer.md`) to compare against Agent 1 filing evidence.
+
+Good traps include:
+- A geographic revenue number that reflects customer headquarters, distributors, ODMs, or billing entities rather than final demand.
+- A growth metric that mixes organic growth with M&A, price, FX, or channel inventory.
+- A sector metric whose public shorthand differs from economic reality, such as ARR vs GAAP revenue, GMV vs net revenue, same-store sales vs total sales, or cloud capex as supplier revenue vs spender cost.
+
+Each trap should include `common_read`, `better_read`, `evidence_needed`, and `confidence`. Do not add generic "market underestimates growth" claims.
+
 ## Step 2b: Industry position — Investment Summary (fourth paragraph)
 
 **Purpose:** Populate **`industry_position`** for Section I **`{{SUMMARY_PARA_4}}`** (Phase 2 copies/refines into `financial_analysis.json` → `summary_para_4`). Focus on **sub-industry market share (multi-year when credible)**, **how the company is positioned in its niche**, **reputation / market recognition**, **main operating footprint**, and **where revenue is earned** (cross-check filings later in Phase 2 — do not contradict `financial_data.json` geographic tables when those exist).
@@ -75,7 +86,7 @@ Run **additional** searches (adapt years to the report calendar; prefer primary 
 
 - **Do not invent** percentage time series. Each `market_share_series[]` entry must carry **`source`** and a realistic **`confidence`** (`high` / `medium` / `low`). If only one year is public, store that one year and explain the gap in `notes[]`.
 - **Metric scope:** Set **`market_definition`** to the **exact market boundary** the share refers to (e.g. “consumer vs enterprise SSD”, “global vs US only”) so Phase 2 / Porter do not mix incompatible figures.
-- **`summary_para_4`:** One **plain** paragraph, **no Markdown**. **`zh`:** **≈80–120 Chinese characters** (汉字计长，不含换行). **`en`:** **~55–90 words** (same information slot). Weave **only** what you can support: share points (with years), niche/segment focus, 1–2 words on reputation if sourced, **main operating geography** vs **largest revenue regions** when known. If third-party share is unavailable, say so briefly and use **qualitative** positioning + segment names from public sources.
+- **`summary_para_4`:** One **plain** paragraph, **no Markdown**. **`zh`:** **160–200 Chinese characters** (汉字计长，不含换行). **`en`:** **90–130 words**. Weave **only** what you can support: share points (with years), niche/segment focus, 1–2 words on reputation if sourced, **main operating geography** vs **largest revenue regions** when known. If third-party share is unavailable, say so briefly and use **qualitative** positioning + segment names from public sources.
 
 ## Step 3: Forward-Looking Intelligence
 
@@ -118,6 +129,14 @@ Use these to describe how the five forces are likely to evolve over the next 2-3
     "substitutes": "Moderate. Physical retail as substitute for e-commerce is declining. Specialized cloud providers (Snowflake, Databricks) threaten niche AWS workloads.",
     "rivalry": "High in e-commerce (Walmart, Temu, Shein). High in cloud (Azure, GCP compete aggressively on pricing). Moderate in advertising (Google, Meta dominate)."
   },
+  "consensus_traps": [
+    {
+      "common_read": "Surface-level interpretation readers may take from headlines or one disclosed number.",
+      "better_read": "More accurate interpretation to test against filings or primary sources.",
+      "evidence_needed": "Specific filing note, metric definition, customer/channel disclosure, or industry mechanism needed for confirmation.",
+      "confidence": "medium"
+    }
+  ],
   "forward_looking": {
     "supplier_power": "Expected to increase slightly as AI chip supply tightens and NVIDIA maintains pricing power.",
     "buyer_power": "Likely to increase as enterprise cloud contracts come up for renewal and multi-cloud strategies gain adoption.",
@@ -151,7 +170,7 @@ Use these to describe how the five forces are likely to evolve over the next 2-3
     "reputation_and_brand": "Short factual line on awards, brand, or enterprise recognition — or state insufficient public data.",
     "main_operating_locations": "HQ, major manufacturing/R&D hubs by country/region (sourced).",
     "revenue_geography_note": "Largest revenue regions in plain language; if unknown, say align with SEC geographic note in financial_data.json in Phase 2.",
-    "summary_para_4": "Single paragraph for Section I fourth block: niche, multi-year share if available, ops vs revenue geography, reputation — zh ≈80–120字 / en ~55–90 words; plain text only."
+    "summary_para_4": "Single paragraph for Section I fourth block: niche, multi-year share if available, ops vs revenue geography, reputation — zh 160–200字 / en 90–130 words; plain text only."
   },
   "notes": []
 }

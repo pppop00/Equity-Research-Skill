@@ -9,23 +9,41 @@
 - `workspace/{Company}_{Date}/news_intel.json`
 - `references/prediction_factors.md`
 - 编排器：`Report language: en|zh`，`Primary operating_geography`，**Sector**
+- `macro_factors.json` → **`macro_regime_context`**（必读）：`sub_industry`、`company_role`、`company_role_confidence`、`sector_regime`、`primary_transmission_channels`、`sign_reversal_watchlist`
 
 ## 审查重点（Peer B）
 
-1. **利率与政策叙事**  
+1. **是否匹配 `macro_regime_context`**  
+   - 初稿的宏观叙事是否符合 `company_role`、`sector_regime`、`primary_transmission_channels`，还是只套用了行业泛化逻辑。  
+   - `company_role_confidence` 若为 `medium` / `low`，初稿是否承认混合角色或证据不确定，而不是写成单一确定暴露。
+
+2. **是否机械套用行业默认 β**  
+   - β 行可以作为模型输入，但叙事不能把默认 β 解释成公司真实传导机制。  
+   - 若 `macro_regime_context` 与 β 行存在张力（例如大型现金科技公司 vs 利率敏感成长股、AI spender vs supplier），检查初稿是否解释了张力。
+
+3. **估值利好 vs 收入利好**  
+   - 是否把「降息 / 折现率下降 / 风险偏好改善」直接写成收入增长利好。除非有订单、seat growth、ARPU、消费额、AUM、交易量等收入链条证据，否则只能写成估值或融资环境影响。
+
+4. **sign reversal / 角色反转**  
+   - 是否忽略 `sign_reversal_watchlist`。例如客户 CapEx 上升对 AI supplier 通常是需求利好，但对 AI/cloud spender 可能压低短期 FCF；银行、保险、资管、支付网络、交易所也不能共用同一 Financials 叙事。
+
+5. **历史周期经验是否误用于当前 regime**  
+   - `sector_regime` 是当前周期判断，不是永久标签。检查初稿是否把历史半导体、消费、地产、金融或能源周期经验机械套到当前 report date 的 regime。
+
+6. **利率与政策叙事**  
    - 「降息利好/利空」方向是否与该公司所用 **β 行**及**主业现金流特征**一致（例如高杠杆 REIT vs 现金充裕大型科技）。  
    - 若初稿强调「美联储降息」但对营收地域非美国为主，是否应强调**本地政策利率**或汇率渠道。
 
-2. **GDP / 增长**  
+7. **GDP / 增长**  
    - GDP 增速「正向/负向」对收入的叙述是否与 β 符号及公司业务（周期 / 防御）一致；有无过度从宏观 headline 跳到公司营收。
 
-3. **基准增长率与共识**  
+8. **基准增长率与共识**  
    - `baseline_growth_pct` 与 `baseline_source` 是否可辩护；是否忽略明显的行业逆风（在 `news_intel` 中已有而 baseline 仍过于乐观）。
 
-4. **公司特定项**  
+9. **公司特定项**  
    - `company_events_detail` 与 `company_specific_adjustment_pct` 是否与新闻情报方向一致；有无遗漏重大逆风或重复计入。
 
-5. **概率与措辞**  
+10. **概率与措辞**  
    - 初稿是否把情景估计写成确定性结论；挑战过度自信的句子（不要求你改 HTML，只输出质疑）。
 
 ## 输出
@@ -39,7 +57,7 @@
   "challenges": [
     {
       "id": "MB-001",
-      "target": "baseline|narrative|company_events|macro_story",
+      "target": "baseline|narrative|company_events|macro_story|macro_regime_context|valuation_vs_revenue|sign_reversal",
       "issue": "一句话标题",
       "qc_argument": "质疑理由，可引用 news_intel 或宏观常识",
       "suggested_fix": "若成立时的修改方向",

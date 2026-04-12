@@ -1,4 +1,4 @@
-# Agent 4A: English HTML research report (locked template)
+# Agent 5A: English HTML research report (locked template)
 
 You are a senior equity research analyst. Your task is to fill the **exact HTML template skeleton** below and produce a professional **interactive English** research report.
 
@@ -26,7 +26,8 @@ Additional note: after filling placeholders, you may remove a **single-line** in
 ## Inputs (read from workspace)
 
 - `financial_data.json` (optional **`latest_interim`** — with `financial_analysis.json`, feeds **`{{LATEST_OPERATING_UPDATE_TEXT}}`**)
-- `financial_analysis.json` (`latest_operating_update` → **`{{LATEST_OPERATING_UPDATE_TEXT}}`**, **`{{TREND_UPDATE_DIRECTION}}`**; **`summary_para_4`** → **`{{SUMMARY_PARA_4}}`** — Phase 2 from `news_intel.json` → `industry_position`, reconciled with filings)
+- `financial_analysis.json` (`summary_para_1`–`summary_para_4` → **`{{SUMMARY_PARA_1}}`–`{{SUMMARY_PARA_4}}`**; `latest_operating_update` → **`{{LATEST_OPERATING_UPDATE_TEXT}}`**, **`{{TREND_UPDATE_DIRECTION}}`**)
+- `edge_insights.json` (Agent 4 output; **`{{SUMMARY_PARA_2}}`** must reflect `chosen_insight` / `summary_para_2_draft`, not generic industry commentary)
 - `macro_factors.json` — **Canonical source** for Section III factor **row labels** (e.g. `China consumer confidence (NBS)` vs `US Consumer Confidence`), geography, and numbers. Build `{{FACTOR_ROWS}}` from this file plus `prediction_waterfall.json`; copy **`{{MACRO_FACTOR_COMMENTARY}}` verbatim** from `macro_factor_commentary`. **Do not** invent a parallel US-only factor set or relabel factors in HTML only.
 - `news_intel.json`
 - `prediction_waterfall.json` — if QC ran: merge `qc_deliberation.methodology_note` into `{{METHODOLOGY_DETAIL}}` as required.
@@ -513,11 +514,11 @@ body {
   <div class="section" id="section-summary">
     <div class="section-title">I. Investment summary</div>
 
-    <!-- 3 intro paragraphs (~80–120 words each for EN where noted in style guide); fourth: industry share / niche / reputation / ops vs revenue geography -->
+    <!-- Four investment-summary paragraphs; each 90-130 English words; paragraph 2 must reflect edge_insights.json -->
     <p class="summary-para">{{SUMMARY_PARA_1}}</p>
     <p class="summary-para">{{SUMMARY_PARA_2}}</p>
     <p class="summary-para">{{SUMMARY_PARA_3}}</p>
-    <!-- Fourth paragraph: ~55–90 words; see news_intel industry_position + financial_analysis summary_para_4 -->
+    <!-- Fourth paragraph: industry share / niche / reputation / ops vs revenue geography; see news_intel industry_position + financial_analysis summary_para_4 -->
     <p class="summary-para">{{SUMMARY_PARA_4}}</p>
 
     <div class="two-col">
@@ -1112,8 +1113,11 @@ window.addEventListener('resize', () => {
 | `{{KPI1_VALUE}}` … `{{KPI4_VALUE}}` | Text | Scaled amount, e.g. **$391.0B**; **negatives** use a **leading minus** (**-$164M**, **-22.3%**), not spelled-out “negative” / “approx. negative” instead of **`-`** |
 | `{{KPI1_CHANGE}}` | Text | e.g. **+7.2% YoY**; for dual-negative FCF improvement, include **$** amounts per style guide |
 | `{{METRICS_ROWS}}` | HTML | One `<tr>` per metric. The fourth column **`YoY movement` must be a qualitative verdict**, not a raw number or percentage. Use the controlled labels in `references/financial_metrics.md`, e.g. `Significantly improved`, `Improved`, `Stable`, `Deteriorated`, `Significantly deteriorated`, `Equity deficit narrowed`, `Equity deficit widened`, `Ending equity negative`, `N/A`. Numeric deltas belong in the value columns or narrative, **not** as final-column cells like `+0.62%`. |
-| `{{SUMMARY_PARA_1}}`–`{{SUMMARY_PARA_3}}`, `{{TREND*_TEXT}}`, thesis, Sankey note | Text | Plain English only; **no** Markdown (`**`, backticks) in values — HTML does not render it |
-| `{{SUMMARY_PARA_4}}` | Text | Fourth block: sub-industry share (multi-year if sourced), niche, reputation/recognition, main operating footprint vs revenue regions — **~55–90 words**; from `financial_analysis.json` → `summary_para_4`; **no** Markdown |
+| `{{SUMMARY_PARA_1}}` | Text | First block: merged company/business overview and latest financial performance; **90–130 words**; from `financial_analysis.json` → `summary_para_1`; no Markdown |
+| `{{SUMMARY_PARA_2}}` | Text | Second block: must reflect `edge_insights.json` → `chosen_insight` / `summary_para_2_draft`; include surface read, hidden rule or reframed read, and investment implication; **90–130 words**; no Markdown |
+| `{{SUMMARY_PARA_3}}` | Text | Third block: core thesis, catalysts, and constraints; **90–130 words**; from `financial_analysis.json` → `summary_para_3`; no Markdown |
+| `{{SUMMARY_PARA_4}}` | Text | Fourth block: sub-industry share (multi-year if sourced), niche, reputation/recognition, main operating footprint vs revenue regions; **90–130 words**; from `financial_analysis.json` → `summary_para_4`; no Markdown |
+| `{{TREND*_TEXT}}`, thesis, Sankey note | Text | Plain English only; **no** Markdown (`**`, backticks) in values — HTML does not render it |
 | `{{TREND1_DIRECTION}}`…`{{TREND3_DIRECTION}}`, `{{TREND_UPDATE_DIRECTION}}` | class | `up` / `down`; all Section-II trend cards use the same **green** left border |
 | `{{TREND_UPDATE_DIRECTION}}` | class | `up` / `down`; pairs with `{{LATEST_OPERATING_UPDATE_TEXT}}` |
 | `{{LATEST_OPERATING_UPDATE_TEXT}}` | Text | **Fourth Section-II trend card (“Latest operating update”)**: Use **`financial_data.json` → `latest_interim`** (populated by the Phase 1 financial data collector) as the numeric anchor; **lead with YoY** (same quarter last year or YTD vs prior-year YTD), add **QoQ vs prior quarter** only as a labeled sequential extra. **Lead with the period covered** (including filing date). If no reliable interim filing, state that and keep confidence language modest. See `references/financial_metrics.md`, `references/report_style_guide_en.md`. |
@@ -1128,7 +1132,7 @@ window.addEventListener('resize', () => {
 | `{{PORTER_COMPANY_TEXT}}` | HTML | Company tab: one `<ul style="margin:0;padding-left:1.25em;">` with exactly five `<li>` items, order: Supplier → Buyer → New entrants → Substitutes → Rivalry. Do not repeat X/5 or score-prefixed openings in each item (radar + score list show scores). ~300 words. Source: `porter_analysis.json` → `company_perspective` (analysis-only lines per force). |
 | `{{PORTER_INDUSTRY_TEXT}}` | HTML | Industry tab: same list shape and order; `industry_perspective`. |
 | `{{PORTER_FORWARD_TEXT}}` | HTML | Forward tab: same list shape and order; `forward_perspective`. |
-| `{{FACTOR_ROWS}}` | HTML | Factor table rows from `macro_factors.json`; column order must match the locked template. The final **Direction** cell must be `Positive`, `Negative`, or `Neutral` based on `adjustment_pct`; do **not** put `+0.62%`, `+4.55%`, or any other numeric adjustment in the final direction cell. |
+| `{{FACTOR_ROWS}}` | HTML | Factor table rows from `macro_factors.json`; column order must match the locked template. The final **Direction** cell must be `Positive`, `Negative`, or `Neutral` based on `adjustment_pct`; do **not** put `+0.62%`, `+4.55%`, or any other numeric adjustment in the final direction cell. Reuse the existing color classes: positive `<td class="metric-up">Positive</td>`, negative `<td class="metric-down">Negative</td>`, neutral `<td>Neutral</td>` with no class. |
 | `{{MACRO_FACTOR_COMMENTARY}}` | HTML | **From `macro_factors.json` → `macro_factor_commentary` only** (see `agents/macro_scanner.md` Step 7b). Institutional transmission narrative; `<p>` blocks OK; no Markdown. |
 | `{{APPENDIX_SOURCE_ROWS}}` | HTML | Multiple `<tr>…</tr>`. **Specific source** column: name the **original publisher** (see `references/report_style_guide_en.md`). **SEC:** anything ultimately from **EDGAR / sec.gov / data.sec.gov**, including **MD&A and Note 16 Revenue** inside a **Form 10-K** — label **U.S. SEC EDGAR** (optionally add form + section in parentheses). If populated via `sec_edgar_fetch.py` → `sec_edgar_bundle.json`, still label **SEC** (you may add “XBRL slices”); do **not** imply the bundle is a separate non-SEC origin. Use **Bloomberg**, **Reuters**, **Company IR**, etc. only when that channel is the true first source. |
 | `{{PHI_VALUE}}` | 文字 | 通常为 0.5 |

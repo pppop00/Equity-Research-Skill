@@ -1,6 +1,6 @@
 === HTML 报告验证报告 ===
 文件：PDD_Holdings_Research_CN.html
-验证时间：2026-04-09
+验证时间：2026-04-12
 
 --- 1. Section 完整性 ---
 [PASS] 6个section均存在 ✓
@@ -9,23 +9,32 @@
 [PASS] 4张卡片，方向class正确 ✓
 [WARNING] 自由现金流采用近似 capex 估算，建议人工复核。
 
---- 3. CSS 变量 ---
+--- 3. 投资摘要与 Edge Insight ---
+[PASS] Section I 恰好 4 段 summary-para ✓
+[PASS] 中文字符数分别为 167 / 171 / 170 / 172，符合 160-200 字要求 ✓
+[PASS] 第二段体现 edge_insights.json：交易服务收入不能直接等同于 Temu 利润池 ✓
+[PASS] financial_analysis.json summary_para_2 与 edge_insights.json summary_para_2_draft 一致 ✓
+
+--- 4. CSS 变量 ---
 [PASS] 所有必须变量存在 ✓
 
---- 4. 图表容器与数据 ---
+--- 5. 图表容器与数据 ---
 [PASS] Waterfall / Sankey / Radar 容器与数据变量均存在 ✓
 
---- 5. 波特五力 ---
+--- 6. 波特五力 ---
 [PASS] 3个panel，各5个li，score-dot与数组吻合 ✓
 
---- 6. 页面结构 ---
+--- 7. 页面结构 ---
 [PASS] 所有必须元素和函数存在 ✓
+[PASS] 第二节 5 张 trend-card 均存在：净利润、净利率、自由现金流、最新经营更新、地区收入结构 ✓
+[PASS] 宏观因子传导阐释已写入 Section III ✓
 
---- 7. 占位符残留 ---
+--- 8. 占位符残留 ---
 [PASS] 无残留占位符 ✓
 
---- 8. 数字格式 ---
+--- 9. 数字格式 ---
 [PASS] 抽查数字与格式，无 NaN/undefined/null/Infinity ✓
+[PASS] 指标表“同比变动”列使用定性判断，未残留机械百分比 ✓
 
 === 总结 ===
 CRITICAL 错误：0
