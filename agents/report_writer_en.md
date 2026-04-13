@@ -1112,7 +1112,7 @@ window.addEventListener('resize', () => {
 | `{{EXCHANGE}}` | Text | e.g. NASDAQ |
 | `{{SECTOR}}` | Text | GICS-style sector in **English** |
 | `{{REPORT_DATE}}` | Text | e.g. April 8, 2026 |
-| `{{DATA_SOURCE}}` | Text | One-line header summary: use the **ultimate publisher** per **`references/report_style_guide_en.md` (Appendix source attribution)** (e.g. `Primary financials: U.S. SEC EDGAR; Macro: FOMC/IMF illustrative`). Do **not** treat `sec_edgar_bundle.json` or the script name as the public-facing source — they are just the fetch path from **SEC**. |
+| `{{DATA_SOURCE}}` | Text | One-line header summary: use the **ultimate publisher** per **`references/report_style_guide_en.md` (Appendix source attribution)** (e.g. `Primary financials: U.S. SEC EDGAR; Macro: FOMC/IMF illustrative`). **Hard limit: the final rendered text must not exceed 50 characters** (including spaces and punctuation), otherwise it is likely to break the single-line header layout; if it would exceed that, compress it into 2 short parallel clauses and move the fuller wording to `{{APPENDIX_SOURCE_ROWS}}`. Do **not** treat `sec_edgar_bundle.json` or the script name as the public-facing source — they are just the fetch path from **SEC**. |
 | `{{RATING_CLASS}}` | class | `overweight` / `neutral` / `underweight` |
 | `{{RATING_EN}}` | Text | Overweight / Neutral / Underweight |
 | `{{KPI1_DIRECTION}}` 等 | class | Same class on the **`.kpi-card`** and **`.kpi-change`**: `up` / `down` / `neutral-kpi`. **KPI 3 (FCF):** if FCF is **negative in both years** but **less negative** YoY, use **`neutral-kpi`** (not `up`) and put a **quantified** narrowing + **“still negative”** in `{{KPI3_CHANGE}}` (see `references/report_style_guide_en.md`, Section II KPI note). |

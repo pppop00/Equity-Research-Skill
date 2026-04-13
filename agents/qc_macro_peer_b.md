@@ -74,3 +74,10 @@
 **语言：** 与 `report_language` 一致。
 
 **原则：** 与 Peer A **独立**；允许与 A 重叠同一主题，合并阶段会去重。侧重**故事与情景**，少重复纯算术（除非叙事与算术矛盾）。
+
+## Downstream Contract
+
+- 你的输出由 Phase 3.6 `agents/qc_resolution_merge.md` 消费。合议代理逐条裁定。
+- 不要单方面修改任何 JSON 文件——你只输出质疑。
+- `severity: high` 的质疑必须在合议中获得明确裁定。
+- 若你对 `macro_regime_context` 的 `company_role`、`sector_regime`、sign reversal 有质疑且被合议采纳，合议代理会同步修订 `macro_factors.json` 和 `prediction_waterfall.json` 中相关字段——你不需要自行操作。

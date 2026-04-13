@@ -1116,7 +1116,7 @@ window.addEventListener('resize', () => {
 | `{{EXCHANGE}}` | 文字 | 交易所，例如 NASDAQ |
 | `{{SECTOR}}` | 文字 | 行业，例如 半导体 |
 | `{{REPORT_DATE}}` | 文字 | 报告日期，例如 2026年4月8日 |
-| `{{DATA_SOURCE}}` | 文字 | 页眉一行「数据来源」摘要：按 **`references/report_style_guide_cn.md`（附录与页眉披露口径）** 写**最终权威出处**（如 `主要财务：美国 SEC EDGAR；宏观：FOMC/IMF 等示意`）。勿用仅含 `sec_edgar_bundle.json` 或脚本文件名的表述代替 **SEC**；脚本只是从 SEC 拉数的手段。 |
+| `{{DATA_SOURCE}}` | 文字 | 页眉一行「数据来源」摘要：按 **`references/report_style_guide_cn.md`（附录与页眉披露口径）** 写**最终权威出处**（如 `主要财务：美国 SEC EDGAR；宏观：FOMC/IMF 等示意`）。**硬限制：最终渲染文本不得超过 50 个字符**（含中文、英文、空格与标点），否则极易挤压页眉横排布局；超出时请缩写为 2 段并列短语，把展开说明放到附录 `{{APPENDIX_SOURCE_ROWS}}`。勿用仅含 `sec_edgar_bundle.json` 或脚本文件名的表述代替 **SEC**；脚本只是从 SEC 拉数的手段。 |
 | `{{RATING_CLASS}}` | class | `overweight` / `neutral` / `underweight` |
 | `{{RATING_CN}}` | 文字 | 增持 / 中性 / 减持 |
 | `{{KPI1_DIRECTION}}` 等 | class | 每张 KPI 卡与对应 `.kpi-change` **填同一 class**：`up` / `down` / `neutral-kpi`。**第三卡 FCF：** 若两年 FCF 均为负但同比向零收窄，**须**用 `neutral-kpi`，**勿**用 `up`（绿色易误读为已健康）；`{{KPI3_CHANGE}}` 须含**可核对金额**并写明仍未转正（见 `references/report_style_guide_cn.md` §财务概览）。 |

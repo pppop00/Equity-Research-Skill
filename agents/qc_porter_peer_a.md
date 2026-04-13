@@ -74,3 +74,12 @@
 
 - 若你主张改分，必须说明**为什么当前分数错**以及**为何新分更合适**。
 - 若你主张维持原分，必须明确写出“**维持原分，仅调整论证**”这一层意思，避免后续流程把你的 challenge 误读为改分建议。
+
+## Downstream Contract
+
+- 你的输出由 `agents/qc_resolution_merge.md` 消费。合议代理根据 `challenge_type` 和 `score_change_recommended` 来裁定是"维持原分"还是"从 X 调整到 Y"。
+- Phase 5 report writer 将根据合议结果决定 HTML 中的措辞：
+  - `score_change_recommended = false` 且被采纳 → HTML 只能写"维持 X 分"
+  - `score_change_recommended = true` 且被采纳改分 → HTML 写"从 X 调整到 Y 分"
+- 因此，你的 `current_score` / `proposed_score` / `score_change_recommended` 三个字段必须准确——它们直接决定最终报告的措辞。不要为了让输出"显得有用"而夸大为改分建议。
+- 不要单方面修改 `porter_analysis.json`，你只输出质疑。

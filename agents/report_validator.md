@@ -141,12 +141,13 @@ HTML 中的 `<style>` 块必须包含以下所有变量定义（在 `:root` 或 
 - `.header-main` / `.header-left` / `.header-right` 存在
 - `.rating-badge` class 包含 `overweight` / `neutral` / `underweight` 之一
 - `.header-meta` 存在且包含3个 `<span>`
+- `.header-meta` 中表示数据来源的 `<span>` 文本应为**单行短摘要**，**最终文本长度不得超过 50 个字符**（含中文、英文、空格与标点）；这是为避免页眉横向排版被挤压或换行
 - `toggleTheme()` 函数存在
 - `switchTab()` 函数存在
 - `redrawAllCharts()` 函数存在
 - `DOMContentLoaded` 事件监听存在
 
-**失败条件：** 函数缺失 → CRITICAL；badge class 错误 → WARNING。
+**失败条件：** 函数缺失 → CRITICAL；badge class 错误 → WARNING；`{{DATA_SOURCE}}` 渲染后超过 50 个字符 → WARNING（交付前必改）。
 
 ---
 
@@ -269,7 +270,9 @@ HTML 中的 `<style>` 块必须包含以下所有变量定义（在 `:root` 或 
 
 **附录「具体来源」列 — SEC 归因：**凡可追溯到 **EDGAR / sec.gov / data.sec.gov** 的申报正文（含 **Form 10-K 的 MD&A、附注如 Note 16 Revenue**），「具体来源」应标 **美国 SEC EDGAR**（括号可写章节/表单），**不得**仅以 `sec_edgar_bundle.json` 或脚本文件名作为唯一来源表述，以免读者误解为非 SEC 渠道。Bloomberg、Reuters、公司 IR 等非 SEC 首发渠道须标实名。
 
-**失败条件：** 来源日期晚于报告日、或估算被写成已验证实时事实 → **WARNING**（视为交付前必改项）。附录将 SEC 申报误标为仅脚本/JSON、或将 SEC 内章节写成与 SEC 并列的虚构第三方 → **WARNING**（交付前必改）。
+**页眉来源摘要长度：**`{{DATA_SOURCE}}` 只负责页眉短摘要，不承担附录级披露。若最终文本超过 **50 个字符**，即使语义正确，也视为**排版风险**，必须压缩为更短的并列表述，把细节下沉到附录来源表。
+
+**失败条件：** 来源日期晚于报告日、或估算被写成已验证实时事实 → **WARNING**（视为交付前必改项）。附录将 SEC 申报误标为仅脚本/JSON、或将 SEC 内章节写成与 SEC 并列的虚构第三方 → **WARNING**（交付前必改）。页眉 `{{DATA_SOURCE}}` 超过 50 个字符 → **WARNING**（交付前必改）。
 
 ---
 

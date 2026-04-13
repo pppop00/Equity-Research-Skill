@@ -106,3 +106,17 @@
    - `id` 与 `fields_changed` 不能替代 `perspective` / `force`；因为 Porter 共 3 个透视 × 5 个维度，审计链必须能唯一定位到具体评分单元
 
 **语言：** 所有面向读者的 `summary`、`methodology_note`、`rationale` 与 `report_language` 一致。
+
+## Execution Policy
+
+### Full-run vs fast-run
+
+- Phase 2.6 + 3.5 + 3.6 is the **default full-run path**. Only skip adversarial QC when the user explicitly requests a lightweight draft, quick prototype, or manually skips the QC phases.
+- If QC was skipped, do **not** generate `qc_audit_trail.json`. Phase 5 must not use QC-style wording (e.g. "经QC合议") when no QC actually ran.
+
+### Conflict resolution priority
+
+1. **Data-backed QC** overrides narrative — if a QC challenge cites a verifiable number or formula inconsistency, fix the data first and then adjust narrative to match.
+2. **Pure opinion conflicts** (both sides lack data) — retain the analyst's original position and note "insufficient evidence" in `qc_audit_trail`.
+3. **Duplicate challenges** from Peer A and Peer B on the same point — merge into a single `qc_audit_trail` item with one `verdict`.
+4. **Undecidable** — when evidence is genuinely ambiguous, retain the analyst and set `verdict: "retain_analyst"` with an honest `rationale`. Do not fabricate a resolution.

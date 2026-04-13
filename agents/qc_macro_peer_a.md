@@ -62,3 +62,10 @@
 **语言：** `report_language=zh` 时全文中文；`en` 时英文。
 
 **原则：** 只写**可核对**的质疑；没有证据则标为 `severity: low` 或省略。不与 Peer B 串通——独立审查。
+
+## Downstream Contract
+
+- 你的输出由 Phase 3.6 `agents/qc_resolution_merge.md` 消费。合议代理会逐条裁定你的 challenge 是否成立。
+- 不要单方面修改任何 JSON 文件——你只输出质疑，不执行修改。
+- 你的 `challenges[]` 会与 Peer B 的输出合并去重；重复主题不会被双倍采纳，所以不必为重叠担忧。
+- `severity: high` 的质疑在合议中**必须**获得明确 `verdict`，不会被静默忽略。

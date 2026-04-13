@@ -78,3 +78,20 @@ Save exactly this shape:
 ```
 
 `insight_type` must be one of: `non_consensus_read`, `industry_unwritten_rule`, `industry_special_rule`.
+
+## Downstream Contract
+
+- `edge_insights.json` is **mandatory** for full runs. Phase 2 will not proceed without it.
+- Phase 2 must base `summary_para_2` on `summary_para_2_draft` from this file. If Phase 2 replaces the edge insight with generic industry commentary, that is a validation failure.
+- `chosen_insight.evidence[]` must have at least one entry with `source` and `fact`. If `confidence` is `high`, evidence must trace to `financial_data.json`, `news_intel.json`, or authoritative primary sources (SEC filings, company IR, exchange filings).
+- `report_validator.md` (Phase 6) will check that Section I paragraph 2 reflects the core facts from `chosen_insight` — at minimum two of: `surface_read`, `hidden_rule`/`reframed_read`, `investment_implication`.
+
+## Evidence-Thin Fallback
+
+When input data is sparse (e.g. private company, limited filings, knowledge-cutoff-only news):
+
+1. Still produce `edge_insights.json` with all required fields.
+2. Set `chosen_insight.confidence` to `"low"`.
+3. Write a restrained `summary_para_2_draft` that frames the insight as a hypothesis rather than a confirmed finding.
+4. Populate `candidates[]` even if only one candidate was viable — explain in `why_not_chosen` that alternatives were weaker or unsupported.
+5. Add a `notes[]` entry explaining the evidence limitation so downstream agents can calibrate.

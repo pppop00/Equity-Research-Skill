@@ -120,4 +120,4 @@ Readers care about the **original publisher** of the information, not intermedia
 
 **Rule of thumb:** If the line item ultimately ties to the **EDGAR-filed statutory disclosure**, label the source **SEC** (optionally name the form and section). Use **Bloomberg**, **Reuters**, **Company IR**, etc. **only** when that channel is where the figure or narrative first appears.
 
-For `{{DATA_SOURCE}}`, use a short parallel summary, e.g. `Primary financials: U.S. SEC EDGAR; Macro: …`.
+For `{{DATA_SOURCE}}`, use a short parallel summary, e.g. `Primary financials: U.S. SEC EDGAR; Macro: …`. **New hard rule: keep the final header text within 50 characters** (including spaces and punctuation). This field sits inside a single-line header layout, not the appendix; if the wording would exceed 50 characters, shorten it to 1-2 top-level source buckets and move the detail into the appendix source rows.
