@@ -1,0 +1,136 @@
+{
+  "company": "Aave Protocol",
+  "ticker": "AAVE",
+  "sector": "金融科技 / DeFi 借贷",
+  "sub_industry": "去中心化非托管流动性协议",
+  "fiscal_year": "FY2025",
+  "fiscal_year_end": "2025-12-31",
+  "prior_fiscal_year": "FY2024",
+  "currency": "USD",
+  "data_source": "链上协议数据聚合与 Aave 官方披露",
+  "data_confidence": "medium",
+  "income_statement": {
+    "current_year": {
+      "gross_protocol_fees": 907.69,
+      "cost_of_revenue": 783.52,
+      "revenue": 124.15,
+      "incentives": 5.3,
+      "earnings": 118.84,
+      "token_holder_net_income": 32.79,
+      "net_margin": 95.7,
+      "diluted_eps": null
+    },
+    "prior_year": {
+      "gross_protocol_fees": 456.44,
+      "cost_of_revenue": 384.67,
+      "revenue": 71.78,
+      "incentives": 10.88,
+      "earnings": 66.89,
+      "token_holder_net_income": 0.0,
+      "net_margin": 93.2,
+      "diluted_eps": null
+    },
+    "unit": "millions USD",
+    "definition_note": "本报告将 DeFiLlama 的 protocol revenue / gross profit 作为 Aave DAO 协议收入口径；earnings 为 protocol revenue 减 incentives。"
+  },
+  "balance_sheet": {
+    "cash_and_equivalents": 33.73,
+    "short_term_investments": 6.47,
+    "total_assets": 83.22,
+    "total_debt": 0.0,
+    "total_equity": 83.22,
+    "shares_outstanding": null,
+    "unit": "millions USD",
+    "definition_note": "DAO treasury 为链上资产市值快照，不等同于审计资产负债表。"
+  },
+  "cash_flow": {
+    "operating_cash_flow": 118.84,
+    "capex": 0.0,
+    "free_cash_flow": 118.84,
+    "unit": "millions USD",
+    "definition_note": "协议 earnings 近似用于现金流口径；服务商预算和激励另行在治理预算中体现。"
+  },
+  "segment_data": [
+    {
+      "name": "Ethereum",
+      "revenue": 244.5,
+      "pct_of_total": 85.8
+    },
+    {
+      "name": "Avalanche",
+      "revenue": 10.96,
+      "pct_of_total": 3.8
+    },
+    {
+      "name": "Arbitrum",
+      "revenue": 8.69,
+      "pct_of_total": 3.1
+    },
+    {
+      "name": "Polygon",
+      "revenue": 6.24,
+      "pct_of_total": 2.2
+    },
+    {
+      "name": "Base",
+      "revenue": 4.77,
+      "pct_of_total": 1.7
+    },
+    {
+      "name": "Other networks",
+      "revenue": 9.65,
+      "pct_of_total": 3.4
+    }
+  ],
+  "latest_interim": {
+    "form_type": "onchain_protocol_dashboard",
+    "period_end": "2026-03-31",
+    "fiscal_period_label": "FY2026 Q1",
+    "revenue": 25.37,
+    "revenue_yoy_pct": -6.5,
+    "net_income": 25.32,
+    "operating_cash_flow_ytd": 25.32,
+    "unit": "millions USD",
+    "filing_date": "2026-04-22",
+    "notes": [
+      "Aave 无 SEC 季报；本项使用 DeFiLlama protocol revenue / earnings 季度链上数据。"
+    ]
+  },
+  "market_snapshot": {
+    "tvl": 15645.0,
+    "active_loans": 14332.0,
+    "annualized_fees": 680.29,
+    "annualized_revenue": 86.13,
+    "annualized_earnings": 85.94,
+    "market_cap": 1398.0,
+    "token_price": 92.13,
+    "treasury": 83.22,
+    "unit": "millions USD except token_price"
+  },
+  "disclosure_quirks": [
+    {
+      "topic": "协议收入与公司收入口径",
+      "reported_basis": "DeFiLlama protocol revenue",
+      "economic_basis": "Aave DAO 从利差、清算、GHO 与相关机制中捕获的协议收入",
+      "why_it_matters": "该口径不是 Aave Labs 的 GAAP 收入，也不代表 AAVE 持有人已直接分红。",
+      "evidence": "DeFiLlama methodology: Aave revenue is amount of fees going to Aave treasury.",
+      "source": "https://defillama.com/protocol/aave",
+      "confidence": "medium"
+    }
+  ],
+  "notes": [
+    "Aave 是开源非托管协议，不是传统上市公司；本报告采用协议经济模型而非 SEC/IFRS 财务报表。",
+    "FY2025 与 FY2024 数字由 DeFiLlama 季度表合计；当前 TVL、收入年化和 treasury 为 2026-04-22 前后公开页面快照。"
+  ],
+  "sources": {
+    "defillama": "https://defillama.com/protocol/aave",
+    "aave_recap": "https://aave.com/blog/aave-2025-recap",
+    "aave_v4": "https://governance.aave.com/t/aave-v4-launch-roadmap/23134",
+    "aave_funding": "https://governance.aave.com/t/aave-dao-funding-insights/24192",
+    "aave_svr": "https://governance.aave.com/t/arfc-addendum-aave-dao-chainlink-smart-value-recapture-svr/21358",
+    "gho": "https://aave.com/gho",
+    "fed_sep": "https://www.federalreserve.gov/monetarypolicy/fomcprojtabl20260318.htm",
+    "imf_weo": "https://www.imf.org/en/publications/weo/issues/2026/04/14/world-economic-outlook-april-2026",
+    "eia": "https://www.eia.gov/outlooks/steo/report/petro_prod.php"
+  }
+}

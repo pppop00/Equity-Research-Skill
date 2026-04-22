@@ -1,0 +1,102 @@
+{
+  "company": "Aave Protocol",
+  "primary_operating_geography": "Global_other",
+  "sector": "Financials",
+  "sub_industry": "DeFi lending / market infrastructure",
+  "phi": 0.5,
+  "beta_source": "adjusted",
+  "data_freshness": "2026-04-22",
+  "factor_geography_note": "Aave 的收入来自全球公链流动性，宏观表采用全球/美元流动性代理：美联储政策路径、IMF 全球增长、美元指数、油价冲击与加密风险偏好。",
+  "macro_regime_context": {
+    "sector": "Financials",
+    "sub_industry": "去中心化借贷与链上市场基础设施",
+    "company_role": "crypto credit market infrastructure",
+    "company_role_confidence": "medium",
+    "sector_regime": "risk-off deleveraging with product-cycle offset",
+    "primary_transmission_channels": [
+      "usd_liquidity",
+      "stablecoin_borrow_demand",
+      "collateral_values",
+      "liquidation_activity",
+      "cross_chain_liquidity"
+    ],
+    "sign_reversal_watchlist": [
+      "降息有利于风险偏好，但可能压低稳定币借贷收益率",
+      "清算增加可短期提高费用，但若坏账或用户去杠杆过快则伤害长期收入"
+    ],
+    "role_evidence": "Aave 收入主要由借款利息、清算相关费用、GHO 利息与跨链市场规模驱动。"
+  },
+  "factors": [
+    {
+      "name": "美元政策利率下行",
+      "current_value": 4.5,
+      "forecast_value": 3.4,
+      "factor_change_pct": 1.1,
+      "beta": 0.6,
+      "phi": 0.5,
+      "adjustment_pct": 0.33,
+      "direction": "正向",
+      "source": "https://www.federalreserve.gov/monetarypolicy/fomcprojtabl20260318.htm"
+    },
+    {
+      "name": "全球实际GDP增速",
+      "current_value": 3.4,
+      "forecast_value": 3.1,
+      "factor_change_pct": -0.3,
+      "beta": 1.0,
+      "phi": 0.5,
+      "adjustment_pct": -0.15,
+      "direction": "负向",
+      "source": "https://www.imf.org/en/publications/weo/issues/2026/04/14/world-economic-outlook-april-2026"
+    },
+    {
+      "name": "全球通胀压力",
+      "current_value": 4.0,
+      "forecast_value": 4.4,
+      "factor_change_pct": 0.4,
+      "beta": -0.3,
+      "phi": 0.5,
+      "adjustment_pct": -0.06,
+      "direction": "负向",
+      "source": "https://www.imf.org/en/publications/weo/issues/2026/04/14/world-economic-outlook-april-2026"
+    },
+    {
+      "name": "美元风险溢价 / DXY",
+      "current_value": 100.0,
+      "forecast_value": 103.0,
+      "factor_change_pct": 3.0,
+      "beta": -0.5,
+      "phi": 0.5,
+      "adjustment_pct": -0.75,
+      "direction": "负向",
+      "source": "https://www.federalreserve.gov/monetarypolicy/fomcprojtabl20260318.htm"
+    },
+    {
+      "name": "能源价格冲击",
+      "current_value": 100.0,
+      "forecast_value": 119.0,
+      "factor_change_pct": 19.0,
+      "beta": -0.1,
+      "phi": 0.5,
+      "adjustment_pct": -0.95,
+      "direction": "负向",
+      "source": "https://www.imf.org/en/publications/weo/issues/2026/04/14/world-economic-outlook-april-2026"
+    },
+    {
+      "name": "加密风险偏好",
+      "current_value": 100.0,
+      "forecast_value": 95.0,
+      "factor_change_pct": -5.0,
+      "beta": 0.3,
+      "phi": 0.5,
+      "adjustment_pct": -0.75,
+      "direction": "负向",
+      "source": "https://defillama.com/protocol/aave"
+    }
+  ],
+  "total_macro_adjustment_pct": -2.33,
+  "macro_factor_commentary": "<p>表中六项调整幅度合计为-2.33个百分点，对应瀑布图中的「宏观调整」柱。Aave 的收入不是传统贷款利差，而是由链上借款需求、抵押品价格、清算活动和 GHO 利息共同驱动；美元利率下行有利于风险偏好和抵押品估值，但稳定币收益率回落会压低部分借贷需求，因此仅给正向小幅权重。IMF 下调全球增长并提示能源冲击推升通胀，意味着风险资产杠杆更谨慎；美元风险溢价走强会削弱链上流动性。加密风险偏好用 TVL 与收入年化回落作代理，属于估算项，方向上解释 FY2026 基准增速低于 FY2025 的压力。</p>",
+  "notes": [
+    "DeFi 协议不适合机械套用银行 β；本报告在 Financials 行基础上调整利率、美元与风险偏好权重。"
+  ]
+}

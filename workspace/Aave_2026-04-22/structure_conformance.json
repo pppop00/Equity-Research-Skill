@@ -1,0 +1,35 @@
+{
+  "mode": "strict_packaging",
+  "profile": "strict_17_full_qc_no_secapi",
+  "language": "zh",
+  "status": "pass",
+  "workspace": "workspace/Aave_2026-04-22",
+  "required_files": [
+    "financial_data.json",
+    "macro_factors.json",
+    "news_intel.json",
+    "edge_insights.json",
+    "financial_analysis.json",
+    "prediction_waterfall.json",
+    "porter_analysis.json",
+    "qc_macro_peer_a.json",
+    "qc_macro_peer_b.json",
+    "qc_porter_peer_a.json",
+    "qc_porter_peer_b.json",
+    "qc_audit_trail.json",
+    "_locked_cn_skeleton.html",
+    "Aave_Research_CN.html",
+    "final_report_data_validation.json",
+    "report_validation.txt",
+    "structure_conformance.json"
+  ],
+  "missing_required_files": [],
+  "deleted_files": [],
+  "forbidden_remaining_files": [],
+  "summary": {
+    "required_count": 17,
+    "missing_count": 0,
+    "deleted_count": 0,
+    "forbidden_remaining_count": 0
+  }
+}

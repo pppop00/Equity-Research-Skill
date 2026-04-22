@@ -1,0 +1,11 @@
+{
+  "status": "pass",
+  "challenges": [
+    {
+      "id": "PA-001",
+      "topic": "新进入者",
+      "finding": "不要把现有协议竞争误判为新进入者。",
+      "resolution": "维持新进入者2分，将主要压力放入 rivalry。"
+    }
+  ]
+}

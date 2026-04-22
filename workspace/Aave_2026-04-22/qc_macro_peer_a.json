@@ -1,0 +1,11 @@
+{
+  "status": "pass",
+  "challenges": [
+    {
+      "id": "MA-001",
+      "topic": "地理口径",
+      "finding": "Aave 收入按链和全球用户分布，不宜套用单一美国宏观。",
+      "resolution": "采纳 Global_other，使用美元流动性与全球增长代理。"
+    }
+  ]
+}

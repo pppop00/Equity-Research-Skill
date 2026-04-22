@@ -1,0 +1,120 @@
+{
+  "company": "Aave Protocol",
+  "sector": "金融科技 / DeFi 借贷",
+  "data_freshness": "2026-04-22",
+  "data_source_note": "已使用公开网页核对 Aave 官方、治理论坛、DeFiLlama、IMF/Fed/EIA 等来源。",
+  "company_events": [
+    {
+      "type": "product",
+      "description": "Aave V4 已在 2025 年进入测试网，官方称将于 2026 年主网上线，核心变化包括 Hub-and-Spoke 架构、风险溢价和新清算引擎。",
+      "revenue_impact_pct": 9.0,
+      "impact_direction": "positive",
+      "confidence": "medium",
+      "source": "https://aave.com/blog/aave-2025-recap"
+    },
+    {
+      "type": "stablecoin",
+      "description": "GHO 2025 年供应接近 5 亿美元，官方披露年末年化收入超过 1,400 万美元，sGHO 提高了协议内留存。",
+      "revenue_impact_pct": 6.0,
+      "impact_direction": "positive",
+      "confidence": "medium",
+      "source": "https://aave.com/blog/aave-2025-recap"
+    },
+    {
+      "type": "rwa",
+      "description": "Aave Horizon 2025 年上线并年末超过 5.7 亿美元存款，定位为 RWA 抵押借贷市场。",
+      "revenue_impact_pct": 5.0,
+      "impact_direction": "positive",
+      "confidence": "medium",
+      "source": "https://aave.com/blog/aave-2025-recap"
+    },
+    {
+      "type": "consumer_app",
+      "description": "Aave App 面向消费者储蓄场景，支持银行、借记卡和稳定币入口，但 2026 年收入转化仍取决于获客与监管进度。",
+      "revenue_impact_pct": 4.0,
+      "impact_direction": "positive",
+      "confidence": "low",
+      "source": "https://aave.com/blog/aave-2025-recap"
+    },
+    {
+      "type": "mev_revenue",
+      "description": "Aave DAO 与 Chainlink SVR 合作已通过治理成为有效方案，后续扩展可增加清算 OEV 回收。",
+      "revenue_impact_pct": 2.5,
+      "impact_direction": "positive",
+      "confidence": "medium",
+      "source": "https://governance.aave.com/t/arfc-addendum-aave-dao-chainlink-smart-value-recapture-svr/21358"
+    },
+    {
+      "type": "market",
+      "description": "2026 年 4 月 TVL 与年化收入较 2025 年峰值回落，说明抵押品价格和风险偏好仍是短期收入约束。",
+      "revenue_impact_pct": -10.0,
+      "impact_direction": "negative",
+      "confidence": "medium",
+      "source": "https://defillama.com/protocol/aave"
+    }
+  ],
+  "industry_dynamics": {
+    "supplier_power": "中等。Aave 依赖 Chainlink 预言机、审计/风险服务商、多链基础设施与稳定币发行方，单一资产或预言机故障会放大协议风险。",
+    "buyer_power": "中高。大型借款人与流动性提供者可在 Aave、Spark、Compound、Morpho、Kamino 等协议间迁移，资金对利率和激励敏感。",
+    "new_entrants": "中等偏低。智能合约可复制，但安全记录、风险参数、流动性深度、治理和集成网络难以短期复制。",
+    "substitutes": "中高。CeFi 借贷、交易所理财、国债代币、稳定币收益产品和自托管收益聚合器均可替代部分 Aave 用例。",
+    "rivalry": "高。DeFi 借贷竞争围绕稳定币流动性、抵押品清单、激励预算和跨链部署展开。"
+  },
+  "consensus_traps": [
+    {
+      "common_read": "只看 TVL 认为 Aave 规模越大收入越强。",
+      "better_read": "收入更接近借款需求、利用率、利率、GHO 和清算/OEV 的函数，TVL 是必要但不充分条件。",
+      "evidence_needed": "DeFiLlama fees/revenue/borrowed 与 Aave 官方 GHO、Horizon 披露。",
+      "confidence": "high"
+    },
+    {
+      "common_read": "协议收入等同于 AAVE 持有人收入。",
+      "better_read": "DAO revenue 先进入 treasury 或用于激励、服务商、储备和回购，持有人捕获取决于治理。",
+      "evidence_needed": "Aavenomics、buyback 和 DAO funding 治理帖。",
+      "confidence": "high"
+    }
+  ],
+  "forward_looking": {
+    "supplier_power": "V4 安全审计、预言机和风险服务要求上升，关键服务商议价能力仍强。",
+    "buyer_power": "机构和大额资金会继续压低净利差，但深流动性和安全记录可抵消部分议价压力。",
+    "new_entrants": "新协议可在单一链或单一资产上突破，但难以在多链、多资产、风险治理上迅速复制 Aave。",
+    "substitutes": "RWA、稳定币收益和交易所理财继续挤压低风险资金，但 Aave 可通过 Horizon 和 App 吸收部分替代威胁。",
+    "rivalry": "Spark、Compound、Morpho 及各链原生借贷协议会继续争夺稳定币与 ETH/BTC 抵押品，竞争强度维持高位。"
+  },
+  "key_analyst_views": [
+    "DeFiLlama 显示 Aave 仍是最大借贷协议之一，2026 年 4 月 TVL 约 156 亿美元。",
+    "Aave 官方 2025 回顾披露，年末在借贷赛道 active loan share 为 61.5%、TVL share 为 52.4%、revenue share 为 43.2%。"
+  ],
+  "industry_position": {
+    "market_definition": "全球 DeFi 借贷协议，按 active loan、TVL 与 lending-sector revenue 统计。",
+    "market_share_series": [
+      {
+        "period_label": "2025 年末",
+        "share_pct": 61.5,
+        "segment_label": "active loan market share",
+        "source": "https://aave.com/blog/aave-2025-recap",
+        "confidence": "medium"
+      },
+      {
+        "period_label": "2025 年末",
+        "share_pct": 52.4,
+        "segment_label": "lending-sector TVL share",
+        "source": "https://aave.com/blog/aave-2025-recap",
+        "confidence": "medium"
+      },
+      {
+        "period_label": "2025 年末",
+        "share_pct": 43.2,
+        "segment_label": "lending-sector revenue share",
+        "source": "https://aave.com/blog/aave-2025-recap",
+        "confidence": "medium"
+      }
+    ],
+    "sub_segments_focus": "多链超额抵押借贷、稳定币 GHO、RWA 抵押市场 Horizon、嵌入式储蓄入口。",
+    "reputation_and_brand": "DeFi 借贷赛道头部品牌，2025 年处理超过 11 亿美元清算且官方称无单一事故。",
+    "main_operating_locations": "协议部署在 Ethereum、Plasma、Arbitrum、Base、Avalanche 等多条公链；Aave Labs 与 DAO 服务商分散运营。",
+    "revenue_geography_note": "收入按链而非国家披露，Ethereum 仍贡献大部分累计协议收入。",
+    "summary_para_4": "在全球 DeFi 借贷赛道中，Aave 2025 年末据官方披露占 active loan 61.5%、借贷 TVL 52.4%、赛道收入 43.2%，仍是头部流动性场所。其核心部署集中于 Ethereum，并向 Plasma、Arbitrum、Base 等链扩展；收入按链而非国家披露，品牌背书来自长期安全运营、稳定币和机构 RWA 场景。"
+  },
+  "notes": []
+}

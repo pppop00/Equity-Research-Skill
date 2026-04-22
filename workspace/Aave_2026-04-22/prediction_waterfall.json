@@ -1,0 +1,108 @@
+{
+  "company": "Aave Protocol",
+  "base_year": "FY2025",
+  "base_revenue": 124.15,
+  "predicted_fiscal_year_label": "FY2026E",
+  "baseline_growth_pct": -18.3,
+  "macro_adjustment_pct": -2.33,
+  "company_specific_adjustment_pct": 12.63,
+  "predicted_revenue_growth_pct": -8.0,
+  "predicted_revenue": 114.22,
+  "confidence": "中等",
+  "company_events_detail": [
+    {
+      "name": "Aave V4 主网上线",
+      "raw_impact_pct": 9.0,
+      "timing_weight": 0.55,
+      "overlap_ratio": 0.1,
+      "run_rate_weight": 1.0,
+      "probability_weight": 0.75,
+      "realization_weight": 0.85,
+      "final_impact_pct": 2.84,
+      "direction": "positive",
+      "adjustment_reason": "V4 可提升资本效率和新增资产类型，但主网上线时点与迁移速度存在不确定性。",
+      "source": "https://aave.com/blog/aave-2025-recap"
+    },
+    {
+      "name": "GHO 与 sGHO 扩张",
+      "raw_impact_pct": 6.0,
+      "timing_weight": 0.8,
+      "overlap_ratio": 0.15,
+      "run_rate_weight": 1.0,
+      "probability_weight": 0.8,
+      "realization_weight": 0.9,
+      "final_impact_pct": 2.94,
+      "direction": "positive",
+      "adjustment_reason": "GHO 利息直接进入 DAO treasury，但部分增长已反映在 FY2025 基数。",
+      "source": "https://aave.com/blog/aave-2025-recap"
+    },
+    {
+      "name": "Horizon RWA 市场",
+      "raw_impact_pct": 5.0,
+      "timing_weight": 0.7,
+      "overlap_ratio": 0.05,
+      "run_rate_weight": 1.0,
+      "probability_weight": 0.8,
+      "realization_weight": 0.8,
+      "final_impact_pct": 2.13,
+      "direction": "positive",
+      "adjustment_reason": "RWA 抵押借贷可扩展稳定币需求，但机构准入和风险参数约束变现速度。",
+      "source": "https://aave.com/blog/aave-2025-recap"
+    },
+    {
+      "name": "Aave App 消费者入口",
+      "raw_impact_pct": 4.0,
+      "timing_weight": 0.45,
+      "overlap_ratio": 0.0,
+      "run_rate_weight": 0.8,
+      "probability_weight": 0.65,
+      "realization_weight": 0.7,
+      "final_impact_pct": 0.66,
+      "direction": "positive",
+      "adjustment_reason": "App 有获客价值，但 FY2026 收入贡献初期化。",
+      "source": "https://aave.com/blog/aave-2025-recap"
+    },
+    {
+      "name": "Chainlink SVR 扩展",
+      "raw_impact_pct": 2.5,
+      "timing_weight": 0.85,
+      "overlap_ratio": 0.0,
+      "run_rate_weight": 1.0,
+      "probability_weight": 0.85,
+      "realization_weight": 0.9,
+      "final_impact_pct": 1.63,
+      "direction": "positive",
+      "adjustment_reason": "OEV 回收提升清算相关收入，但依赖波动率和覆盖资产范围。",
+      "source": "https://governance.aave.com/t/arfc-addendum-aave-dao-chainlink-smart-value-recapture-svr/21358"
+    },
+    {
+      "name": "TVL 与风险偏好回落",
+      "raw_impact_pct": -10.0,
+      "timing_weight": 1.0,
+      "overlap_ratio": 0.4,
+      "run_rate_weight": 1.0,
+      "probability_weight": 0.8,
+      "realization_weight": 0.8,
+      "final_impact_pct": -3.84,
+      "direction": "negative",
+      "adjustment_reason": "部分压力已体现在 Q1 基准增长，剩余影响通过利用率和抵押品价格传导。",
+      "source": "https://defillama.com/protocol/aave"
+    },
+    {
+      "name": "回购与 treasury 再投资信号",
+      "raw_impact_pct": 3.0,
+      "timing_weight": 0.6,
+      "overlap_ratio": 0.2,
+      "run_rate_weight": 1.0,
+      "probability_weight": 0.85,
+      "realization_weight": 0.75,
+      "final_impact_pct": 0.92,
+      "direction": "positive",
+      "adjustment_reason": "回购本身不是协议收入，但可稳定治理预期和激励预算。",
+      "source": "https://governance.aave.com/t/aave-dao-funding-insights/24192"
+    }
+  ],
+  "notes": [
+    "基准增长使用 FY2026 Q1 协议收入年化相对 FY2025 协议收入；公司特定调整为事件层折现后的净值。"
+  ]
+}

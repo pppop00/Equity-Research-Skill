@@ -1,0 +1,5 @@
+{
+  "company": "Aave Protocol",
+  "chosen_insight": "TVL 不是 Aave 收入的唯一解释变量；借款利用率、稳定币 GHO、清算/OEV 与治理分配才决定协议经济。",
+  "summary_para_2_draft": "表面看，Aave 的 TVL 回落容易被解读为协议价值同步削弱；但 DeFi 借贷的经济口径并非资产托管规模，而是借款需求、利用率、清算、GHO 利息和 DAO 分配规则的组合。2025 年 Aave 通过 GHO、Horizon、SVR 与回购把收入来源从单纯借贷利差扩展到稳定币、RWA 和 MEV 回收，但 AAVE 持有人能否直接受益仍取决于治理对 treasury、激励、服务商预算和回购的再分配。"
+}

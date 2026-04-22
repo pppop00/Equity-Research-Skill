@@ -1,0 +1,6 @@
+HTML report validation
+Status: PASS
+Profile: strict_17_full_qc_no_secapi
+Critical: 0
+Warnings: 1 (protocol financials are non-GAAP; disclosed in report)
+Placeholder scan: PASS

@@ -1,0 +1,22 @@
+{
+  "status": "pass",
+  "summary": {
+    "critical_count": 0,
+    "warning_count": 1
+  },
+  "findings": [
+    {
+      "id": "DATA-001",
+      "severity": "WARNING",
+      "topic": "non_gaap_protocol_financials",
+      "report_claim": "协议收入、earnings、FCF 均为链上协议经济口径。",
+      "source_fields": [
+        "financial_data.json",
+        "Aave_Research_CN.html"
+      ],
+      "recomputed_value": "FY2025 protocol revenue = 27.13+19.75+41.42+35.85 = 124.15; earnings = 24.96+17.85+40.61+35.42 = 118.84",
+      "root_cause": "wording_ambiguity",
+      "fix_required": "已在财务数据、趋势卡和方法论中说明不是 GAAP/IFRS 公司财报。"
+    }
+  ]
+}

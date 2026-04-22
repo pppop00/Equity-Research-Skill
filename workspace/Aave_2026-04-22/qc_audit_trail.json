@@ -1,0 +1,44 @@
+{
+  "mode": "full",
+  "porter": [
+    {
+      "force": "供应商议价能力",
+      "score_before": 3,
+      "score_after": 3,
+      "score_changed": false,
+      "resolution": "维持供应商议价能力为3分。"
+    },
+    {
+      "force": "买方议价能力",
+      "score_before": 4,
+      "score_after": 4,
+      "score_changed": false,
+      "resolution": "维持买方议价能力为4分。"
+    },
+    {
+      "force": "新进入者威胁",
+      "score_before": 2,
+      "score_after": 2,
+      "score_changed": false,
+      "resolution": "维持新进入者威胁为2分。"
+    },
+    {
+      "force": "替代品威胁",
+      "score_before": 4,
+      "score_after": 4,
+      "score_changed": false,
+      "resolution": "维持替代品威胁为4分。"
+    },
+    {
+      "force": "行业竞争强度",
+      "score_before": 4,
+      "score_after": 4,
+      "score_changed": false,
+      "resolution": "维持行业竞争强度为4分。"
+    }
+  ],
+  "macro": {
+    "score_changed": false,
+    "resolution": "维持宏观调整-2.33个百分点；补充说明 DeFi 协议采用全球/美元流动性代理而非单一国家宏观指标。"
+  }
+}

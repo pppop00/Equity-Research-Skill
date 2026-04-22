@@ -1,0 +1,11 @@
+{
+  "status": "pass",
+  "challenges": [
+    {
+      "id": "MB-001",
+      "topic": "利率符号",
+      "finding": "降息对 DeFi 收入存在风险偏好正效应和稳定币收益率负效应。",
+      "resolution": "采用小幅正向调整并在 commentary 中说明符号约束。"
+    }
+  ]
+}

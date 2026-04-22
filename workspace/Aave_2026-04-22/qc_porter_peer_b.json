@@ -1,0 +1,11 @@
+{
+  "status": "pass",
+  "challenges": [
+    {
+      "id": "PB-001",
+      "topic": "持有人价值捕获",
+      "finding": "协议收入不直接等于持有人收入。",
+      "resolution": "在买方权力、风险和 edge insight 中补充治理分配约束。"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "summary_para_1": "Aave 是全球头部去中心化非托管借贷协议，用户可在多条公链上存入抵押资产、借出稳定币或其他代币。按 DeFiLlama 口径，FY2025 协议收入约1.24亿美元，同比+73.0%；earnings 约1.19亿美元，同比+77.7%，但 2026 年 4 月 TVL 与收入年化已回落，显示市场周期仍主导短期结果。",
+  "summary_para_2": "表面看，Aave 的 TVL 回落容易被解读为协议价值同步削弱；但 DeFi 借贷的经济口径并非资产托管规模，而是借款需求、利用率、清算、GHO 利息和 DAO 分配规则的组合。2025 年 Aave 通过 GHO、Horizon、SVR 与回购把收入来源从单纯借贷利差扩展到稳定币、RWA 和 MEV 回收，但 AAVE 持有人能否直接受益仍取决于治理对 treasury、激励、服务商预算和回购的再分配。",
+  "summary_para_3": "未来 12 个月的核心催化剂是 V4 主网上线、GHO 规模扩张、Horizon RWA 抵押借贷和 SVR 清算价值回收。我们认为这些因素可抵消部分风险偏好下降，但难以完全摆脱抵押品价格与链上杠杆周期的影响；若宏观冲击导致 TVL 和借款利用率同时下行，FY2026 协议收入仍可能低于 FY2025。",
+  "summary_para_4": "在全球 DeFi 借贷赛道中，Aave 2025 年末据官方披露占 active loan 61.5%、借贷 TVL 52.4%、赛道收入 43.2%，仍是头部流动性场所。其核心部署集中于 Ethereum，并向 Plasma、Arbitrum、Base 等链扩展；收入按链而非国家披露，品牌背书来自长期安全运营、稳定币和机构 RWA 场景。",
+  "investment_thesis": "Aave 凭借安全记录、跨链流动性与 DAO 收入再投资机制，有望在 FY2026 维持 DeFi 借贷龙头地位；主要驱动为 V4、GHO、Horizon 和 SVR，但短期收入弹性受 TVL、借款利用率和风险偏好约束。",
+  "rating": "中性",
+  "rating_class": "neutral",
+  "highlights": [
+    "FY2025 协议收入约1.24亿美元、earnings 约1.19亿美元，均较 FY2024 高增长。",
+    "官方披露 2025 年末 Aave 在借贷赛道 active loan share 为 61.5%，具备显著网络效应。",
+    "GHO、Horizon、Aave App 与 SVR 提供多元收入来源，降低对单一借贷利差的依赖。"
+  ],
+  "risks": [
+    "2026 年 4 月 TVL 约156亿美元，较 2025 年峰值750亿美元明显回落，收入基准承压。",
+    "协议收入不等同于 AAVE 持有人分红，价值捕获取决于治理分配、回购和安全预算。",
+    "智能合约、预言机、跨链部署和监管合规风险可能导致资产流失或风险参数收紧。"
+  ],
+  "latest_operating_update": "FY2026 Q1 链上协议收入约2,537万美元，同比-6.5%；同期 earnings 约2,532万美元。DeFiLlama 当前页显示 30 日协议收入约706万美元、年化收入约8,613万美元，低于 FY2025 协议收入年化口径，反映 2026 年 4 月 TVL、活跃借款和风险偏好回落。",
+  "geo_revenue_text": "Aave 按链而非国家披露收入。累计协议收入中 Ethereum 约2.45亿美元，占比约85.8%；Avalanche、Arbitrum、Polygon、Base 合计约10.8%。当前 TVL 也以 Ethereum 为核心，Plasma、Arbitrum、Base 等链构成第二梯队。"
+}
