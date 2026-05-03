@@ -131,7 +131,7 @@
 ### Full-run vs fast-run
 
 - Phase 2.6 + 3.5 + 3.6 is the **default full-run path**. Only skip adversarial QC when the user explicitly requests a lightweight draft, quick prototype, or manually skips the QC phases.
-- If QC was skipped, do **not** generate `qc_audit_trail.json`. Phase 5 must not use QC-style wording (e.g. "经QC合议") when no QC actually ran.
+- If QC was skipped, do **not** generate `qc_audit_trail.json`. Phase 5 must not use QC-style wording (e.g. "经QC合议" / "Dual-QC deliberation …") when no QC actually ran. Instead, the report writer falls back to the **no-QC opening** mandated by `references/report_style_guide_cn.md` / `report_style_guide_en.md` Porter section: zh — "**基于初稿评分，<力名>为 N 分。……**"; en — "**Per draft scoring, <force> stands at N/5. …**". This is non-optional — Porter `<li>` openings must always come from one of the two whitelisted patterns (QC vs no-QC), and `agents/report_validator.md` rejects HTML that uses neither.
 
 ### Conflict resolution priority
 

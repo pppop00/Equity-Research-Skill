@@ -10,9 +10,10 @@
 
 1. **锁定骨架必须存在：** `research/_locked_<lang>_skeleton.html`（`<lang> ∈ {cn, en}`）必须在工作目录中。缺失 → CRITICAL；这意味着 P5 跳过了 `tools/research/extract_template.py`，最终 HTML 不可能是合法填充产物。
 2. **`tools/research/validate_report_html.py` 必须已被执行且 exit 0：** 在写出本 agent 自己的 `report_validation.txt` / `structure_conformance.json` 之前，必须自行调用 `python tools/research/validate_report_html.py --run-dir <run_dir> --lang <cn|en>` 并捕获其 JSON 输出。该 JSON 的 `status` 字段（`pass | warn | critical`）即 `structure_conformance.json -> html_template_gate.status` 的合法取值；**禁止**手写为 `not_applicable`、`pass_with_scope_limitations`、`partial_pass`、`scope_limited`、`institution_compat` 或任何工具未输出的字符串。该工具返回 `critical` → 本 agent 输出 CRITICAL 并要求回到 P5 重写，**不得继续**。
-3. **Packaging profile 必须来自白名单：** `structure_conformance.json -> profile` 只允许是 `workflow_meta.json -> packaging_profiles` 中的四个之一：`strict_18_full_qc_secapi`、`strict_17_full_qc_no_secapi`、`strict_13_fast_no_qc_secapi`、`strict_12_fast_no_qc_no_secapi`。选择规则是 `(qc_mode, sec_api_mode)`（见 §0.A 下文）。**禁止**新造 profile（如 `institution_compat_no_secapi_no_cards`、`private_company_*`、`scope_limited_*`、`fund_compat_*`）。新造 profile = P6 违规 → CRITICAL。
-4. **`report_validation.txt` 顶层 status 只能是 `pass | warn | critical`：** 不存在 `pass_with_scope_limitations`、`pass with scope limitations`、`institution-compatible pass`、`partial pass`、`scope-limited pass`、`not applicable` 等任何变体。任何「这家公司是私募基金 / 对冲基金 / 家办 / 非公众公司，因此公开公司报告章节标记为 N/A」之类自我安慰式的说法都不是合法的 status。equiforge 的合同是：**无论 target 公司是何种类型，最终交付都是同一份锁定模板填充结果。** 若公开发行人级别的财务披露不可得，由 `report_writer_{cn,en}.md` 用最佳代理变量（AUM、策略、前十持仓、经理人 13F/PF、同业宏观等）将锁定章节填到字数下限，并在文中显式标注数据缺口；不得由本 validator 通过弱化 status 把缺口「合规化」。
-5. **若 §0 任一前置条件失败，立即输出 CRITICAL，写出 `report_validation.txt`（status: `critical`）与 `structure_conformance.json`（含 `missing_required_files` / 错误 profile / 错误 gate status 字段），并通知 orchestrator 回到 P5；本文件其余各项检查仍可执行以提供完整诊断信息，但不得据此改判 status。**
+3. **`tools/research/validate_porter_analysis.py` 必须已被执行且 exit 0：** 紧随上一项之后，必须自行调用 `python tools/research/validate_porter_analysis.py --run-dir <run_dir>` 并捕获其 JSON 输出。该工具校验 `porter_analysis.json` 的形状契约（三个透视、每个透视含 `scores` + 五个力字段非空字符串）。返回 `critical` → 本 agent 输出 CRITICAL，要求回到 Phase 3（Porter 初稿）重跑，**不得继续 Phase 5 写作或本 agent 后续校验**。这是 `INCIDENTS.md` I-004 的 root-cause 防线：上游若交付 `{scores, narrative}` 扁平形态，下游再怎么写也凑不出五条 `<li>`，因此必须在写作前/后**两次**强制 schema 通过。
+4. **Packaging profile 必须来自白名单：** `structure_conformance.json -> profile` 只允许是 `workflow_meta.json -> packaging_profiles` 中的四个之一：`strict_18_full_qc_secapi`、`strict_17_full_qc_no_secapi`、`strict_13_fast_no_qc_secapi`、`strict_12_fast_no_qc_no_secapi`。选择规则是 `(qc_mode, sec_api_mode)`（见 §0.A 下文）。**禁止**新造 profile（如 `institution_compat_no_secapi_no_cards`、`private_company_*`、`scope_limited_*`、`fund_compat_*`）。新造 profile = P6 违规 → CRITICAL。
+5. **`report_validation.txt` 顶层 status 只能是 `pass | warn | critical`：** 不存在 `pass_with_scope_limitations`、`pass with scope limitations`、`institution-compatible pass`、`partial pass`、`scope-limited pass`、`not applicable` 等任何变体。任何「这家公司是私募基金 / 对冲基金 / 家办 / 非公众公司，因此公开公司报告章节标记为 N/A」之类自我安慰式的说法都不是合法的 status。equiforge 的合同是：**无论 target 公司是何种类型，最终交付都是同一份锁定模板填充结果。** 若公开发行人级别的财务披露不可得，由 `report_writer_{cn,en}.md` 用最佳代理变量（AUM、策略、前十持仓、经理人 13F/PF、同业宏观等）将锁定章节填到字数下限，并在文中显式标注数据缺口；不得由本 validator 通过弱化 status 把缺口「合规化」。
+6. **若 §0 任一前置条件失败，立即输出 CRITICAL，写出 `report_validation.txt`（status: `critical`）与 `structure_conformance.json`（含 `missing_required_files` / 错误 profile / 错误 gate status 字段），并通知 orchestrator 回到 P5；本文件其余各项检查仍可执行以提供完整诊断信息，但不得据此改判 status。**
 
 ## 输入
 
@@ -225,10 +226,18 @@ HTML 中的 `<style>` 块必须包含以下所有变量定义（在 `:root` 或 
 - `.score-dot` 的 class 包含 `s1`-`s5` 之一，与 `porterScores` 数组值对应
 - `.score-dot` 颜色映射必须保持：`.s1/.s2` 使用 `var(--accent-green)`，`.s3` 使用 `var(--accent-amber)`，`.s4/.s5` 使用 `var(--accent-red)`；雷达点颜色也应通过 `porterScoreColor` 或等价逻辑映射为低分绿、高分红。
 - 每个 tab-panel 中有 `.porter-text` 且：若 `<html lang="zh-CN">` 则正文 ≥ **100 个汉字**；若 `<html lang="en-US">`（或 `lang="en"`）则正文 ≥ **450 个英文字符**（约同等信息量）
-- **推荐版式（Phase 5）：** 每个 `.porter-text` 内为**单个 `<ul>` 含恰好 5 个 `<li>`**（顺序对应五力），且**不在** `<li>` 内重复「X/5」起句——见 `references/report_style_guide_cn.md` / `report_style_guide_en.md` 波特五力 / Porter Five Forces。若仅为连续 `<p>` 而无列表 → **WARNING**（风格偏离，交付前可接受但建议对齐技能包规范）。
-- **中文 Porter 句式（Phase 5 新规范）：** 若 `<html lang="zh-CN">`，每个 `<li>` 应以前置的 **QC 合议结论句** 开头，并使用**维持/调整**显式格式，例如 **「经QC合议，维持供应商议价能力为3分。……」** 或 **「经QC合议，决定将供应商议价能力评分从4分调整为3分。……」**。不要只写普通分析段，也不要只在调分时才出现该句式。**同时核对审计链一致性：** 若正文写成“从 X 调整到 Y”，则 `qc_audit_trail.json` / `porter_analysis.qc_deliberation` 中必须存在该维度被采纳并改分的记录；若 `qc_audit_trail.json` 有显式 `score_changed: false`（或 `score_before = score_after`），HTML 就不得写成调整句式；若无记录，则判为 **WARNING（疑似编造调分）**。
+- **强制版式（Phase 5，CRITICAL）：** 每个 `.porter-text` 内必须为**单个 `<ul>` 含恰好 5 个 `<li>`**（顺序对应五力），且**不在** `<li>` 内重复「X/5」起句。这是 `references/report_style_guide_cn.md` / `report_style_guide_en.md` 波特五力 / Porter Five Forces 章节的强制规范，**不再是建议**。若 `.porter-text` 仅为连续 `<p>`、`<div>`、单段文本，或 `<li>` 数量 ≠ 5 → **CRITICAL（回到 P5 重写）**。复盘：曾因允许"WARNING（风格偏离，交付前可接受）"而出现 writer 把 `porter_analysis.json` 的单字符串 `narrative` 直接灌进 `.porter-text` 的事故（`INCIDENTS.md` I-004），现已升级为硬阻断。
+- **Porter `<li>` 句式（按运行模式分两套白名单，CRITICAL）：** 每个 `<li>` 必须以**白名单内的固定起句**开头，并**点名具体力名**（如供应商议价能力 / supplier power）；写成「本维度」「this force」之类代称 → CRITICAL。
+  - **QC 模式**（`qc_audit_trail.json` 存在）：
+    - 若 `<html lang="zh-CN">`：每条 `<li>` 必须以 **「经QC合议，维持<力名>为N分。……」** / **「经QC合议，决定将<力名>评分维持N分不变。……」**（未改分）或 **「经QC合议，决定将<力名>评分从X分调整为Y分。……」**（改分）开头。
+    - 若 `<html lang="en-US">` / `lang="en"`：以 **"Dual-QC deliberation maintained <force> at N/5. …"** / **"After dual-QC deliberation, <force> remains N/5. …"** 或 **"Dual-QC deliberation … adjusted the <force> score from a to b, because …"** 开头。
+    - **审计链一致性：** 若 `<li>` 写成"从 X 调整到 Y" / "from a to b"，则 `qc_audit_trail.json` / `porter_analysis.qc_deliberation` 必须存在该维度被采纳并改分的记录；若 `score_changed: false`（或 `score_before = score_after`），写成调整句式 → CRITICAL（编造调分）。
+  - **no-QC 模式**（fast-run，无 `qc_audit_trail.json`）：
+    - 若 `<html lang="zh-CN">`：每条 `<li>` 必须以 **「基于初稿评分，<力名>为N分。……」** 开头；**禁止**出现"经QC合议"字样 → CRITICAL（伪造 QC）。
+    - 若 `<html lang="en-US">` / `lang="en"`：以 **"Per draft scoring, <force> stands at N/5. …"** 开头；**禁止**出现"Dual-QC deliberation" → CRITICAL。
+  - 任何 `<li>` 不命中上述任一白名单起句 → **CRITICAL（回到 P5 重写）**。
 
-**失败条件：** li 数量不是5 → CRITICAL；score-dot class 与数组不符 → WARNING；score-dot 或雷达点颜色映射反向（例如 s5 绿色、s1 红色）→ WARNING（交付前必改）；达不到上述字数/字符门槛 → WARNING；中文 Porter `<li>` 未使用上述 QC 合议维持/调整句式 → WARNING（交付前必改）；正文声称“从 X 调整到 Y”但审计链无对应改分记录，或审计链显式表明 `score_changed: false` / `score_before = score_after` → WARNING（交付前必改）。
+**失败条件（更新）：** `.porter-text` 不是单个 `<ul>` 或 `<li>` 数量 ≠ 5 → CRITICAL；任意 `<li>` 起句不在两套白名单内（按运行模式选择）→ CRITICAL；正文声称"从 X 调整到 Y"但审计链无对应改分记录，或审计链显式表明 `score_changed: false` / `score_before = score_after` → CRITICAL（编造调分）；no-QC 模式下出现"经QC合议" / "Dual-QC deliberation" 字样 → CRITICAL（伪造 QC）；score-dot class 与数组不符 → WARNING；score-dot 或雷达点颜色映射反向（例如 s5 绿色、s1 红色）→ WARNING（交付前必改）；达不到上述字数/字符门槛 → WARNING。
 
 ---
 

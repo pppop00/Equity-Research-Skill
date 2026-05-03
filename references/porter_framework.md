@@ -175,4 +175,12 @@ For **`{{PORTER_COMPANY_TEXT}}`**, **`{{PORTER_INDUSTRY_TEXT}}`**, and **`{{PORT
 1. Use **one `<ul>` with exactly five `<li>` elements** per perspective. Recommended wrapper: `<ul style="margin:0;padding-left:1.25em;">` (matches Equity Research Skill house style).
 2. **Fixed order** of list items: supplier power, buyer power, new entrants, substitutes, competitive rivalry — aligned with the radar chart and score list.
 3. **Do not** repeat "Force name (X/5)…" at the start of each bullet; scores belong in **`PORTER_*_SCORES`** and the chart, not duplicated in the narrative list.
-4. Draft JSON in `porter_analysis.json` so each of `supplier_power`, `buyer_power`, `new_entrants`, `substitutes`, `rivalry` under the relevant perspective is **analysis-only** (no redundant score lead-in), then paste or assemble into the five `<li>` blocks in Phase 5.
+4. **`porter_analysis.json` shape (Phase 3 hard contract — enforced by `tools/research/validate_porter_analysis.py`, exit 0 required before Phase 3.5 / 4 / 5).** The top level **must** contain `company_perspective`, `industry_perspective`, `forward_perspective`. Each perspective **must** be a dict with:
+   - `scores` — list of exactly 5 integers in 1..5, in fixed order (supplier, buyer, new_entrants, substitutes, rivalry); and
+   - all five force keys — `supplier_power`, `buyer_power`, `new_entrants`, `substitutes`, `rivalry` — each a non-empty string (≥ 20 chars recommended) carrying the analysis for that force.
+
+   The **deprecated `{scores, narrative}` flat-string shape is forbidden** (see `INCIDENTS.md` I-004): the writer cannot synthesise a five-bullet `<ul>` Porter list from a single sentence.
+
+   Each force string must open with the whitelisted sentence pattern from the relevant style guide (`references/report_style_guide_cn.md` / `report_style_guide_en.md` Porter section) so the writer can drop it into the matching `<li>` verbatim:
+   - **In a full QC run** the force strings are first drafted neutral (no QC opening) at Phase 3, then **rewritten** by `qc_resolution_merge.md` at Phase 3.6 with the QC opening that reflects the real audit verdict ("经QC合议，维持/调整 …" / "Dual-QC deliberation maintained / adjusted …").
+   - **In a fast / no-QC run** the force strings keep the no-QC opening at Phase 3 itself ("基于初稿评分，<力名>为 N 分。……" / "Per draft scoring, <force> stands at N/5. …"); `qc_audit_trail.json` is **not** produced, and writer must not invent QC wording.

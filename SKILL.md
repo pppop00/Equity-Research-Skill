@@ -300,7 +300,9 @@ The Phase 2.5 macro table and Section III must use **macro indicators from the r
 
 **Output:** `workspace/{Company}_{Date}/porter_analysis.json`.
 
-**Gate:** base Porter analysis complete before Phase 3.5 QC.
+**Schema (hard contract):** the top level must contain `company_perspective` / `industry_perspective` / `forward_perspective`; each perspective must be a dict with `scores` (5 ints in 1..5) **and** the five force keys `supplier_power` / `buyer_power` / `new_entrants` / `substitutes` / `rivalry`, each a non-empty string. The flat `{scores, narrative}` single-string shape is forbidden — see `INCIDENTS.md` I-004 (writer cannot synthesise five `<li>` from one sentence).
+
+**Gate:** base Porter analysis complete **and** `python tools/research/validate_porter_analysis.py --run-dir <run_dir>` exits 0 before Phase 3.5 QC. The same gate reruns at the Phase 5 entry inside `agents/report_validator.md` §0.3.
 
 **Detailed execution rules:** `references/porter_framework.md`.
 

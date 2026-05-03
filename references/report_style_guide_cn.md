@@ -151,13 +151,17 @@
 
 - **`{{PORTER_COMPANY_TEXT}}`、`{{PORTER_INDUSTRY_TEXT}}`、`{{PORTER_FORWARD_TEXT}}`** 均使用 **无序列表**：`<ul style="margin:0;padding-left:1.25em;">` 内 **恰好 5 个 `<li>`**，顺序固定为：**供应商议价能力 → 买方议价能力 → 新进入者威胁 → 替代品威胁 → 行业竞争强度**（与雷达轴与右侧评分列表顺序一致）。
 - **不要**在每条 `<li>` 内用「**力名称（X/5）**：」作**标题式起句**——分数与力的标签已在**雷达图**与**右侧彩色分值列表**中展示；正文以**论据与分析**为主。
-- **合议与 QC 透明（强制）：** 双 QC 与 Analyst 合议后的**最终版**，每个 Porter `<li>` 都应把 QC 结论前置写清，但**前提是结论必须来自真实的 QC 流程**：`qc_porter_peer_a.json` / `qc_porter_peer_b.json` 提出挑战，`qc_resolution_merge.md` 裁定后，才决定该维度是**维持原评分**还是**从初稿分数调整到新分数**。**不得为了套格式虚构“初稿分数”或编造调分故事**。完整审计链与条目级 rationale 仍以 **`qc_audit_trail.json`** 及附录 / `qc_deliberation` 摘要为主。
-- **合议句式（中文固定格式，Phase 5 强制）：** 每个力对应的 `<li>` 开头都应根据**真实合议结果**使用下列两种句式之一，且要**点名具体力名**（如供应商议价能力、买方议价能力），不要写成「本维度」这类代称：  
-  **维持分数：**「**经QC合议，维持供应商议价能力为3分。……**」或「**经QC合议，决定将供应商议价能力评分维持3分不变。……**」  
-  **调整分数：**「**经QC合议，决定将供应商议价能力评分从4分调整为3分。……**」  
-  其中 **a、b 为 1–5 分制整数**；句号后继续写证据、争议点与投资含义。**只有当 `qc_audit_trail.json` / `porter_analysis.qc_deliberation` 能证明该维度确有 score change 时，才可使用“从 a 调整为 b”句式；否则一律写“维持 X 分”。** 若初稿误把成熟在位者写成新进入者、或误把竞争问题写成供应商问题，可在后文交代口径纠偏。**勿**用仅含「【QC修正：PA-xxx】」而无实质分析的工单体单独占段；合议编号可置于句末括注。
+- **合议与 QC 透明（强制）：** 双 QC 与 Analyst 合议后的**最终版**，每个 Porter `<li>` 都应把结论前置写清。**前提是结论必须来自真实流程**：`qc_porter_peer_a.json` / `qc_porter_peer_b.json` 提出挑战，`qc_resolution_merge.md` 裁定后，才决定该维度是**维持原评分**还是**从初稿分数调整到新分数**。**不得为了套格式虚构“初稿分数”或编造调分故事**。完整审计链与条目级 rationale 仍以 **`qc_audit_trail.json`** 及附录 / `qc_deliberation` 摘要为主。
+- **句式（中文固定格式，Phase 5 强制；分 QC 模式 / no-QC 模式两套，覆盖所有运行）：** 每个力对应的 `<li>` 开头都应**点名具体力名**（如供应商议价能力、买方议价能力），不得写成「本维度」这类代称。根据本次运行是否真实跑了 QC（即 `qc_audit_trail.json` 是否存在）选择句式：
+  - **QC 模式（`qc_audit_trail.json` 存在）：**
+    **维持分数：**「**经QC合议，维持供应商议价能力为3分。……**」或「**经QC合议，决定将供应商议价能力评分维持3分不变。……**」
+    **调整分数：**「**经QC合议，决定将供应商议价能力评分从4分调整为3分。……**」
+    其中 **a、b 为 1–5 分制整数**；句号后继续写证据、争议点与投资含义。**只有当 `qc_audit_trail.json` / `porter_analysis.qc_deliberation` 能证明该维度确有 score change 时，才可使用"从 a 调整为 b"句式；否则一律写"维持 X 分"。**
+  - **no-QC 模式（fast-run，无 `qc_audit_trail.json`）：**
+    使用「**基于初稿评分，供应商议价能力为3分。……**」固定句式（其中分数取 `porter_analysis.json -> <perspective>.scores[i]`）。**禁止**在此模式下出现"经QC合议"字样——QC 没跑就不能写得像跑了；这是 `agents/qc_resolution_merge.md` 的硬规则。
+  若初稿误把成熟在位者写成新进入者、或误把竞争问题写成供应商问题，可在后文交代口径纠偏。**勿**用仅含「【QC修正：PA-xxx】」而无实质分析的工单体单独占段；合议编号可置于句末括注。
 - 每条 `<li>` 内可用多句，用分号或逗号连接；禁止 Markdown（`**` 等）。
-- 中间数据层 `porter_analysis.json` 中 `company_perspective` / `industry_perspective` / `forward_perspective` 各子段应为**不以「力名（X/5）：」标题起句**、但**以“经QC合议，维持/决定将…评分…”起句**的分析句，便于直接填入 `<li>`；相应子段的“维持/调整”动作必须与 `qc_audit_trail.json` 中的真实裁定一致，避免 JSON 与 HTML 两套口径，更不得出现 HTML 编造调分而审计轨迹没有记录的情况。
+- **中间数据层 `porter_analysis.json` 形状契约（Phase 3 / 4 / 5 共同硬契约，`tools/research/validate_porter_analysis.py` exit 0 强制）：** 顶层必须含三个透视（`company_perspective` / `industry_perspective` / `forward_perspective`）；每个透视必须是 dict，且必须同时含 `scores`（整数列表，恰好 5 项，每项 1–5）与五个力字段——`supplier_power`、`buyer_power`、`new_entrants`、`substitutes`、`rivalry`，每项为非空字符串（建议 ≥ 20 字）。**禁止**把整个透视收敛成 `{scores, narrative}` 这种单字符串形态——下游 writer 无法从一句 narrative 拆出五条 `<li>`，是已知 incident（见 `INCIDENTS.md` I-004）。每个力字段的写法应**不以「力名（X/5）：」标题起句**：QC 模式下以"经QC合议，维持/决定将…评分…"起句；no-QC 模式下以"基于初稿评分，<力名>为 N 分。"起句，便于直接填入 `<li>`。"维持/调整"动作必须与 `qc_audit_trail.json`（若存在）的真实裁定一致，避免 JSON 与 HTML 两套口径，更不得出现 HTML 编造调分而审计轨迹没有记录的情况。
 
 **具体性与命名（行业层面与公司层面均适用）：**
 - **行业层面**描写产业结构（集中度、周期、资本强度）时，仍须写出**可核对的主体**：凡出现「在位者」「现有巨头」「主要竞争者」「头部厂商」等措辞，须在**同一句或紧邻一句**内列出该子行业**全球（或报告所选主市场）前 3–5 名**主要企业，或写「以 A、B、C 等寡头为主」一类表述；**禁止**仅用抽象集合名词带过。
