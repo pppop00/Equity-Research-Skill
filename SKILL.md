@@ -1,7 +1,7 @@
 ---
 name: equity-research
 description: >
-  Full-stack equity research report generator. Trigger when the user wants to analyze a company, generate an equity research report, fundamental analysis, or stock investment research. Works with a company name (web search) or uploaded filings (10-K / 10-Q PDFs, HK/A-share reports). P0 mandatory gates (see SKILL.md Step 0A): (1) explicit report language en/zh before any research; (2) when the SEC API path applies, real email or explicit decline before workspace/Phase 1. Outputs one interactive HTML report (Sankey, macro waterfall, Porter). Never skip Step 0A — it is the key to all downstream procedures.
+  Full-stack equity research report generator built on the Anamnesis Pattern (cross-session institutional memory + scheduled adversarial review). Trigger when the user wants to analyze a company, generate an equity research report, fundamental analysis, or stock investment research. Works with a company name (web search) or uploaded filings (10-K / 10-Q PDFs, HK/A-share reports). P0 mandatory gates (see SKILL.md Step 0A): (1) explicit report language en/zh before any research; (2) when the SEC API path applies, real email or explicit decline before workspace/Phase 1. Non-skippable bracket: P_INCIDENT_PRECHECK reads INCIDENTS.md before any work; Phase 5.7 fires two adversarial attackers (red_team_numeric + red_team_narrative); P_INCIDENT_POSTCHECK re-checks every accumulated rule before delivery — flagged blocks delivery. Outputs one interactive HTML report (Sankey, macro waterfall, Porter). Never skip Step 0A — it is the key to all downstream procedures.
 
   TRIGGER on: "equity research", "research report", "analyze [company]", "financial analysis of [company]", "做研报", "研究报告", "分析[公司]", English/Chinese equivalents, or user uploads a 10-K/10-Q and wants full research (not only a revenue-flow diagram).
 ---
@@ -9,6 +9,19 @@ description: >
 # Equity Research Skill
 
 Generate a professional equity research report for any public company. You are the orchestrator — you coordinate data collection, analysis, and report writing, either via parallel subagents (Claude Code) or sequentially (Claude.ai).
+
+This skill implements the **Anamnesis Pattern** (cross-session institutional memory + scheduled adversarial review). See `references/anamnesis_pattern.md` for the methodology; see `INCIDENTS.md` for the accumulated failure rules; see `MEMORY.md` for project invariants.
+
+---
+
+## Boot order — read in this order, every session
+
+1. This file (`SKILL.md`)
+2. `MEMORY.md` — project invariants (load-bearing; freeze into the session's system prompt)
+3. `INCIDENTS.md` — append-only log of past failure modes (load-bearing; frozen into the same prompt). Read end-to-end. Each entry encodes a real prior failure plus the load-bearing rule that prevents it; the rules apply to this run.
+4. `workflow_meta.json` — machine-readable phase + gate contract
+
+Stop after #4. Do not pre-load `agents/*.md` or `references/*.md` — open them lazily when you actually delegate or look up domain knowledge.
 
 ---
 
@@ -18,12 +31,26 @@ Before Step 0A, load `workflow_meta.json` as the machine-readable contract for t
 
 - Treat `workflow_meta.json` as the source of truth for:
   - gate IDs and preconditions
-  - phase order
+  - phase order (now includes `phase_incident_precheck` first, `phase_5_7_red_team` between 5.5 and 6, and `phase_incident_postcheck` after 6)
   - packaging profiles in Phase 6 (`strict_18_full_qc_secapi`, `strict_17_full_qc_no_secapi`, `strict_13_fast_no_qc_secapi`, `strict_12_fast_no_qc_no_secapi`)
+  - `memory_files`: which files must be loaded into the session's system prompt
 - `SKILL.md` and `agents/*.md` remain the narrative execution guide; if there is a conflict on artifact presence or packaging strictness, follow `workflow_meta.json`.
 - Persist run mode flags early (at least in working notes):  
   `qc_mode = full|fast` and `sec_api_mode = yes|no`  
   so Phase 6 can select the correct packaging profile instead of forcing unavailable artifacts.
+
+---
+
+## P_INCIDENT_PRECHECK — institutional memory, read first
+
+**Runs before Step 0A. Non-skippable. A run that did not pre-check is not deliverable.**
+
+Walk every entry in `INCIDENTS.md` end-to-end. For each `I-NNN`, acknowledge in working state (one short note per entry) before any phase work begins. Currently shipped entries:
+
+- **I-001** — P0 interactive gate bypassed by inventing a default. Applies to Step 0A.1 (language) and Step 0A.2 (SEC email). The only allowed gate `source` values are `user_response`, `explicit_phrase` (§0A.1 only), `skipped` / `declined` (§0A.2 only). Auto-mode is not an override.
+- **I-002** — P5 locked HTML template skipped, simplified hand-written report emitted. Every run — public, private fund, hedge fund, family office, government entity, anything — fills the same SHA256-pinned locked skeleton. There is **no** institution-compatible / private-company / scope-limited / simplified bypass. `report_validation.txt` status is `pass | warn | critical` only; `structure_conformance.json -> profile` must be one of the four whitelisted `strict_*` values.
+
+If any incident's `Phase` field matches a phase the run will execute (e.g. private-fund target → I-002 applies to Phase 5 / Phase 6), **raise the bar** on that surface — strict reading of the contract, no shortcuts, additional cross-checks. When the matching phase fires, note that you are operating under the incident's heightened standard.
 
 ---
 
@@ -397,9 +424,30 @@ This phase is optional for report-only runs and mandatory for card-output runs.
 
 **Output:** `workspace/{Company}_{Date}/final_report_data_validation.json`.
 
-**Gate:** must reach zero CRITICAL before Phase 6.
+**Gate:** must reach zero CRITICAL before Phase 5.7. The Phase 5 → Phase 5.5 retry cap is **2** (data-validation rewrites).
 
 **Detailed validation expectations and pre-delivery warnings policy:** `agents/final_report_data_validator.md`.
+
+---
+
+## Phase 5.7: Adversarial review (Red Team) — non-skippable in full QC runs
+
+**Inputs:** locked-template HTML, all upstream `*.json` (financial, macro, news, edge, financial_analysis, prediction_waterfall, porter, qc_*), `final_report_data_validation.json`, `INCIDENTS.md`.
+
+**Agents in parallel (concurrency 2):**
+
+- `agents/attackers/red_team_numeric.md` → `workspace/{Company}_{Date}/red_team_numeric_phase_5_7.json`
+- `agents/attackers/red_team_narrative.md` → `workspace/{Company}_{Date}/red_team_narrative_phase_5_7.json`
+
+Before delegating, write a manifest at `workspace/{Company}_{Date}/meta/red_team/phase_5_7.input.json` with absolute paths to the HTML, every upstream JSON, and `final_report_data_validation.json`.
+
+**Loop rule:** if either attacker reports `summary.critical > 0`, build a single combined revision request from both attackers' challenge lists and loop back to Phase 5 **once** (red-team retry cap = 1, separate from the Phase 5.5 retry cap of 2). A second critical from either attacker after the loop = halt and surface to user. `warn` findings flow into `report_validation.txt` at Phase 6 but do not block.
+
+**Distinct from QC peers.** QC peer agents (`qc_macro_peer_*`, `qc_porter_peer_*`) vote on agreement and feed `qc_resolution_merge.md`. Red-team attackers try to falsify and succeed when they find a real defect. A clean attacker output (zero criticals) is a valid result; do not pressure the attackers to manufacture issues.
+
+**Skip rule:** Phase 5.7 may be skipped only in **intentionally shortened runs** that already skip QC (i.e. `qc_mode = fast`). The skip must be a deliberate, user-acknowledged choice — never the orchestrator's invention. Full-QC runs always fire the red team.
+
+**Detailed attack contracts:** `agents/attackers/red_team_numeric.md` and `agents/attackers/red_team_narrative.md`.
 
 ---
 
@@ -434,6 +482,33 @@ Notes:
 
 ---
 
+## P_INCIDENT_POSTCHECK — relapse detector, runs before delivery
+
+**Runs after Phase 6 and before announcing delivery. Non-skippable. A flagged result blocks delivery handoff.**
+
+Re-read `INCIDENTS.md` end-to-end. For each entry, confirm the detection signal is green for this run:
+
+- **I-001** — check that `report_language` and `financial_data_sec_api` were resolved with sources in the whitelist (`user_response`, `explicit_phrase`, `skipped`, `declined`). Any other source = `flagged`.
+- **I-002** — check that `_locked_<lang>_skeleton.html` was extracted (file exists in workspace), `report_validation.txt` top-line status ∈ `{pass, warn, critical}` (no fabrications), and `structure_conformance.json -> profile` is one of the four whitelisted `strict_*` values. Any deviation = `flagged`.
+- (Future incidents — same pattern: each entry's `Detection:` field tells you what to check.)
+
+Write `workspace/{Company}_{Date}/incident_postcheck.json`:
+
+```json
+{
+  "schema_version": 1,
+  "incidents": [
+    {"id": "I-001", "status": "pass", "evidence": "<path or note>"},
+    {"id": "I-002", "status": "pass", "evidence": "structure_conformance.json"}
+  ],
+  "flagged": []
+}
+```
+
+**Any `flagged` entry blocks delivery.** Do not announce the run as complete. Surface to the user with the exact incident id, the file path that contradicts it, and the rule that was violated. The retry budget is **0** for post-check failures — the run must be re-driven from the upstream phase that failed.
+
+---
+
 ## Final output
 
 Deliver the generated file:
@@ -458,6 +533,9 @@ Summarize: data mode, predicted revenue growth and drivers, data confidence cave
 
 | File | When |
 |------|------|
+| `MEMORY.md` | Read at session start (project invariants, P0 gates, locked-template rule, QC math, tolerances) |
+| `INCIDENTS.md` | Read at session start (P_INCIDENT_PRECHECK) and again at delivery (P_INCIDENT_POSTCHECK) |
+| `references/anamnesis_pattern.md` | Methodology behind the incident loop and red team |
 | `references/phase_execution_rules.md` | Detailed constraints for Phases 1-6 |
 | `references/intelligence_layer.md` | Agent 3, Agent 4, Phase 2, Phase 2.5, Phase 6 |
 | `references/prediction_factors.md` | Phase 2.5 |
@@ -465,4 +543,22 @@ Summarize: data mode, predicted revenue growth and drivers, data confidence cave
 | `references/financial_metrics.md` | Phase 2 |
 | `references/report_style_guide_cn.md` | Phase 5 if `zh` |
 | `references/report_style_guide_en.md` | Phase 5 if `en` |
+| `agents/attackers/red_team_numeric.md` | Phase 5.7 (numeric falsifier) |
+| `agents/attackers/red_team_narrative.md` | Phase 5.7 (narrative falsifier) |
 | `agents/logo_production_agent.md` | Phase 5.2 when card workflow is enabled |
+| `.claude/commands/log-incident.md` | When the user runs `/log-incident <description>` to capture a new failure rule |
+| `tools/io/log_incident.py` | Backend collector for `/log-incident`; emits a workspace digest for the model to draft from |
+
+---
+
+## Hard floor — non-negotiable rules (composed with `MEMORY.md` and `INCIDENTS.md`)
+
+- **Never skip `P_INCIDENT_PRECHECK`.** Read `INCIDENTS.md` and acknowledge each entry before any phase work. A run that did not pre-check is not deliverable.
+- **Never bypass an interactive P0 gate** (Step 0A.1 / 0A.2) by inventing a value or picking a default. The only allowed `source` values are listed in `workflow_meta.json -> gates -> allowed_sources` plus `INCIDENTS.md` I-001. Auto mode does not waive these.
+- **Never edit the locked HTML template** during Phase 5. Substitute `{{PLACEHOLDER}}` only. The SHA256 pin in `tests/test_extract_report_template.py` will catch you.
+- **Never accept a simplified or hand-written HTML report** regardless of target type. Every run — public, private fund, hedge fund, family office, government entity, anything — fills the same locked skeleton. There is no institution-compatible / private-company / scope-limited bypass. (See `INCIDENTS.md` I-002.)
+- **Never invent a packaging profile name.** `structure_conformance.json -> profile` must be one of the four whitelisted in `workflow_meta.json -> packaging_profiles`. Strings like `institution_compat_*`, `private_company_*`, `scope_limited_*` are fabricated and will be flagged at `P_INCIDENT_POSTCHECK`.
+- **Never invent a status string.** `report_validation.txt`'s top-line status is `pass | warn | critical`, full stop. `pass_with_scope_limitations`, `not_applicable`, `partial_pass`, `pass with scope limitations`, `institution-compatible pass`, `scope-limited pass` are fabricated and will be flagged.
+- **Never skip Phase 5.7 RED TEAM in full-QC runs.** The two attackers (`red_team_numeric.md`, `red_team_narrative.md`) are distinct from QC peers — peers vote, attackers try to falsify. A clean attacker output is a valid result; pressuring them to manufacture issues is also a violation.
+- **Never skip `P_INCIDENT_POSTCHECK`.** A flagged post-check on a known incident means the skill relapsed; do not announce delivery.
+- **Never persist a user-supplied SEC EDGAR email** to disk beyond the run's HTTP `User-Agent` header. Strip `(email@domain)` from any `data_source` string before writing.

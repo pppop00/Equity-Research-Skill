@@ -1,5 +1,8 @@
 .DS_Store
-.claude/
+
+# Claude Code per-user state — keep slash commands tracked
+.claude/settings.local.json
+.claude/.local/
 
 # Python
 __pycache__/

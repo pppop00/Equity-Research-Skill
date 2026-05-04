@@ -1,6 +1,9 @@
 {
-  "version": "1.0.0",
-  "description": "Machine-readable contract for the Equity Research Skill workflow. Use this file as the source of truth for phase ordering, mandatory gates, and packaging profiles.",
+  "version": "1.1.0",
+  "description": "Machine-readable contract for the Equity Research Skill workflow. Use this file as the source of truth for phase ordering, mandatory gates, packaging profiles, the institutional-memory bracket (P_INCIDENT_PRECHECK / P_INCIDENT_POSTCHECK), and the Phase 5.7 adversarial review.",
+  "memory_files": ["MEMORY.md", "INCIDENTS.md"],
+  "memory_files_note": "MEMORY.md and INCIDENTS.md are load-bearing project memory and must be loaded verbatim into the session's system prompt at session start. INCIDENTS.md is append-only — new entries arrive via .claude/commands/log-incident.md (the human-gated /log-incident slash command).",
+  "freeze_system_prompt_at": "session_start",
   "gates": [
     {
       "id": "0A.1",
@@ -8,7 +11,12 @@
       "must_resolve_before": [
         "0B",
         "phase_1"
-      ]
+      ],
+      "allowed_sources": [
+        "user_response",
+        "explicit_phrase"
+      ],
+      "allowed_sources_note": "explicit_phrase is restricted to the table in SKILL.md §0A.1. Inferring from chat language alone is not permitted (see INCIDENTS.md I-001)."
     },
     {
       "id": "0A.2",
@@ -16,10 +24,17 @@
       "must_resolve_before": [
         "0B",
         "phase_1"
-      ]
+      ],
+      "allowed_sources": [
+        "user_response",
+        "skipped",
+        "declined"
+      ],
+      "allowed_sources_note": "skipped is valid only when applies_when is false (Mode B/C, non-US, private company). declined requires an explicit user decline (no email / 不提供邮箱). See INCIDENTS.md I-001."
     }
   ],
   "phase_order": [
+    "phase_incident_precheck",
     "phase_1",
     "phase_1_5",
     "phase_2",
@@ -32,8 +47,51 @@
     "phase_5",
     "phase_5_2_optional",
     "phase_5_5",
-    "phase_6"
+    "phase_5_7_red_team",
+    "phase_6",
+    "phase_incident_postcheck"
   ],
+  "phase_definitions": {
+    "phase_incident_precheck": {
+      "alias": "P_INCIDENT_PRECHECK",
+      "blocking": true,
+      "interactive": false,
+      "executor": "orchestrator",
+      "produces": ["meta:incident_precheck.acknowledged events"],
+      "reads": ["INCIDENTS.md"],
+      "executor_note": "Orchestrator reads INCIDENTS.md end-to-end before any P0 gate. For each entry I-NNN, acknowledge in working state. If any incident's Phase field matches a phase the run will execute, raise the bar on that surface. A run that did not pre-check is not deliverable."
+    },
+    "phase_5_7_red_team": {
+      "alias": "P5_7_RED_TEAM",
+      "blocking": true,
+      "interactive": false,
+      "parallelism": "parallel",
+      "concurrency": 2,
+      "agents": [
+        "agents/attackers/red_team_numeric.md",
+        "agents/attackers/red_team_narrative.md"
+      ],
+      "produces": [
+        "red_team_numeric_phase_5_7.json",
+        "red_team_narrative_phase_5_7.json"
+      ],
+      "retry_to": "phase_5",
+      "retry_cap": 1,
+      "loop_rule": "If either attacker reports critical>0, loop once back to phase_5 with both attackers' findings combined into a single revision request. A second critical halts the run and surfaces to user.",
+      "executor_note": "Adversarial review of the locked-template HTML and upstream research JSONs. Distinct from QC peer agents (which average) — these attackers succeed when they find a real defect. Skipped only in intentionally shortened runs that explicitly skip QC."
+    },
+    "phase_incident_postcheck": {
+      "alias": "P_INCIDENT_POSTCHECK",
+      "blocking": true,
+      "interactive": false,
+      "executor": "orchestrator",
+      "produces": ["incident_postcheck.json"],
+      "reads": ["INCIDENTS.md"],
+      "runs_after": "phase_6",
+      "on_flagged": "block delivery; surface to user with paths to the flagged incident's detection signal",
+      "executor_note": "Orchestrator re-reads INCIDENTS.md and confirms each entry's detection signal is green for this run. Output JSON has one entry per incident with status: pass | flagged plus evidence path. flagged blocks final delivery — the run's HTML is not handed off as complete."
+    }
+  },
   "artifacts": {
     "core": [
       "financial_data.json",
@@ -64,12 +122,20 @@
       "qc_porter_peer_a.json",
       "qc_porter_peer_b.json",
       "qc_audit_trail.json"
+    ],
+    "red_team": [
+      "red_team_numeric_phase_5_7.json",
+      "red_team_narrative_phase_5_7.json"
+    ],
+    "incident_loop": [
+      "incident_postcheck.json"
     ]
   },
   "packaging_profiles": {
     "strict_18_full_qc_secapi": {
       "requires_sec_api_bundle": true,
       "requires_qc_files": true,
+      "requires_red_team_files": true,
       "required_files_zh": [
         "sec_edgar_bundle.json",
         "financial_data.json",
@@ -87,8 +153,11 @@
         "_locked_cn_skeleton.html",
         "{Company}_Research_CN.html",
         "final_report_data_validation.json",
+        "red_team_numeric_phase_5_7.json",
+        "red_team_narrative_phase_5_7.json",
         "report_validation.txt",
-        "structure_conformance.json"
+        "structure_conformance.json",
+        "incident_postcheck.json"
       ],
       "required_files_en": [
         "sec_edgar_bundle.json",
@@ -107,13 +176,17 @@
         "_locked_en_skeleton.html",
         "{Company}_Research_EN.html",
         "final_report_data_validation.json",
+        "red_team_numeric_phase_5_7.json",
+        "red_team_narrative_phase_5_7.json",
         "report_validation.txt",
-        "structure_conformance.json"
+        "structure_conformance.json",
+        "incident_postcheck.json"
       ]
     },
     "strict_17_full_qc_no_secapi": {
       "requires_sec_api_bundle": false,
       "requires_qc_files": true,
+      "requires_red_team_files": true,
       "required_files_zh": [
         "financial_data.json",
         "macro_factors.json",
@@ -130,8 +203,11 @@
         "_locked_cn_skeleton.html",
         "{Company}_Research_CN.html",
         "final_report_data_validation.json",
+        "red_team_numeric_phase_5_7.json",
+        "red_team_narrative_phase_5_7.json",
         "report_validation.txt",
-        "structure_conformance.json"
+        "structure_conformance.json",
+        "incident_postcheck.json"
       ],
       "required_files_en": [
         "financial_data.json",
@@ -149,13 +225,17 @@
         "_locked_en_skeleton.html",
         "{Company}_Research_EN.html",
         "final_report_data_validation.json",
+        "red_team_numeric_phase_5_7.json",
+        "red_team_narrative_phase_5_7.json",
         "report_validation.txt",
-        "structure_conformance.json"
+        "structure_conformance.json",
+        "incident_postcheck.json"
       ]
     },
     "strict_13_fast_no_qc_secapi": {
       "requires_sec_api_bundle": true,
       "requires_qc_files": false,
+      "requires_red_team_files": false,
       "required_files_zh": [
         "sec_edgar_bundle.json",
         "financial_data.json",
@@ -169,7 +249,8 @@
         "{Company}_Research_CN.html",
         "final_report_data_validation.json",
         "report_validation.txt",
-        "structure_conformance.json"
+        "structure_conformance.json",
+        "incident_postcheck.json"
       ],
       "required_files_en": [
         "sec_edgar_bundle.json",
@@ -184,12 +265,14 @@
         "{Company}_Research_EN.html",
         "final_report_data_validation.json",
         "report_validation.txt",
-        "structure_conformance.json"
+        "structure_conformance.json",
+        "incident_postcheck.json"
       ]
     },
     "strict_12_fast_no_qc_no_secapi": {
       "requires_sec_api_bundle": false,
       "requires_qc_files": false,
+      "requires_red_team_files": false,
       "required_files_zh": [
         "financial_data.json",
         "macro_factors.json",
@@ -202,7 +285,8 @@
         "{Company}_Research_CN.html",
         "final_report_data_validation.json",
         "report_validation.txt",
-        "structure_conformance.json"
+        "structure_conformance.json",
+        "incident_postcheck.json"
       ],
       "required_files_en": [
         "financial_data.json",
@@ -216,7 +300,8 @@
         "{Company}_Research_EN.html",
         "final_report_data_validation.json",
         "report_validation.txt",
-        "structure_conformance.json"
+        "structure_conformance.json",
+        "incident_postcheck.json"
       ]
     }
   },
@@ -226,5 +311,15 @@
     "tmp*",
     "*.tmp",
     "debug_*"
-  ]
+  ],
+  "failure_caps": {
+    "subagent_retry_same_prompt": 2,
+    "phase_5_5_to_phase_5_data_validation": 2,
+    "phase_5_7_red_team_to_phase_5": 1,
+    "phase_incident_postcheck_flagged_retry": 0
+  },
+  "subagent_timeouts_seconds": {
+    "research": 600,
+    "qc": 180
+  }
 }
